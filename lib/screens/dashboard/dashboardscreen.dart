@@ -217,12 +217,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     Text('ACX 7518',style: TextStyle(color: Colors.grey.shade400,fontWeight: FontWeight.bold,fontSize: 12),),
                                   ],
                                 ),
-
-
                               ],),
-
                           ],
-
                         ),
                       ),
                       Flexible(
