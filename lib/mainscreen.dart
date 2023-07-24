@@ -112,8 +112,7 @@ class _MainScreenState extends State<MainScreen> {
     scaffoldKey.currentState?.openDrawer();
   }
 
-  Map<String, WidgetBuilder> _homeScreenRouteBuilder(BuildContext context,
-      int index) {
+  Map<String, WidgetBuilder> _homeScreenRouteBuilder(BuildContext context, int index) {
     return {
       '/': (context) {
         return [
