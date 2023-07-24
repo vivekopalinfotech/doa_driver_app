@@ -199,7 +199,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             const CircleAvatar(
                               backgroundColor: Colors.white,
                               radius: 25,
-                              backgroundImage: AssetImage('assets/images/mike.jpg',),
+                              backgroundImage: NetworkImage('https://image.shutterstock.com/image-photo/smile-confidence-young-man-professional-260nw-1801689064.jpg',),
                             ),
                             const SizedBox(width: 12,),
                             Column(
