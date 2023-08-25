@@ -68,36 +68,39 @@ class _NotificationPageState extends State<NotificationPage> {
                                     children: [
                                       Padding(
                                         padding: const EdgeInsets.only(bottom: 4),
-                                        child: Row( children: [
-                                        Flexible(flex: 1,
-                                          child: CachedNetworkImage(
-                                                imageUrl: notification[index].img,
-                                                height: 45, width: 45,
-                                                imageBuilder: (context, imageProvider) => Container(
-                                                      decoration: BoxDecoration(
-                                                        borderRadius: BorderRadius.circular(56),
-                                                        image: DecorationImage(image: imageProvider, fit: BoxFit.cover,
+                                        child: InkWell(
+                                          onTap: (){},
+                                          child: Row( children: [
+                                          Flexible(flex: 1,
+                                            child: CachedNetworkImage(
+                                                  imageUrl: notification[index].img,
+                                                  height: 45, width: 45,
+                                                  imageBuilder: (context, imageProvider) => Container(
+                                                        decoration: BoxDecoration(
+                                                          borderRadius: BorderRadius.circular(56),
+                                                          image: DecorationImage(image: imageProvider, fit: BoxFit.cover,
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                progressIndicatorBuilder:
-                                                    (context, url, downloadProgress) =>
-                                                const CircleAvatar(backgroundImage: NetworkImage("https://wisdomexperience.org/wp-content/uploads/2019/10/blank-profile-picture-973460_960_720.png"),),
-                                                errorWidget: (context, url, error) =>
-                                                const CircleAvatar(backgroundImage: NetworkImage("https://wisdomexperience.org/wp-content/uploads/2019/10/blank-profile-picture-973460_960_720.png"),)),
-                                        ),
-                                          const SizedBox(width: 15,),
-                                          Flexible(flex: 6,
-                                            child: Text(
-                                                notification[index].notification,
-                                                style: TextStyle(
-                                                  color:  Theme.of(context).brightness == Brightness.dark ?  Colors.white.withOpacity(.85):Colors.black,
-                                                  fontStyle: FontStyle.normal,
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w500,
-                                                )),
+                                                  progressIndicatorBuilder:
+                                                      (context, url, downloadProgress) =>
+                                                  const CircleAvatar(backgroundImage: NetworkImage("https://wisdomexperience.org/wp-content/uploads/2019/10/blank-profile-picture-973460_960_720.png"),),
+                                                  errorWidget: (context, url, error) =>
+                                                  const CircleAvatar(backgroundImage: NetworkImage("https://wisdomexperience.org/wp-content/uploads/2019/10/blank-profile-picture-973460_960_720.png"),)),
                                           ),
-                                        ]),
+                                            const SizedBox(width: 15,),
+                                            Flexible(flex: 6,
+                                              child: Text(
+                                                  notification[index].notification,
+                                                  style: const TextStyle(
+                                                    color:  AppStyles.MAIN_COLOR,
+                                                    fontStyle: FontStyle.normal,
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w500,
+                                                  )),
+                                            ),
+                                          ]),
+                                        ),
                                       ),
                                       //   const SizedBox(height : 15),
                                     ],

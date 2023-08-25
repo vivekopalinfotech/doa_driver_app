@@ -23,7 +23,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             loginResponse.data != null) {
           yield Authenticated(loginResponse.data!);
         } else {
-          yield AuthFailed(loginResponse.message!);
+          yield AuthFailed("Some Error");
         }
       } on Error {
         yield const AuthFailed("Some Error");

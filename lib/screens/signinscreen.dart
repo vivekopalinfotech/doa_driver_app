@@ -1,12 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:doa_driver_app/bloc/auth/auth_bloc.dart';
-import 'package:doa_driver_app/constants/app_data.dart';
+import 'package:doa_driver_app/bloc/login/mobile_bloc.dart';
 import 'package:doa_driver_app/constants/appstyles.dart';
-import 'package:doa_driver_app/mainscreen.dart';
+import 'package:doa_driver_app/screens/otp_screen.dart';
 import 'package:doa_driver_app/tweaks/shared_pref_service.dart';
-import 'package:doa_driver_app/utils/widgets/customtextfield.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -18,7 +17,7 @@ class SignInScreen extends StatefulWidget {
 
 class _SignInScreenState extends State<SignInScreen> {
 
-  TextEditingController emailController = TextEditingController();
+  TextEditingController mobileController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
 
   String? validateEmail(String? value) {
@@ -39,31 +38,9 @@ class _SignInScreenState extends State<SignInScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: BlocConsumer<AuthBloc, AuthState>(
-        listener: (context, state) async {
-          if (state is Authenticated) {
-            AppData.user = state.user;
-            AppData.accessToken = state.user?.token;
-            final sharedPrefService = await SharedPreferencesService.instance;
-            await sharedPrefService.setUserID(state.user!.id!);
-            await sharedPrefService.setUserFirstName(state.user!.firstName!);
-            await sharedPrefService.setUserLastName(state.user!.lastName!);
-            await sharedPrefService.setUserEmail(state.user!.email!);
-            await sharedPrefService.setUserToken(state.user!.token!);
-            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) =>  MainScreen()), (route) => false);
-          } else if (state is UnAuthenticated) {
-            AppData.user = null;
-            AppData.accessToken = null;
-            Navigator.pop(context);
-          } else if (state is EmailSent) {
-            Navigator.pop(context);
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message!)));
-          } else if (state is AuthFailed) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message!)));
-          }
-        },
-        builder: (context, state) => DefaultTabController(
-            length: 2, child: SingleChildScrollView(
+      body:  BlocConsumer<MobileBloc, MobileState>(
+        builder: (context, state) {
+      return SingleChildScrollView(
               child: Column(
                 children: [
                   Padding(
@@ -89,7 +66,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             Text('with Email &',
                               style: TextStyle(
                                   fontSize: 28, fontWeight: FontWeight.bold,
-                                  color: Colors.black,
+                                  color: AppStyles.SECOND_COLOR,
                                   fontFamily: 'MontserratSemiBold'),
                             )
                           ],
@@ -97,102 +74,120 @@ class _SignInScreenState extends State<SignInScreen> {
                         const Text('Mobile Number',
                           style: TextStyle(
                               fontSize: 28, fontWeight: FontWeight.bold,
-                              color: Colors.black,
+                              color: AppStyles.SECOND_COLOR,
                               fontFamily: 'MontserratSemiBold'),
                         ),
-                        const SizedBox(height: 30),
-                        const Text('Enter Your Email',
-                          style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w500,
-                            color: AppStyles.MAIN_COLOR,
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.symmetric(vertical: 10),
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          height: 50,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: AppStyles.SECOND_COLOR),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children:  [
-                              Flexible( flex: 5,
-                                child: TextFormField(
-                                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                                  keyboardType: TextInputType.emailAddress,
-                                  controller: emailController,
-                                  validator: validateEmail,
-                                  style: const TextStyle(
-                                    fontStyle: FontStyle.normal,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                  decoration: const InputDecoration(
-                                    hintText: 'Please Enter your Email',
-                                    hintStyle: TextStyle(
-                                      color: AppStyles.COLOR_GREY_LIGHT,
-                                    ),
-                                    border: InputBorder.none,),
-                                ),
+                        const SizedBox(height: 20),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+
+                            const SizedBox(height: 30),
+                            const Text(
+                              'Enter Your Phone Number',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: AppStyles.MAIN_COLOR,
                               ),
-                              const Flexible( flex: 1,
-                                child: Icon(
-                                  Icons.email_outlined,
-                                  color:  AppStyles.COLOR_GREY_LIGHT, size: 20,),
-                              )
-                            ],
-                          ),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.symmetric(vertical: 10),
+                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                              height: 50,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: AppStyles.SECOND_COLOR),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text(
+                                    '+1',style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500,color: AppStyles.MAIN_COLOR),
+                                  ),
+                                  Flexible(
+                                    flex: 5,
+                                    child: TextFormField(
+                                      cursorColor: AppStyles.MAIN_COLOR,
+                                      controller: mobileController,
+                                      inputFormatters: <TextInputFormatter>[
+                                        FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                                        FilteringTextInputFormatter.digitsOnly
+                                      ],
+                                      keyboardType: TextInputType.phone,
+                                      style: const TextStyle(
+                                        color: AppStyles.MAIN_COLOR,
+                                        fontStyle: FontStyle.normal,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                      decoration: const InputDecoration(
+                                          hintText: 'Phone Number',
+                                          border: InputBorder.none),
+                                    ),
+                                  ),
+                                  const Flexible(
+                                      flex: 1,
+                                      child: Icon(
+                                        Icons.phone_outlined,
+                                        color: AppStyles.MAIN_COLOR,
+                                        size: 22,
+                                      ))
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 30,),
+                            SizedBox(
+                              height: 40.0,
+                              width: double.maxFinite,
+                              child: ElevatedButton(
+                                  style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(AppStyles.MAIN_COLOR),
+                                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                      RoundedRectangleBorder( borderRadius: BorderRadius.circular(20.0),
+                                      ),),
+                                  ),
+                                  onPressed: () {
+                                    print(mobileController.text);
+                                    BlocProvider.of<MobileBloc>(context).add(PerformMobile(mobileController.text));
+                                    },
+                                  child: const Text("Sign In")),
+                            ),
+                          ],
                         ),
-                        const SizedBox(height: 30,),
-                        const Text( 'Enter Your Password',
-                          style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w500,
-                            color: AppStyles.MAIN_COLOR,
-                          ),
-                        ),
-                        CustomTextfield(
-                          obscure: true,
-                          obscuringCharacter: '●',
-                          keyboardType: TextInputType.visiblePassword,
-                          hint: 'Please enter your Password',
-                          fieldIcon: const Icon(Icons.lock_outline,
-                            color: AppStyles.COLOR_GREY_LIGHT, size: 20,),
-                          controller: phoneController,),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 30,),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: SizedBox(
-                      height: 40.0,
-                      width: double.maxFinite,
-                      child: ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(AppStyles.MAIN_COLOR),
-                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                              RoundedRectangleBorder( borderRadius: BorderRadius.circular(18.0),
-                              ),),
-                          ),
-                          onPressed: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => MainScreen()));
-                            if (emailController.text.isEmpty && phoneController.text.isEmpty){
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Center(child: Text('Empty Email or Password')),
-                                    duration: Duration(seconds: 1),backgroundColor: AppStyles.MAIN_COLOR,));
-                              }else{
-                              BlocProvider.of<AuthBloc>(context).add(
-                                  PerformLogin(emailController.text, phoneController.text));
-                            }},
-                          child: const Text("Sign In")),
-                    ),
-                  ),
+
                 ],
               ),
-            ),
-        ),
-      ),
-    );
+            );
+        },
+        listener: (context, state) async {
+          if (state is MobileSuccess) {
+
+            setState(() {
+              state.data!.mobile = mobileController.text;
+            });
+
+            final sharedPrefService = await SharedPreferencesService.instance;
+            await sharedPrefService.setUserPhone(mobileController.text);
+
+            if(state.data != null) {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          OtpScreen(phone: state.data!.mobile.toString(),
+                            otp: state.data!.Code,
+                            user: state.data!.user,)));
+            }else {
+              const ScaffoldMessenger(
+                  child: Text('Enter Valid Phone Number'));
+            }
+          }
+        },
+      ));
+
+
   }
 }

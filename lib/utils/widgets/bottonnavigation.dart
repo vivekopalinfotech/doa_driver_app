@@ -13,34 +13,34 @@ class MyBottomNavigation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SalomonBottomBar(
-      selectedColorOpacity: .2,
-      backgroundColor: Colors.white,
+      selectedColorOpacity: .3,
+      backgroundColor: AppStyles.MAIN_COLOR,
       margin: const EdgeInsets.all(10),
-      onTap: (value) { selectCurrentItem(value);},
-
+      onTap: (value) {
+        selectCurrentItem(value);
+        },
       currentIndex: selectedIndex,
-
       items: [
         SalomonBottomBarItem(
           title: const Text('Dashboard'),
           icon: const Icon(Icons.home_outlined,size: 30,),
           //Image.asset("assets/images/home.png",height: 25,width: 25,),
           unselectedColor: Colors.grey,
-          selectedColor: AppStyles.MAIN_COLOR,
+          selectedColor: AppStyles.SECOND_COLOR,
         ),
         SalomonBottomBarItem(
           title: const Text('Orders'),
           icon:  const Icon(Icons.list_alt_outlined,size: 30,),
           //Image.asset("assets/images/order.png",height: 25,width: 25,),
           unselectedColor: Colors.grey,
-          selectedColor: AppStyles.MAIN_COLOR,
+          selectedColor: AppStyles.SECOND_COLOR,
         ),
         SalomonBottomBarItem(
           title: const Text('History'),
           icon:  const Icon(Icons.history,size: 30,),
           //Image.asset("assets/images/history.png",height: 25,width: 25,),
           unselectedColor: Colors.grey,
-          selectedColor: AppStyles.MAIN_COLOR,
+          selectedColor: AppStyles.SECOND_COLOR,
         ),
 
         SalomonBottomBarItem(
@@ -48,7 +48,7 @@ class MyBottomNavigation extends StatelessWidget {
           icon: const Icon(Icons.settings_outlined,size: 30,),
           //Image.asset("assets/images/settings.png",height: 25,width: 25,),
           unselectedColor: Colors.grey,
-          selectedColor: AppStyles.MAIN_COLOR,
+          selectedColor: AppStyles.SECOND_COLOR,
         ),
 
       ],

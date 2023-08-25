@@ -4,6 +4,8 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:doa_driver_app/bloc/auth/auth_bloc.dart';
+import 'package:doa_driver_app/constants/app_data.dart';
 import 'package:doa_driver_app/constants/appstyles.dart';
 import 'package:doa_driver_app/mainscreen.dart';
 import 'package:doa_driver_app/screens/order/orderscreen.dart';
@@ -11,6 +13,7 @@ import 'package:doa_driver_app/screens/settings/editprofilescreen.dart';
 import 'package:doa_driver_app/screens/signinscreen.dart';
 import 'package:doa_driver_app/utils/notifications.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 
 class SettingScreen extends StatefulWidget {
@@ -43,59 +46,6 @@ class _SettingScreenState extends State<SettingScreen> {
     return Scaffold(
 
       backgroundColor: Colors.white,
-      appBar:
-      widget.type == 'drawer'? const PreferredSize(preferredSize:  Size.fromHeight(0),child: SizedBox(),):
-      AppBar(
-          elevation: 0,
-          backgroundColor: AppStyles.MAIN_COLOR,
-          leading: Padding(
-            padding: const EdgeInsets.all(15),
-            child: GestureDetector(
-              onTap: () => _openHomeDrawer(),
-              // onTap:  s1.assignListner(_counter),
-              child: SizedBox(
-                width: 30,
-                height: 30,
-                child: Image.asset("assets/images/menu.png",
-                    scale: 2.5,
-                    color: Colors.white,
-                    fit: BoxFit.none),
-              ),
-            ),
-          ),
-          title:  Center(
-              child: Text(
-                widget.online == false? "Offline": "Online",
-                // AppLocalizations.of(context)!.translate('app_name')!,
-                style: const TextStyle(
-                    fontSize: 20.0,
-                    fontFamily: "MontserratBold",
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white
-                ),
-              )),
-          actions: [ Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: FlutterSwitch(
-              activeSwitchBorder: Border.all(color: Colors.white),
-
-              activeColor: AppStyles.MAIN_COLOR,
-              width: 45.0,
-              height: 30.0,
-              valueFontSize: 12.0,
-              toggleSize: 20.0,
-              value: widget.online ,
-              borderRadius: 20.0,
-              padding: 5.0,
-              showOnOff: false,
-              onToggle: (val) {
-                setState(() {
-                  widget.online  = val;
-                });
-              },
-            ),
-          )]
-      ),
             body: SingleChildScrollView(
               child: Column(
                 children: [
@@ -139,9 +89,9 @@ class _SettingScreenState extends State<SettingScreen> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisSize: MainAxisSize.min,
-                                children: const [
+                                children:  [
                                   Text(
-                                    "Mike Jones",
+                                    '${AppData.user?.firstName} ${AppData.user?.lastName}',
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
@@ -151,9 +101,8 @@ class _SettingScreenState extends State<SettingScreen> {
                                     height: 5,
                                   ),
                                   Text(
-                                    'mikejones1@doa.com',
-                                    style:
-                                    TextStyle(color: Colors.white,fontSize: 12),
+                                    '${AppData.user?.email}',
+                                    style: TextStyle(color: Colors.white,fontSize: 12),
                                   ),
                                 ],
                               ),
@@ -224,7 +173,7 @@ class _SettingScreenState extends State<SettingScreen> {
 
                               GestureDetector(
                                 onTap: (){
-                                  navigateToNext(OrderScreen(navigateToNext, _openHomeDrawer,widget.online,type: widget.type,));
+                                  navigateToNext(OrderScreen(navigateToNext, _openHomeDrawer,widget.online,'','',type: 'order',));
                                   },
                                   child: Row(
                                     children: const [
@@ -245,9 +194,10 @@ class _SettingScreenState extends State<SettingScreen> {
                                   )),
                               const Divider(height: 1, color: AppStyles.MAIN_COLOR),
 
-                            GestureDetector(
+                      BlocConsumer<AuthBloc, AuthState>(
+                        builder: (context, state) =>     GestureDetector(
                               onTap: (){
-                                navigateToRemoveUntil(const SignInScreen());
+                                showAlertDialog1(context);
                               },
                                     child: Row(
                                       children: const [
@@ -266,6 +216,19 @@ class _SettingScreenState extends State<SettingScreen> {
                                             )),
                                       ],
                                     )),
+                        listener: (context, state) {
+                          if (state is UnAuthenticated) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text("logout successful")));
+                            // Navigator.pushAndRemoveUntil(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //         builder: (context) => SplashScreen()),
+                            //         (route) => false);
+                          }
+                        },
+                      )
                             ],
                           ),
                         )),
@@ -276,5 +239,51 @@ class _SettingScreenState extends State<SettingScreen> {
       //    ),
     );
   }
+  void showAlertDialog1(BuildContext context) {
+    Widget cancelButton = TextButton(
 
+      child: const Text("Cancel",style: TextStyle(color: AppStyles.MAIN_COLOR,fontWeight: FontWeight.bold),),
+      onPressed: () {
+        Navigator.of(context, rootNavigator: true).pop();
+      },
+    );
+    Widget continueButton = TextButton(
+      child: const Text("Logout",style: TextStyle(color: AppStyles.MAIN_COLOR,fontWeight: FontWeight.bold)),
+      onPressed: ()  async {
+        Navigator.of(context, rootNavigator: true)
+            .pushAndRemoveUntil(
+          MaterialPageRoute(
+              builder: (context) => const SignInScreen()),
+              (Route<dynamic> route) => false,);
+        BlocProvider.of<AuthBloc>(context)
+            .add(const PerformLogout());
+      },
+    );
+    AlertDialog alert = AlertDialog(
+      contentPadding: EdgeInsets.zero,
+      title: Row(
+        children: [
+          Image.asset('assets/images/logo.png',height: 50,),
+          Container(
+            padding: const EdgeInsets.only(left: 10),
+            width: 200,
+            child: const Text("Are You Sure You Want to Logout?",
+              style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,color: AppStyles.MAIN_COLOR),),
+
+          ),
+        ],
+      ),
+
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
 }

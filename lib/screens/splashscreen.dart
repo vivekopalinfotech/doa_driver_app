@@ -1,6 +1,6 @@
 // ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
-
 import 'package:doa_driver_app/bloc/auth/auth_bloc.dart';
+import 'package:doa_driver_app/bloc/login/mobile_bloc.dart';
 import 'package:doa_driver_app/constants/app_data.dart';
 import 'package:doa_driver_app/mainscreen.dart';
 import 'package:doa_driver_app/models/user.dart';
@@ -29,13 +29,17 @@ class _SplashScreenState extends State<SplashScreen> with  SingleTickerProviderS
       user.firstName = sharedPrefService.userFirstName;
       user.lastName = sharedPrefService.userLastName;
       user.email = sharedPrefService.userEmail;
-      user.token = sharedPrefService.userToken;
+      user.mobile = sharedPrefService.userPhone;
+      user.vehicle_registration_no = sharedPrefService.userVehicle;
+
       AppData.user = user;
-      AppData.accessToken = user.token;
+
       BlocProvider.of<AuthBloc>(context).add(PerformAutoLogin(user));
+
       setState(() {
         isLogin = true;
       });
+
     }
   }
 

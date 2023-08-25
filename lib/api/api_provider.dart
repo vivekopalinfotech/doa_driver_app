@@ -1,11 +1,14 @@
 // ignore_for_file: avoid_print
 
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:doa_driver_app/api/login_interceptors.dart';
 import 'package:doa_driver_app/api/responses/login_response.dart';
 import 'package:doa_driver_app/api/responses/logout_response.dart';
+import 'package:doa_driver_app/api/responses/mobile_rsponse.dart';
+import 'package:doa_driver_app/api/responses/order_response.dart';
 import 'package:doa_driver_app/constants/app_config.dart';
 import 'package:doa_driver_app/constants/app_data.dart';
 
@@ -63,6 +66,66 @@ class ApiProvider {
       return LogoutResponse.withError(_handleError(error as TypeError));
     }
   }
+
+  Future<MobileResponse> phoneNo(String phoneNumber) async {
+    try {
+      Response response = await _dio!.post("${_baseUrl}verifydelivery_mobile",
+          data: jsonEncode({
+            "phone_number": phoneNumber,
+          }));
+      return MobileResponse.fromJson(response.data);
+    } catch (error) {
+      return MobileResponse.withError(_handleError(error as TypeError));
+    }
+  }
+
+  Future<LoginResponse> otp(String phoneNumber,String otp) async {
+    try {
+      Response response = await _dio!.post("${_baseUrl}deliverylogin",
+          data: jsonEncode({
+            "phone_number": phoneNumber,
+            "mobile_del_code": otp,
+          }));
+      return LoginResponse.fromJson(response.data);
+    } catch (error) {
+      return LoginResponse.withError(_handleError(error as TypeError));
+    }
+  }
+
+
+  Future<String> online(String id,String availabilityStatus) async {
+    try {
+      Response response = await _dio!.put("${_baseUrl}update_delivery_boy_status",
+          data: jsonEncode({
+            "id": id,
+            "availability_status": availabilityStatus,
+          }));
+      return response.data;
+    } catch (error) {
+      return error.toString();
+    }
+  }
+
+  Future<OrderResponse> getOrder() async {
+    try {
+      Response response = await _dio!.get("${_baseUrl}order?delivery_boy_id=2&productDetail=1&pending_orders=1");
+      log(jsonEncode(response.data));
+      return OrderResponse.fromJson(response.data);
+    } catch (error) {
+      return OrderResponse.withError(_handleError(error as TypeError));
+    }
+  }
+
+  Future<OrderResponse> getHistory() async {
+    try {
+      Response response = await _dio!.get("${_baseUrl}order?delivery_boy_id=2&productDetail=1&complete_orders=1");
+      log(jsonEncode(response.data));
+      return OrderResponse.fromJson(response.data);
+    } catch (error) {
+      return OrderResponse.withError(_handleError(error as TypeError));
+    }
+  }
+
 
   String _handleError(Error error) {
     String errorDescription = "";

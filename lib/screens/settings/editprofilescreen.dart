@@ -39,8 +39,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       appBar: AppBar(
         elevation: 1,
         backgroundColor: AppStyles.MAIN_COLOR,
-        title: const Text('Edit Profile',style: TextStyle(color: Colors.white),),
-        iconTheme: const IconThemeData(color: Colors.white),
+        title: const Text('Edit Profile',style: TextStyle(color: AppStyles.SECOND_COLOR),),
+        iconTheme: const IconThemeData(color: AppStyles.SECOND_COLOR),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -145,18 +145,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 style: BorderStyle.none,
                               ),
                             ),
-                            fillColor: Theme.of(context).brightness ==
-                                Brightness.dark
-                                ? AppStyles.COLOR_LITE_GREY_DARK
-                                : AppStyles.COLOR_LITE_GREY_LIGHT,
-                            filled: true,
+
                             // border: InputBorder.none,
                             hintText: "First Name",
-                            hintStyle: TextStyle(
-                                color: Theme.of(context).brightness ==
-                                    Brightness.dark
-                                    ? AppStyles.COLOR_GREY_DARK
-                                    : AppStyles.COLOR_GREY_LIGHT,
+                            hintStyle: const TextStyle(
+                                color: Colors.brown,
                                 fontSize: 14),
                             prefixIcon: const Icon(
                               Icons.person_outline,
@@ -192,18 +185,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 style: BorderStyle.none,
                               ),
                             ),
-                            fillColor: Theme.of(context).brightness ==
-                                Brightness.dark
-                                ? AppStyles.COLOR_LITE_GREY_DARK
-                                : AppStyles.COLOR_LITE_GREY_LIGHT,
-                            filled: true,
                             // border: InputBorder.none,
                             hintText: "Last Name",
-                            hintStyle: TextStyle(
-                                color: Theme.of(context).brightness ==
-                                    Brightness.dark
-                                    ? AppStyles.COLOR_GREY_DARK
-                                    : AppStyles.COLOR_GREY_LIGHT,
+                            hintStyle: const TextStyle(
+                                color: Colors.brown,
                                 fontSize: 14),
                             prefixIcon: const Icon(
                               Icons.person_outline,
@@ -239,18 +224,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 style: BorderStyle.none,
                               ),
                             ),
-                            fillColor: Theme.of(context).brightness ==
-                                Brightness.dark
-                                ? AppStyles.COLOR_LITE_GREY_DARK
-                                : AppStyles.COLOR_LITE_GREY_LIGHT,
-                            filled: true,
                             // border: InputBorder.none,
                             hintText: "Password",
-                            hintStyle: TextStyle(
-                                color: Theme.of(context).brightness ==
-                                    Brightness.dark
-                                    ? AppStyles.COLOR_GREY_DARK
-                                    : AppStyles.COLOR_GREY_LIGHT,
+                            hintStyle: const TextStyle(
+                                color: Colors.brown,
                                 fontSize: 14),
                             prefixIcon: const Icon(
                               Icons.lock_outline,
@@ -287,19 +264,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 style: BorderStyle.none,
                               ),
                             ),
-                            fillColor: Theme.of(context).brightness ==
-                                Brightness.dark
-                                ? AppStyles.COLOR_LITE_GREY_DARK
-                                : AppStyles.COLOR_LITE_GREY_LIGHT,
-                            filled: true,
                             // border: InputBorder.none,
                             hintText:
                             "Confirm Password",
-                            hintStyle: TextStyle(
-                                color: Theme.of(context).brightness ==
-                                    Brightness.dark
-                                    ? AppStyles.COLOR_GREY_DARK
-                                    : AppStyles.COLOR_GREY_LIGHT,
+                            hintStyle: const TextStyle(
+                                color: Colors.brown,
                                 fontSize: 14),
                             prefixIcon: const Icon(
                               Icons.lock_outline,

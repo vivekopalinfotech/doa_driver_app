@@ -1,7 +1,16 @@
+
 import 'package:doa_driver_app/bloc/auth/auth_bloc.dart';
-import 'package:doa_driver_app/constants/appstyles.dart';
+import 'package:doa_driver_app/bloc/history/history_bloc.dart';
+import 'package:doa_driver_app/bloc/login/mobile_bloc.dart';
+import 'package:doa_driver_app/bloc/online/online_bloc.dart';
+import 'package:doa_driver_app/bloc/order/order_bloc.dart';
+import 'package:doa_driver_app/bloc/otp/otp_bloc.dart';
 import 'package:doa_driver_app/repos/auth_repo.dart';
-import 'package:doa_driver_app/screens/signinscreen.dart';
+import 'package:doa_driver_app/repos/history_repo.dart';
+import 'package:doa_driver_app/repos/mobile_repo.dart';
+import 'package:doa_driver_app/repos/online_repo.dart';
+import 'package:doa_driver_app/repos/order_repo.dart';
+import 'package:doa_driver_app/repos/otp_repo.dart';
 import 'package:doa_driver_app/screens/splashscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,6 +21,11 @@ void main() {
     child: MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => AuthBloc(RealAuthRepo())),
+        BlocProvider(create: (context) => OnlineBloc(RealOnlineRepo())),
+        BlocProvider(create: (context) => MobileBloc(RealMobileRepo())),
+        BlocProvider(create: (context) => OtpBloc(RealOtpRepo())),
+        BlocProvider(create: (context) => OrdersBloc(RealOrderRepo()),),
+        BlocProvider(create: (context) => HistoryBloc(RealHistoryRepo()),),
       ],
       child: const MyApp(),
     ),
@@ -26,6 +40,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
+
       home: MyHomePage(),
     );
   }

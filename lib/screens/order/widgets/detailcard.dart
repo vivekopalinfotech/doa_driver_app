@@ -1,10 +1,13 @@
+import 'package:doa_driver_app/constants/app_utils.dart';
 import 'package:doa_driver_app/constants/appstyles.dart';
+import 'package:doa_driver_app/models/order.dart';
 import 'package:doa_driver_app/utils/widgets/starrating.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DetailCard extends StatefulWidget {
-  const DetailCard({super.key});
+  final OrdersData ordersData;
+  const DetailCard({super.key, required this.ordersData});
 
   @override
   State<DetailCard> createState() => _DetailCardState();
@@ -26,16 +29,13 @@ class _DetailCardState extends State<DetailCard> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 5.0,horizontal: 5),
+        padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 10),
     child: Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Colors.white
+      ),
     height: 270,
-    decoration: BoxDecoration(
-    gradient:   LinearGradient(colors: [Colors.white,AppStyles.SECOND_COLOR.withOpacity(.8),AppStyles.SECOND_COLOR.withOpacity(.9),AppStyles.SECOND_COLOR],begin: AlignmentDirectional.topCenter,end: Alignment.bottomCenter),
-    color: Colors.white,
-    border: Border.all(color: Colors.grey.shade100),
-    boxShadow: [
-    BoxShadow(blurRadius: 1,spreadRadius: 3,color: Colors.grey.shade200)
-    ]),
     child: Padding(
     padding: const EdgeInsets.all(8.0),
     child: Column(
@@ -46,29 +46,29 @@ class _DetailCardState extends State<DetailCard> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(
-            children: const [
-              Text(
-                'Order ',
+            children:  [
+              const Text(
+                'Order  ',
                 style: TextStyle(
                     fontSize: 16,
                     color: Colors.black,
                     fontWeight: FontWeight.bold),
               ),
               Text(
-                '#1234567',
-                style: TextStyle(
+                '#${widget.ordersData.orderId}',
+                style: const TextStyle(
                     fontSize: 16,
-                    color: Colors.black,
+                    color: AppStyles.SECOND_COLOR,
                     fontWeight: FontWeight.bold),
               )
             ],
           ),
-          StarRating(
-            starCount: 5,
-            rating: 5,
-            onRatingChanged: (rating) {},
-            color: Colors.amber,
-          ),
+          // StarRating(
+          //   starCount: 5,
+          //   rating: 5,
+          //   onRatingChanged: (rating) {},
+          //   color: Colors.amber,
+          // ),
         ],
       ),
     //  const SizedBox(height: 20,),
@@ -90,19 +90,19 @@ class _DetailCardState extends State<DetailCard> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Dank of America',
-                    style: TextStyle(
+                   Text(
+                     '${widget.ordersData.billing_first_name} ${widget.ordersData.billing_last_name}',
+                    style: const TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontSize: 16),
                   ),
                 //  const SizedBox(height: 5,),
                   Text(
-                    'OBD Store',
-                    style: TextStyle(
-                        color: Colors.grey.shade400,
-                        fontWeight: FontWeight.bold,
+                    widget.ordersData.warehouse!.warehouse_name??'',
+                    style: const TextStyle(
+                        color: AppStyles.MAIN_COLOR,
+                        fontWeight: FontWeight.w500,
                         fontSize: 14),
                   ),
                 //  const SizedBox(height: 5,),
@@ -113,16 +113,16 @@ class _DetailCardState extends State<DetailCard> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: const [
+            children:  [
               Text(
-                '\$230.00',
-                style: TextStyle(
+                '\$${widget.ordersData.order_price}',
+                style: const TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
                     fontSize: 16),
               ),
              // SizedBox(height: 5,),
-              Text(
+              const Text(
                 '2.5 km',
                 style: TextStyle(
                     color: Colors.black,
@@ -135,29 +135,26 @@ class _DetailCardState extends State<DetailCard> {
         ],
       ),
  //  SizedBox(height: 10,),
-      const Text(
-        'Phone Number',
-        style: TextStyle(color: Colors.grey, fontSize: 12),
-      ),
-     // const SizedBox(height: 5,),
-      InkWell(
-        splashColor: Colors.transparent,
-        highlightColor: Colors.transparent,
-        onTap: (){
-          _makePhoneCall('(805)123 4567');
-        },
-        child: const SizedBox(
-          width: 250,
-          child: Text(
-            '(805)123 4567',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 14,
-              decoration: TextDecoration.underline,
-              decorationStyle: TextDecorationStyle.solid,
-            ),
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Phone Number',
+            style: TextStyle(color: AppStyles.SECOND_COLOR, fontSize: 12),
           ),
-        ),
+          const SizedBox(height: 5,),
+          SizedBox(
+            width: 250,
+            child: Text(
+              widget.ordersData.billing_phone??'',
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 14,
+                decoration: TextDecoration.underline,
+                decorationStyle: TextDecorationStyle.solid,
+              ),
+            ),
+          ),        ],
       ),
     //  const SizedBox(height: 8,),
       Row(
@@ -166,90 +163,95 @@ class _DetailCardState extends State<DetailCard> {
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              Text(
+            children:  [
+              const Text(
                 'Delivery Time',
-                style: TextStyle(color: Colors.grey, fontSize: 12),
+                style: TextStyle(color: AppStyles.SECOND_COLOR, fontSize: 12),
               ),
-          //    SizedBox(height: 5,),
+           const SizedBox(height: 5,),
               SizedBox(
                 child: Text(
-                  'Not Available',
-                  style: TextStyle(color: Colors.black, fontSize: 16),
+                 widget.ordersData.delivery_time??"Not Available",
+                  style: const TextStyle(color: Colors.black, fontSize: 16),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
             ],
           ),
        //   const SizedBox(width: 15,),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: const [
-              Text(
-                'Delivery Method',
-                style: TextStyle(color: Colors.grey, fontSize: 12),
-              ),
-        //      SizedBox(height: 5,),
-              SizedBox(
-                child: Text(
-                  'CurbSide',
-                  style: TextStyle(color: Colors.black, fontSize: 16),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ],
-          ),
+       //    Column(
+       //      crossAxisAlignment: CrossAxisAlignment.start,
+       //      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+       //      children:  [
+       //        const Text(
+       //          'Delivery Method',
+       //          style: TextStyle(color: AppStyles.SECOND_COLOR, fontSize: 12),
+       //        ),
+       //       const SizedBox(height: 5,),
+       //        SizedBox(
+       //          child: Text(
+       //            widget.ordersData.shipping_method??'',
+       //
+       //            style: const TextStyle(color: Colors.black, fontSize: 16),
+       //            overflow: TextOverflow.ellipsis,
+       //          ),
+       //        ),
+       //      ],
+       //    ),
        //   const SizedBox(width: 20,),
+      Row(
+        children: [
           InkWell(
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
             onTap: (){
-              _textMsg('(805)123 4567');
+              _textMsg(widget.ordersData.billing_phone??'');
             },
             child: const CircleAvatar(
               radius: 25,
               backgroundColor: AppStyles.MAIN_COLOR,
               child: Icon(
                 Icons.message_outlined,
-                color: Colors.black,
+                color: Colors.white,
                 size: 18,
               ),
             ),
           ),
-       //   const SizedBox(width: 15,),
+           const SizedBox(width: 20,),
           InkWell(
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
             onTap: (){
-              _makePhoneCall('(805)123 4567');
+              _makePhoneCall(widget.ordersData.billing_phone??'');
             },
             child: const CircleAvatar(
               radius: 25,
               backgroundColor: AppStyles.MAIN_COLOR,
               child: Icon(
                 Icons.phone_in_talk_outlined,
-                color: Colors.black,
+                color: Colors.white,
                 size: 18,
               ),
             ),
           )
+        ],
+      )
         ],
       ),
    //   const SizedBox(height: 15,),
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: const [
-          Text(
+        children:  [
+          const Text(
             'Created at',
-            style: TextStyle(color: Colors.grey, fontSize: 12),
+            style: TextStyle(color: AppStyles.SECOND_COLOR, fontSize: 12),
           ),
-       //   SizedBox(height: 5,),
+         const SizedBox(height: 5,),
           SizedBox(
             child: Text(
-              '03/23/2022, 8:01 pm',
-              style: TextStyle(color: Colors.black, fontSize: 16),
+             '${AppUtils.convertDate(widget.ordersData.order_date??'')}, ${AppUtils.convertTime(widget.ordersData.order_time??'')}',
+              style: const TextStyle(color: Colors.black, fontSize: 16),
               overflow: TextOverflow.ellipsis,
             ),
           ),

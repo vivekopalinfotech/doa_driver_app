@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:doa_driver_app/constants/app_constants.dart';
+import 'package:doa_driver_app/constants/app_data.dart';
 import 'package:doa_driver_app/constants/appstyles.dart';
 import 'package:doa_driver_app/mainscreen.dart';
 import 'package:doa_driver_app/screens/order/orderdetailscreen.dart';
@@ -55,89 +56,47 @@ class _DashboardScreenState extends State<DashboardScreen> {
     }
   }
   LocationData? currentLocation;
-  void getCurrentLocation() async {
-    Location location = Location();
-    location.getLocation().then(
-    (location) {
-        currentLocation = location;
-      },
-    );
-    location.onLocationChanged.listen(
-          (newLoc) {
-        currentLocation = newLoc;
-        const CameraPosition(target: LatLng(23.0298599,72.5250416),zoom: 20.5 );
-      },
-    );
-  }
-
+  // void getCurrentLocation() async {
+  //   Location location = Location();
+  //   location.getLocation().then(
+  //   (location) {
+  //       currentLocation = location;
+  //     },
+  //   );
+  //   location.onLocationChanged.listen(
+  //         (newLoc) {
+  //       currentLocation = newLoc;
+  //       const CameraPosition(target: LatLng(23.0298599,72.5250416),zoom: 20.5 );
+  //     },
+  //   );
+  // }
   @override
   void initState() {
     getPolyPoints();
-    getCurrentLocation();
+   // getCurrentLocation();
     super.initState();
   }
 
-  _openHomeDrawer() {
-    scaffoldKey.currentState?.openDrawer();
-  }
 
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
-      appBar: widget.type != 'order' ? AppBar(
+      appBar: widget.type == 'order' ? AppBar(
         elevation: 0,
         backgroundColor: AppStyles.MAIN_COLOR,
-        leading: Padding(
-          padding: const EdgeInsets.all(15),
-          child: GestureDetector(
-            onTap: () => _openHomeDrawer(),
-            child: SizedBox(
-              width: 30,
-              height: 30,
-              child: Image.asset("assets/images/menu.png",
-                  scale: 2.5,
-                  color: Colors.white,
-                  fit: BoxFit.none),
-            ),
-          ),
-        ),
-        title:  Center(
-            child: Text(
-              widget.online == false? "Offline": "Online",
+        iconTheme: const IconThemeData(color: AppStyles.SECOND_COLOR),
+        title: const Text(
+              "Delivery Map",
               // AppLocalizations.of(context)!.translate('app_name')!,
-              style: const TextStyle(
+              style: TextStyle(
                   fontSize: 20.0,
                   fontFamily: "MontserratBold",
                   fontWeight: FontWeight.bold,
-                  color: Colors.white
+                  color: AppStyles.SECOND_COLOR
               ),
-            )),
-        actions: [
-          Padding( padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: FlutterSwitch(
-            activeSwitchBorder: Border.all(color: Colors.white),
-            activeColor: AppStyles.MAIN_COLOR,
-            width: 45.0,
-            height: 30.0,
-            valueFontSize: 12.0,
-            toggleSize: 20.0,
-            value: widget.online ,
-            borderRadius: 20.0,
-            padding: 5.0,
-            showOnOff: false,
-            onToggle: (val) {
-              setState(() {
-                widget.online  = val;
-              });
-            },
-          ),
-        )]
-      ) : AppBar(
-        backgroundColor: AppStyles.MAIN_COLOR,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.white),
-        title: const Text('Delivery Map',style: TextStyle(color: Colors.white),),
-      ),
+            )
+
+      ) : const PreferredSize(preferredSize: Size.zero, child: SizedBox()),
       body: SlidingUpPanel(
         borderRadius: const BorderRadius.only(topLeft: Radius.circular(40),topRight: Radius.circular(40)),
         controller: _pc,
@@ -180,104 +139,99 @@ class _DashboardScreenState extends State<DashboardScreen> {
         Expanded(
           child : SingleChildScrollView(
             controller: _controller,
-            child: widget.online == false? Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(colors: [Colors.white,AppStyles.SECOND_COLOR.withOpacity(.8),AppStyles.SECOND_COLOR.withOpacity(.9),AppStyles.SECOND_COLOR],begin: AlignmentDirectional.topCenter,end: Alignment.bottomCenter),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0,horizontal: 15),
-                  child: Row(
-                    children: [
-                      Flexible(
-                        flex: 10,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const CircleAvatar(
-                              backgroundColor: Colors.white,
-                              radius: 25,
-                              backgroundImage: NetworkImage('https://image.shutterstock.com/image-photo/smile-confidence-young-man-professional-260nw-1801689064.jpg',),
-                            ),
-                            const SizedBox(width: 12,),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text('Mike Jones',style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 16),),
-                                const SizedBox(height: 10,),
-                                Row(
-                                  children: [
-                                    Text('Basic Level',style: TextStyle(color: Colors.grey.shade400,fontWeight: FontWeight.bold,fontSize: 12),),
-                                    const Text(' | ',style: TextStyle(color: AppStyles.MAIN_COLOR,fontWeight: FontWeight.bold,fontSize: 14),),
-                                    Image.asset('assets/images/licence.png',height: 10,),
-                                    const SizedBox(width: 3),
-                                    Text('ACX 7518',style: TextStyle(color: Colors.grey.shade400,fontWeight: FontWeight.bold,fontSize: 12),),
-                                  ],
-                                ),
-                              ],),
-                          ],
-                        ),
-                      ),
-                      Flexible(
-                        flex: 3,
-                        child: SizedBox(
-                          width: 100,
-                          child: Column(
-                            crossAxisAlignment:CrossAxisAlignment.end,
-                            children:  [
-                              const Text('\$371.00',style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 16),),
-                              const SizedBox(height: 5,),
-                              Text('Earned',style: TextStyle(color: Colors.grey.shade400,fontWeight: FontWeight.bold,fontSize: 12),),
-                              const SizedBox(height: 5,),
+            child: widget.online == false? Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0,horizontal: 15),
+                child: Row(
+                  children: [
+                    Flexible(
+                      flex: 10,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const CircleAvatar(
+                            backgroundColor: Colors.white,
+                            radius: 25,
+                            backgroundImage: NetworkImage('https://image.shutterstock.com/image-photo/smile-confidence-young-man-professional-260nw-1801689064.jpg',),
+                          ),
+                          const SizedBox(width: 12,),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                               Text('${AppData.user!.firstName} ${AppData.user!.lastName}',style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 16),),
+                              const SizedBox(height: 10,),
+                              Row(
+                                children: [
+                                  Text('Basic Level',style: TextStyle(color: Colors.grey.shade400,fontWeight: FontWeight.bold,fontSize: 12),),
+                                  const Text(' | ',style: TextStyle(color: AppStyles.MAIN_COLOR,fontWeight: FontWeight.bold,fontSize: 14),),
+                                  Image.asset('assets/images/licence.png',height: 10,),
+                                   SizedBox(width: 3),
+                                  Text('ACX ${AppData.user!.vehicle_registration_no}',style: TextStyle(color: Colors.grey.shade400,fontWeight: FontWeight.bold,fontSize: 12),),
+                                ],
+                              ),
                             ],),
-                        ),
+                        ],
                       ),
+                    ),
+                    // Flexible(
+                    //   flex: 3,
+                    //   child: SizedBox(
+                    //     width: 100,
+                    //     child: Column(
+                    //       crossAxisAlignment:CrossAxisAlignment.end,
+                    //       children:  [
+                    //         const Text('\$371.00',style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 16),),
+                    //         const SizedBox(height: 5,),
+                    //         Text('Earned',style: TextStyle(color: Colors.grey.shade400,fontWeight: FontWeight.bold,fontSize: 12),),
+                    //         const SizedBox(height: 5,),
+                    //       ],),
+                    //   ),
+                    // ),
+                  ],
+                ),
+              ),
+                Padding(padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 20),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  height: 150,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30),
+                    color: AppStyles.MAIN_COLOR
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: const [
+                          Icon(Icons.access_time_outlined,size: 45,color: AppStyles.SECOND_COLOR,),
+                          Text('22',style: TextStyle(fontSize: 26,color: Colors.white,fontWeight: FontWeight.w500),),
+                          Text("Today's Delivery",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w500,fontSize: 12),),
+                        ],
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Image.asset('assets/images/distance.png',height: 40,color: AppStyles.SECOND_COLOR,),
+                          const Text('12',style: TextStyle(fontSize: 26,color: Colors.white,fontWeight: FontWeight.w500),),
+                          const Text('Pending Delivery',style: TextStyle(color: Colors.white,fontWeight: FontWeight.w500,fontSize: 12),),
+                        ],
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Image.asset('assets/images/scooter.png',height: 40,color: AppStyles.SECOND_COLOR,),
+                          const Text('40',style: TextStyle(fontSize: 26,color: Colors.white,fontWeight: FontWeight.w500),),
+                          const Text('Total Delivery',style: TextStyle(color: Colors.white,fontWeight: FontWeight.w500,fontSize: 12),),
+                        ],
+                      )
                     ],
                   ),
-                ),
-                  Padding(padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 20),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    height: 150,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                      color: AppStyles.MAIN_COLOR
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: const [
-                            Icon(Icons.access_time_outlined,size: 45,color: AppStyles.NEW_COLOR,),
-                            Text('8.5',style: TextStyle(fontSize: 26,color: Colors.white,fontWeight: FontWeight.w500),),
-                            Text('Hours Online',style: TextStyle(color: Colors.white,fontWeight: FontWeight.w500,fontSize: 12),),
-                          ],
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Image.asset('assets/images/distance.png',height: 35,),
-                            const Text('10.5 km',style: TextStyle(fontSize: 26,color: Colors.white,fontWeight: FontWeight.w500),),
-                            const Text('Total Distance',style: TextStyle(color: Colors.white,fontWeight: FontWeight.w500,fontSize: 12),),
-                          ],
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Image.asset('assets/images/scooter.png',height: 35,),
-                            const Text('40',style: TextStyle(fontSize: 26,color: Colors.white,fontWeight: FontWeight.w500),),
-                            const Text('Total Delivery',style: TextStyle(color: Colors.white,fontWeight: FontWeight.w500,fontSize: 12),),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),)
-                ],
-              ),
+                ),)
+              ],
             ):Container(
               height: 260,
               color: Colors.white,
@@ -326,7 +280,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     splashColor: Colors.transparent,
                                     highlightColor: Colors.transparent,
                                     onTap: (){
-                                      widget.navigateToNext(OrderDetailScreen(navigateToNext: widget.navigateToNext));
+                                  //    widget.navigateToNext(OrderDetailScreen(navigateToNext: widget.navigateToNext, ordersData: '',));
                                     },
                                     child: const Text('Order Details >',style: TextStyle(color: AppStyles.MAIN_COLOR,fontWeight: FontWeight.bold,fontSize: 11),)),
                               ],),
@@ -420,7 +374,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   Polyline(
                     polylineId: const PolylineId("route"),
                     points: polylineCoordinates,
-                    color: AppStyles.BOTTOM_COLOR,
+                    color: AppStyles.MAIN_COLOR,
                     width: 6,
                   ),
                 },
@@ -445,7 +399,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                    borderType: BorderType.Circle,
                                    child:  CircleAvatar(
                                      radius: 20,
-                                     backgroundColor: AppStyles.NEW_COLOR,
+                                     backgroundColor: AppStyles.SECOND_COLOR,
                                      child: Image.asset('assets/images/offline.png',height: 25,)
                                    )),
                              ),
