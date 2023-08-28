@@ -15,7 +15,9 @@ class CustomCard extends StatefulWidget {
   final type;
   final miles;
   var online;
-   CustomCard({super.key, this.type,this.online, required this.navigateToNext, required this.ordersData, this.miles, });
+  final lat;
+  final lng;
+   CustomCard({super.key, this.type,this.online, required this.navigateToNext, required this.ordersData, this.miles, this.lat, this.lng, });
 
   @override
   State<CustomCard> createState() => _CustomCardState();
@@ -262,7 +264,7 @@ class _CustomCardState extends State<CustomCard> {
                                 ],
                               ),
                             ))):
-                    widget.navigateToNext( DashboardScreen(widget.navigateToNext, () => null, widget.online,type: 'order',));
+                    widget.navigateToNext( DashboardScreen(widget.navigateToNext, () => null, widget.online,type: 'order',latitude: widget.lat,longitude: widget.lng,));
                   },
                   child: Container(
                     height: 40,

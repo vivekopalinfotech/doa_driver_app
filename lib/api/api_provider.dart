@@ -93,7 +93,7 @@ class ApiProvider {
   }
 
 
-  Future<String> online(String id,String availabilityStatus) async {
+   online(String id,String availabilityStatus) async {
     try {
       Response response = await _dio!.put("${_baseUrl}update_delivery_boy_status",
           data: jsonEncode({

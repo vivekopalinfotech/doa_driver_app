@@ -11,8 +11,10 @@ class HistoryScreen extends StatefulWidget {
   final Function(Widget widget) navigateToNext;
   final Function() openDrawer;
   var online;
+  final lat;
+  final lng;
 
-  HistoryScreen(this.navigateToNext, this.openDrawer, this.online, {super.key});
+  HistoryScreen(this.navigateToNext, this.openDrawer, this.online, {super.key, this.lat, this.lng});
 
   @override
   _HistoryScreenState createState() => _HistoryScreenState();
@@ -47,6 +49,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
                     type: 'history',
                     navigateToNext: widget.navigateToNext,
                     ordersData: state.ordersData[index],
+                    lat: widget.lat,
+                    lng: widget.lng,
                   );
               },
 

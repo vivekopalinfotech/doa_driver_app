@@ -8,6 +8,7 @@ import 'package:doa_driver_app/screens/signinscreen.dart';
 import 'package:doa_driver_app/tweaks/shared_pref_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -19,6 +20,47 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> with  SingleTickerProviderStateMixin{
   late AnimationController controller;
   bool isLogin = false;
+
+  String latitude = "";
+  String longitude = "";
+  late bool serviceEnabled;
+
+  Future<void> _callSplashScreen() async {
+    Position position = await _getGeoLocationPosition();
+    latitude = position.latitude.toString();
+    longitude = position.longitude.toString();
+  }
+  Future<Position> _getGeoLocationPosition() async {
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+
+      return Future.error('Location services are disabled.');
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+
+        return Future.error('Location permissions are denied');
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    } else {
+      // showSnackBar(context, "You have to give your location permission");
+    }
+
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+
+    return await Geolocator.getCurrentPosition();
+  }
+
 
   Future<void> checkIfUserLoggedIn() async {
     final sharedPrefService = await SharedPreferencesService.instance;
@@ -47,19 +89,27 @@ class _SplashScreenState extends State<SplashScreen> with  SingleTickerProviderS
     if(isLogin == true){
       Navigator.of(context)
           .pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => MainScreen()),
+          MaterialPageRoute(builder: (context) => MainScreen(lat: latitude,lng: longitude,)),
               (route) => false);
     }else{
       Future.microtask(() => Navigator.of(context).pushReplacement(
           MaterialPageRoute(
               builder: (BuildContext context) =>
-              const SignInScreen())));
+               SignInScreen())));
     }
+  }
+
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _callSplashScreen();
   }
 
   @override
   void initState() {
     super.initState();
+    _callSplashScreen();
     checkIfUserLoggedIn();
 
     controller = AnimationController(

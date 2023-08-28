@@ -72,7 +72,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(50.0),
                                   child: CachedNetworkImage(
-                                    imageUrl: "https://image.shutterstock.com/image-photo/smile-confidence-young-man-professional-260nw-1801689064.jpg",
+                                    imageUrl: "https://wisdomexperience.org/wp-content/uploads/2019/10/blank-profile-picture-973460_960_720.png",
                                     fit: BoxFit.cover,
                                     progressIndicatorBuilder: (context, url,
                                         downloadProgress) =>

@@ -5,25 +5,23 @@ import 'dart:io';
 import 'package:doa_driver_app/constants/app_constants.dart';
 import 'package:doa_driver_app/constants/app_data.dart';
 import 'package:doa_driver_app/constants/appstyles.dart';
-import 'package:doa_driver_app/mainscreen.dart';
-import 'package:doa_driver_app/screens/order/orderdetailscreen.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-import 'package:flutter_switch/flutter_switch.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-
 
 
 class DashboardScreen extends StatefulWidget {
   final type;
   var online;
+  final latitude;
+  final longitude;
+
   final Function(Widget widget) navigateToNext;
   final Function() openDrawer;
 
-   DashboardScreen(this.navigateToNext, this.openDrawer, this.online, {super.key, this.type});
+   DashboardScreen(this.navigateToNext, this.openDrawer, this.online, {super.key, this.type,this.latitude,this.longitude});
 
   @override
   _DashboardScreenState createState() => _DashboardScreenState();
@@ -31,15 +29,40 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   ScrollController _controller = ScrollController();
-  //
+  late bool serviceEnabled;
    final PanelController _pc = PanelController();
-
+  String latlng = "-1";
   final Completer<GoogleMapController> controller = Completer();
   static const LatLng sourceLocation = LatLng(23.02985991,72.52504161);
-  static const LatLng destination = LatLng(23.0307925,72.5603854);
-
+  static const LatLng destination = LatLng(23.03085995,72.53501535);
   List<LatLng> polylineCoordinates = [];
+  BitmapDescriptor sourceIcon = BitmapDescriptor.defaultMarker;
+  BitmapDescriptor destinationIcon = BitmapDescriptor.defaultMarker;
+  BitmapDescriptor currentLocationIcon = BitmapDescriptor.defaultMarker;
 
+  void setCustomMarkerIcon() {
+    BitmapDescriptor.fromAssetImage(
+        ImageConfiguration.empty, "assets/images/pin_source.png",)
+        .then(
+          (icon) {
+        sourceIcon = icon;
+      },
+    );
+    BitmapDescriptor.fromAssetImage(
+        ImageConfiguration.empty, "assets/images/pin_source.png")
+        .then(
+          (icon) {
+        destinationIcon = icon;
+      },
+    );
+    BitmapDescriptor.fromAssetImage(
+        ImageConfiguration.empty, "assets/images/cars.png")
+        .then(
+          (icon) {
+        currentLocationIcon = icon;
+      },
+    );
+  }
   void getPolyPoints() async {
     PolylinePoints polylinePoints = PolylinePoints();
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
@@ -55,31 +78,51 @@ class _DashboardScreenState extends State<DashboardScreen> {
       );
     }
   }
-  LocationData? currentLocation;
+
+
+ // LocationData? currentLocation;
+
   // void getCurrentLocation() async {
+  //
   //   Location location = Location();
   //   location.getLocation().then(
-  //   (location) {
+  //         (location) {
   //       currentLocation = location;
   //     },
   //   );
+  //   GoogleMapController googleMapController = await controller.future;
   //   location.onLocationChanged.listen(
   //         (newLoc) {
   //       currentLocation = newLoc;
-  //       const CameraPosition(target: LatLng(23.0298599,72.5250416),zoom: 20.5 );
+  //       googleMapController.animateCamera(
+  //         CameraUpdate.newCameraPosition(
+  //           CameraPosition(
+  //             zoom: 13.5,
+  //             target: LatLng(
+  //               newLoc.latitude!,
+  //               newLoc.longitude!,
+  //             ),
+  //           ),
+  //         ),
+  //       );
+  //       setState(() {});
   //     },
   //   );
   // }
   @override
   void initState() {
     getPolyPoints();
-   // getCurrentLocation();
+  //  getCurrentLocation();
+    setCustomMarkerIcon();
+
+
     super.initState();
   }
 
 
   @override
   Widget build(BuildContext context) {
+
     return  Scaffold(
       appBar: widget.type == 'order' ? AppBar(
         elevation: 0,
@@ -154,21 +197,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           const CircleAvatar(
                             backgroundColor: Colors.white,
                             radius: 25,
-                            backgroundImage: NetworkImage('https://image.shutterstock.com/image-photo/smile-confidence-young-man-professional-260nw-1801689064.jpg',),
+                            backgroundImage: NetworkImage('https://wisdomexperience.org/wp-content/uploads/2019/10/blank-profile-picture-973460_960_720.png',),
                           ),
                           const SizedBox(width: 12,),
                           Column(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                               Text('${AppData.user!.firstName} ${AppData.user!.lastName}',style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 16),),
+                               Text('${AppData.user!.firstName} ${AppData.user!.lastName}',style: const TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 16),),
                               const SizedBox(height: 10,),
                               Row(
                                 children: [
                                   Text('Basic Level',style: TextStyle(color: Colors.grey.shade400,fontWeight: FontWeight.bold,fontSize: 12),),
                                   const Text(' | ',style: TextStyle(color: AppStyles.MAIN_COLOR,fontWeight: FontWeight.bold,fontSize: 14),),
                                   Image.asset('assets/images/licence.png',height: 10,),
-                                   SizedBox(width: 3),
+                                   const SizedBox(width: 3),
                                   Text('ACX ${AppData.user!.vehicle_registration_no}',style: TextStyle(color: Colors.grey.shade400,fontWeight: FontWeight.bold,fontSize: 12),),
                                 ],
                               ),
@@ -176,20 +219,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         ],
                       ),
                     ),
-                    // Flexible(
-                    //   flex: 3,
-                    //   child: SizedBox(
-                    //     width: 100,
-                    //     child: Column(
-                    //       crossAxisAlignment:CrossAxisAlignment.end,
-                    //       children:  [
-                    //         const Text('\$371.00',style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 16),),
-                    //         const SizedBox(height: 5,),
-                    //         Text('Earned',style: TextStyle(color: Colors.grey.shade400,fontWeight: FontWeight.bold,fontSize: 12),),
-                    //         const SizedBox(height: 5,),
-                    //       ],),
-                    //   ),
-                    // ),
                   ],
                 ),
               ),
@@ -306,8 +335,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         splashColor: Colors.transparent,
                         highlightColor: Colors.transparent,
                         onTap: (){
-                         _pc.close();
-                        },
+
+                          showAlertDialog1(context);},
                         child: Container(
                           height: 45,
 
@@ -345,28 +374,37 @@ class _DashboardScreenState extends State<DashboardScreen> {
           MediaQuery.of(context).size.height- 235,
           child: Stack(
             children: [
-              GoogleMap(
+              widget.latitude == "" && widget.longitude == ""? const Center(child: CircularProgressIndicator(
+                color: AppStyles.MAIN_COLOR,
+              )):GoogleMap(
                 compassEnabled: false,
                 mapType: MapType.normal,
                 myLocationEnabled: true,
                 zoomGesturesEnabled: true,
-                initialCameraPosition: const CameraPosition(
-                  target: sourceLocation,
-                  zoom: 15.0,
+                initialCameraPosition: CameraPosition(
+                  target: LatLng(
+                      double.parse(widget.latitude), double.parse(widget.longitude)),
+                  zoom: 14,
                 ),
                 markers: {
-                  const Marker(
-                    markerId: MarkerId("currentLocation"),
-                    position: sourceLocation),
-                  const Marker(
-                    markerId: MarkerId("source"),
+                  Marker(
+                    markerId: const MarkerId("currentLocation"),
+                    icon: currentLocationIcon,
+                    position: LatLng(
+                        double.parse(widget.latitude), double.parse(widget.longitude)),
+                  ),
+                   Marker(
+                    markerId: const MarkerId("source"),
+                    icon: sourceIcon,
                     position: sourceLocation,
                   ),
-                  const Marker(
-                    markerId: MarkerId("destination"),
+                   Marker(
+                    markerId: const MarkerId("destination"),
+                    icon: destinationIcon,
                     position: destination,
                   ),
                 },
+
                 onMapCreated: (mapController) {
                   controller.complete(mapController);
                 },
@@ -375,9 +413,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     polylineId: const PolylineId("route"),
                     points: polylineCoordinates,
                     color: AppStyles.MAIN_COLOR,
-                    width: 6,
+                    width: 4,
                   ),
                 },
+
                 myLocationButtonEnabled: true,
                 tiltGesturesEnabled: true,
                 onCameraIdle: () {},
@@ -439,6 +478,44 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ],
     );
   }
-
+  void showAlertDialog1(BuildContext context) {
+    Widget cancelButton = TextButton(
+      child: const Text("Cancel",style: TextStyle(color: AppStyles.MAIN_COLOR,fontWeight: FontWeight.bold),),
+      onPressed: () {
+        Navigator.of(context, rootNavigator: true).pop();
+      },
+    );
+    Widget continueButton = TextButton(
+      child: const Text("Start",style: TextStyle(color: AppStyles.MAIN_COLOR,fontWeight: FontWeight.bold)),
+      onPressed: ()  async {
+        _pc.close();
+        Navigator.of(context, rootNavigator: true).pop();
+      },
+    );
+    AlertDialog alert = AlertDialog(
+      contentPadding: EdgeInsets.zero,
+      title: Row(
+        children: [
+          Image.asset('assets/images/logo.png',height: 50,),
+          Container(
+            padding: const EdgeInsets.only(left: 10),
+            width: 200,
+            child: const Text("Are You Ready For Start This Delivery?",
+              style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,color: AppStyles.MAIN_COLOR),),
+          ),
+        ],
+      ),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
 }
 

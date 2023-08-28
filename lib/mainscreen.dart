@@ -4,6 +4,7 @@ import 'package:doa_driver_app/constants/appstyles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_switch/flutter_switch.dart';
+import 'package:geolocator/geolocator.dart';
 import 'screens/history/historyscreen.dart';
 import 'screens/dashboard/dashboardscreen.dart';
 import 'screens/order/orderscreen.dart';
@@ -13,8 +14,10 @@ import 'utils/widgets/bottonnavigation.dart';
 final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
 class MainScreen extends StatefulWidget {
+  final lat;
+  final lng;
    bool online = false;
-   MainScreen({super.key,});
+   MainScreen({super.key,this.lat,this.lng});
 
   @override
   // ignore: no_logic_in_create_state
@@ -24,6 +27,8 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   bool  online = false;
   int _selectedIndex = 0;
+
+  late bool serviceEnabled;
   final List<GlobalKey<NavigatorState>> _navigatorKeys = [
     GlobalKey<NavigatorState>(),
     GlobalKey<NavigatorState>(),
@@ -34,10 +39,14 @@ class _MainScreenState extends State<MainScreen> {
   _MainScreenState(this.online);
 
 
+
   @override
   void initState() {
+
     super.initState();
   }
+
+
 
   final keyCounter = GlobalKey();
 
@@ -113,7 +122,8 @@ class _MainScreenState extends State<MainScreen> {
                   padding: 5.0,
                   showOnOff: false,
                   onToggle: (val) {
-                    BlocProvider.of<OnlineBloc>(context).add(PerformOnline('2', val.toString()));
+
+                    BlocProvider.of<OnlineBloc>(context).add(PerformOnline('2', val==true ?'1':'2'));
                     setState(() {
                       online  = val;
                     });
@@ -180,9 +190,9 @@ class _MainScreenState extends State<MainScreen> {
     return {
       '/': (context) {
         return [
-          DashboardScreen(_navigateToNext, _openHomeDrawer,online),
-          OrderScreen(_navigateToNext, _openHomeDrawer,online,'',''),
-          HistoryScreen(_navigateToNext, _openHomeDrawer,online),
+          DashboardScreen(_navigateToNext, _openHomeDrawer,online,latitude: widget.lat,longitude: widget.lng,),
+          OrderScreen(_navigateToNext, _openHomeDrawer,online,widget.lat,widget.lng),
+          HistoryScreen(_navigateToNext, _openHomeDrawer,online,lat: widget.lat,lng: widget.lng,),
           SettingScreen(navigateToNext: _navigateToNext, navigateToRemoveUntil: _navigateToNextRemoveUntil,online: online, openDrawer: _openHomeDrawer,),
         ].elementAt(index);
       },

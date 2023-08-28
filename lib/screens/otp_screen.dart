@@ -10,10 +10,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 
 class OtpScreen extends StatefulWidget {
+  final lat;
+  final lng;
   String phone = "";
   final otp;
   final user;
-  OtpScreen({Key? key, required this.phone,this.otp,this.user}) : super(key: key);
+  OtpScreen({Key? key, required this.phone,this.otp,this.user,this.lat,this.lng}) : super(key: key);
 
   @override
   State<OtpScreen> createState() => _OtpScreenState();
@@ -183,7 +185,7 @@ class _OtpScreenState extends State<OtpScreen> {
             print(state.user!.email!);
             print(state.user!.mobile!);
             print('***************');
-            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) =>  MainScreen()), (route) => false);
+            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) =>  MainScreen(lat: widget.lat,lng: widget.lng,)), (route) => false);
           }
         },
       ),

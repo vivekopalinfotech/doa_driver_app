@@ -68,7 +68,7 @@ class _OrderScreenState extends State<OrderScreen> {
                   shrinkWrap: true,
                   itemCount: state.ordersData.length,
                   itemBuilder: (context,index){
-                    return CustomCard(navigateToNext:  widget.navigateToNext,type: 'order',online: widget.online, ordersData: state.ordersData[index],);
+                    return CustomCard(navigateToNext:  widget.navigateToNext,type: 'order',online: widget.online, ordersData: state.ordersData[index],lat: widget.lat,lng: widget.lng,);
                   },),
               ),
             ],
