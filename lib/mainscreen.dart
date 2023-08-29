@@ -1,6 +1,8 @@
 // ignore_for_file: library_private_types_in_public_api, must_be_immutable
 import 'package:doa_driver_app/bloc/online/online_bloc.dart';
+import 'package:doa_driver_app/constants/app_data.dart';
 import 'package:doa_driver_app/constants/appstyles.dart';
+import 'package:doa_driver_app/tweaks/shared_pref_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_switch/flutter_switch.dart';
@@ -38,14 +40,18 @@ class _MainScreenState extends State<MainScreen> {
 
   _MainScreenState(this.online);
 
-
+  getOnline()async{
+    final sharedPrefService = await SharedPreferencesService.instance;
+    setState(() {
+      online = sharedPrefService.userOnline!;
+    });
+  }
 
   @override
   void initState() {
-
+    getOnline();
     super.initState();
   }
-
 
 
   final keyCounter = GlobalKey();
@@ -121,12 +127,15 @@ class _MainScreenState extends State<MainScreen> {
                   borderRadius: 20.0,
                   padding: 5.0,
                   showOnOff: false,
-                  onToggle: (val) {
+                  onToggle: (val)async {
 
-                    BlocProvider.of<OnlineBloc>(context).add(PerformOnline('2', val==true ?'1':'2'));
+                    BlocProvider.of<OnlineBloc>(context).add(PerformOnline('2', val == true ? '1':'2'));
                     setState(() {
                       online  = val;
+                      // val = AppData.onlineStatus!;
                     });
+                    final sharedPrefService = await SharedPreferencesService.instance;
+                    await sharedPrefService.setOnline(val);
                   },
                 ),
               )]

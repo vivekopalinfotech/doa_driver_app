@@ -171,28 +171,28 @@ class _SettingScreenState extends State<SettingScreen> {
                                   )),
                               const Divider(height: 1, color: AppStyles.MAIN_COLOR),
 
-                              GestureDetector(
-                                onTap: (){
-                                  navigateToNext(OrderScreen(navigateToNext, _openHomeDrawer,widget.online,'','',type: 'order',));
-                                  },
-                                  child: Row(
-                                    children: const [
-                                      Icon(
-                                        Icons.list_alt_outlined,
-                                        color: AppStyles.MAIN_COLOR,
-                                      ),
-                                      Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 20, horizontal: 10),
-                                          child: Text(
-                                            'Orders',
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold),
-                                          )),
-                                    ],
-                                  )),
-                              const Divider(height: 1, color: AppStyles.MAIN_COLOR),
+                              // GestureDetector(
+                              //   onTap: (){
+                              //     navigateToNext(OrderScreen(navigateToNext, _openHomeDrawer,widget.online,'','',type: 'order',));
+                              //     },
+                              //     child: Row(
+                              //       children: const [
+                              //         Icon(
+                              //           Icons.list_alt_outlined,
+                              //           color: AppStyles.MAIN_COLOR,
+                              //         ),
+                              //         Padding(
+                              //             padding: EdgeInsets.symmetric(
+                              //                 vertical: 20, horizontal: 10),
+                              //             child: Text(
+                              //               'Orders',
+                              //               style: TextStyle(
+                              //                   fontSize: 16,
+                              //                   fontWeight: FontWeight.bold),
+                              //             )),
+                              //       ],
+                              //     )),
+                              // const Divider(height: 1, color: AppStyles.MAIN_COLOR),
 
                       BlocConsumer<AuthBloc, AuthState>(
                         builder: (context, state) =>     GestureDetector(

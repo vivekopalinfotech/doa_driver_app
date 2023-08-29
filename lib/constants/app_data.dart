@@ -33,5 +33,6 @@ class AppData {
   static User? user;
   static String? accessToken;
   static String? sessionId;
+  static bool? onlineStatus;
 
 }

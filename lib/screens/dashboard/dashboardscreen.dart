@@ -452,7 +452,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       rotateGesturesEnabled: true,
                       zoomGesturesEnabled: true,
                       initialCameraPosition: CameraPosition(
-                        target: LatLng(double.parse(widget.latitude), double.parse(widget.longitude)),
+                        target: LatLng(double.parse(widget.latitude.toString()), double.parse(widget.longitude.toString())),
                         zoom: 14,
                       ),
                       myLocationButtonEnabled: true,
@@ -470,7 +470,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       rotateGesturesEnabled: true,
                       zoomGesturesEnabled: true,
                       initialCameraPosition: CameraPosition(
-                        target: LatLng(double.parse(widget.latitude), double.parse(widget.longitude)),
+                        target: LatLng(double.parse(widget.latitude.toString()), double.parse(widget.longitude.toString())),
                         zoom: 14,
                       ),
                       markers: {
@@ -553,7 +553,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           ],
                         ),
                       )
-                    : Text(currentLocation!.latitude!.toString() + '===' + currentLocation!.longitude!.toString()),
+                    : currentLocation!.latitude!=null?Text('${currentLocation!.latitude!}===${currentLocation!.longitude!}'):SizedBox(),
               )
             ],
           ),

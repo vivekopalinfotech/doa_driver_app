@@ -13,6 +13,7 @@ class SharedPrefKeys {
   static const String USER_VEHICLE = 'user_vehicle';
   static const String SET_LOCATION = 'set_location';
   static const String USER_TOKEN = 'user_token';
+  static const String ONLINE = 'online';
 }
 
 class SharedPreferencesService {
@@ -72,6 +73,11 @@ class SharedPreferencesService {
 
   String ? get userToken => _preferences?.getString(SharedPrefKeys.USER_TOKEN);
 
+  Future<void> setOnline(bool userOnline) async =>
+      await _preferences?.setBool(SharedPrefKeys.ONLINE, userOnline);
+
+  bool ? get userOnline => _preferences?.getBool(SharedPrefKeys.ONLINE);
+
   Future<void> logoutUser() async {
     _preferences?.remove(SharedPrefKeys.USER_ID);
     _preferences?.remove(SharedPrefKeys.USER_FIRST_NAME);
@@ -80,6 +86,7 @@ class SharedPreferencesService {
     _preferences?.remove(SharedPrefKeys.USER_PHONE);
     _preferences?.remove(SharedPrefKeys.USER_VEHICLE);
     _preferences?.remove(SharedPrefKeys.USER_TOKEN);
+    _preferences?.remove(SharedPrefKeys.ONLINE);
   }
 
   Future<void> clearLocation() async {
