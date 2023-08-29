@@ -388,8 +388,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
               //Text(currentLocation!.longitude!.toString()),
               GoogleMap(
                 compassEnabled: false,
-                mapType: MapType.normal,
-                myLocationEnabled: true,
+                mapType: MapType.hybrid,
+                myLocationEnabled: false,
+                rotateGesturesEnabled: true,
                 zoomGesturesEnabled: true,
                 initialCameraPosition: CameraPosition(
                   target: LatLng(
@@ -400,6 +401,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   Marker(
                     markerId: const MarkerId("currentLocation"),
                     icon: currentLocationIcon,
+                    rotation: currentLocation!.heading!,
                     position: LatLng(
                         currentLocation!.latitude!, currentLocation!.longitude!),
                   ),
@@ -414,7 +416,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     position: destination,
                   ),
                 },
-
                 onMapCreated: (mapController) {
                   controller.complete(mapController);
                 },
