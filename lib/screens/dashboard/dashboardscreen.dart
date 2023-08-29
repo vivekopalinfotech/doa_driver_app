@@ -387,7 +387,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   zoom: 14,
                 ),
                 markers: {
-
+                  Marker(
+                    markerId: const MarkerId("currentLocation"),
+                    icon: currentLocationIcon,
+                    position: LatLng(
+                        double.parse(widget.latitude), double.parse(widget.longitude)),
+                  ),
+                   Marker(
+                    markerId: const MarkerId("source"),
+                    icon: sourceIcon,
+                    position: sourceLocation,
+                  ),
+                   Marker(
+                    markerId: const MarkerId("destination"),
+                    icon: destinationIcon,
+                    position: destination,
+                  ),
                 },
 
                 onMapCreated: (mapController) {
