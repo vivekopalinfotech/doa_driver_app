@@ -9,6 +9,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 
@@ -33,7 +34,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
    final PanelController _pc = PanelController();
   String latlng = "-1";
   final Completer<GoogleMapController> controller = Completer();
-  static const LatLng sourceLocation = LatLng(23.02985991,72.52504161);
+  LatLng? sourceLocation;
+
   static const LatLng destination = LatLng(23.03085995,72.53501535);
   List<LatLng> polylineCoordinates = [];
   BitmapDescriptor sourceIcon = BitmapDescriptor.defaultMarker;
@@ -66,53 +68,58 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void getPolyPoints() async {
     PolylinePoints polylinePoints = PolylinePoints();
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-     AppConstants.kGoogleApiKey,
-      PointLatLng(sourceLocation.latitude, sourceLocation.longitude),
+      AppConstants.kGoogleApiKey, // Your Google Map Key
+      PointLatLng(sourceLocation!.latitude!, sourceLocation!.longitude!),
       PointLatLng(destination.latitude, destination.longitude),
     );
     if (result.points.isNotEmpty) {
       result.points.forEach(
-        (PointLatLng point) => polylineCoordinates.add(
+            (PointLatLng point) => polylineCoordinates.add(
           LatLng(point.latitude, point.longitude),
         ),
       );
+      setState(() {});
     }
   }
 
 
- // LocationData? currentLocation;
+ LocationData? currentLocation;
 
-  // void getCurrentLocation() async {
-  //
-  //   Location location = Location();
-  //   location.getLocation().then(
-  //         (location) {
-  //       currentLocation = location;
-  //     },
-  //   );
-  //   GoogleMapController googleMapController = await controller.future;
-  //   location.onLocationChanged.listen(
-  //         (newLoc) {
-  //       currentLocation = newLoc;
-  //       googleMapController.animateCamera(
-  //         CameraUpdate.newCameraPosition(
-  //           CameraPosition(
-  //             zoom: 13.5,
-  //             target: LatLng(
-  //               newLoc.latitude!,
-  //               newLoc.longitude!,
-  //             ),
-  //           ),
-  //         ),
-  //       );
-  //       setState(() {});
-  //     },
-  //   );
-  // }
+  void getCurrentLocation() async {
+
+    Location location = Location();
+    location.getLocation().then(
+          (location) {
+        currentLocation = location;
+        sourceLocation = LatLng(
+            currentLocation!.latitude!, currentLocation!.longitude!);
+      },
+    );
+
+    GoogleMapController googleMapController = await controller.future;
+    location.onLocationChanged.listen(
+          (newLoc) {
+        currentLocation = newLoc;
+        googleMapController.animateCamera(
+          CameraUpdate.newCameraPosition(
+            CameraPosition(
+              zoom: 13.5,
+              target: LatLng(
+                newLoc.latitude!,
+                newLoc.longitude!,
+              ),
+            ),
+          ),
+        );
+        setState(() {});
+      },
+    );
+  }
   @override
   void initState() {
-    getPolyPoints();
-  //  getCurrentLocation();
+    //getPolyPoints();
+    getCurrentLocation();
+    //getPolyPoints();
     setCustomMarkerIcon();
 
 
@@ -374,9 +381,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
           MediaQuery.of(context).size.height- 235,
           child: Stack(
             children: [
-              widget.latitude == "" && widget.longitude == ""? const Center(child: CircularProgressIndicator(
+              currentLocation == null ? const Center(child: CircularProgressIndicator(
                 color: AppStyles.MAIN_COLOR,
-              )):GoogleMap(
+              )):
+
+              //Text(currentLocation!.longitude!.toString()),
+              GoogleMap(
                 compassEnabled: false,
                 mapType: MapType.normal,
                 myLocationEnabled: true,
@@ -391,12 +401,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     markerId: const MarkerId("currentLocation"),
                     icon: currentLocationIcon,
                     position: LatLng(
-                        double.parse(widget.latitude), double.parse(widget.longitude)),
+                        currentLocation!.latitude!, currentLocation!.longitude!),
                   ),
                    Marker(
                     markerId: const MarkerId("source"),
                     icon: sourceIcon,
-                    position: sourceLocation,
+                    position: sourceLocation!,
                   ),
                    Marker(
                     markerId: const MarkerId("destination"),
@@ -414,6 +424,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     points: polylineCoordinates,
                     color: AppStyles.MAIN_COLOR,
                     width: 4,
+
                   ),
                 },
 
@@ -470,7 +481,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                  ))
                            ],
                          ),
-                       ):const SizedBox(height: 0,),
+                       ):Text(currentLocation!.latitude!.toString() + '===' + currentLocation!.longitude!.toString()),
              )
             ],
           ),
@@ -489,6 +500,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       child: const Text("Start",style: TextStyle(color: AppStyles.MAIN_COLOR,fontWeight: FontWeight.bold)),
       onPressed: ()  async {
         _pc.close();
+        getPolyPoints();
         Navigator.of(context, rootNavigator: true).pop();
       },
     );
