@@ -5,6 +5,7 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:doa_driver_app/api/login_interceptors.dart';
+import 'package:doa_driver_app/api/responses/delivery_update_response.dart';
 import 'package:doa_driver_app/api/responses/login_response.dart';
 import 'package:doa_driver_app/api/responses/logout_response.dart';
 import 'package:doa_driver_app/api/responses/mobile_rsponse.dart';
@@ -40,6 +41,8 @@ class ApiProvider {
           ? ""
           : 'Bearer ${AppData.accessToken}',
     });
+    print(_dio?.options.headers);
+    print(AppData.accessToken);
     _dio?.interceptors.add(LoggingInterceptor());
   }
 
@@ -106,9 +109,21 @@ class ApiProvider {
     }
   }
 
-  Future<OrderResponse> getOrder() async {
+   checkOrderStatus(String id,String orderStatus) async {
     try {
-      Response response = await _dio!.get("${_baseUrl}order?delivery_boy_id=2&productDetail=1&pending_orders=1");
+      Response response = await _dio!.put("${_baseUrl}order_status_by_delivery_boy/$id",
+          data: jsonEncode({
+            "order_status": orderStatus,
+          }));
+      return response.data;
+    } catch (error) {
+      return error.toString();
+    }
+  }
+
+  Future<OrderResponse> getOrder(int id) async {
+    try {
+      Response response = await _dio!.get("${_baseUrl}order?delivery_boy_id=$id&productDetail=1&pending_orders=1&order_shipped=1&order_inprocess=1");
       log(jsonEncode(response.data));
       return OrderResponse.fromJson(response.data);
     } catch (error) {
@@ -116,13 +131,23 @@ class ApiProvider {
     }
   }
 
-  Future<OrderResponse> getHistory() async {
+  Future<OrderResponse> getHistory(int id) async {
     try {
-      Response response = await _dio!.get("${_baseUrl}order?delivery_boy_id=2&productDetail=1&complete_orders=1");
+      Response response = await _dio!.get("${_baseUrl}order?delivery_boy_id=$id&productDetail=1&complete_orders=1");
       log(jsonEncode(response.data));
       return OrderResponse.fromJson(response.data);
     } catch (error) {
       return OrderResponse.withError(_handleError(error as TypeError));
+    }
+  }
+
+  Future<DeliveryUpdateResponse> getDeliveryUpdate(int id) async {
+    try {
+      Response response = await _dio!.get("${_baseUrl}delivery_update/$id");
+      log(jsonEncode(response.data));
+      return DeliveryUpdateResponse.fromJson(response.data);
+    } catch (error) {
+      return DeliveryUpdateResponse.withError(_handleError(error as TypeError));
     }
   }
 

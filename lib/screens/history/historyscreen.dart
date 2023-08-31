@@ -2,6 +2,7 @@
 
 import 'package:doa_driver_app/bloc/history/history_bloc.dart';
 import 'package:doa_driver_app/bloc/order/order_bloc.dart';
+import 'package:doa_driver_app/constants/app_data.dart';
 import 'package:doa_driver_app/constants/appstyles.dart';
 import 'package:doa_driver_app/screens/order/widgets/customcards.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +25,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   bool online = false;
   @override
   void initState() {
-    BlocProvider.of<HistoryBloc>(context).add(const GetHistory());
+    BlocProvider.of<HistoryBloc>(context).add( GetHistory(AppData.user!.id));
     super.initState();
   }
 

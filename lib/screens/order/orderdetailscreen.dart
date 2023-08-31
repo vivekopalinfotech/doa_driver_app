@@ -11,10 +11,11 @@ import 'package:flutter/material.dart';
 class OrderDetailScreen extends StatefulWidget {
   final Function(Widget widget) navigateToNext;
   final type;
+  final miles;
   final OrdersData ordersData;
   final List<OrderDetail>? orderDetail;
   var online;
-   OrderDetailScreen({super.key, this.type,this.online, required this.navigateToNext, required this.ordersData, required this.orderDetail});
+   OrderDetailScreen({super.key, this.type,this.miles,this.online, required this.navigateToNext, required this.ordersData, required this.orderDetail});
 
   @override
   State<OrderDetailScreen> createState() => _OrderDetailScreenState();
@@ -54,7 +55,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
         child: Column(
           children: [
 
-            DetailCard(ordersData: widget.ordersData,),
+            DetailCard(ordersData: widget.ordersData,miles: widget.miles,),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15.0,vertical: 10),
               child: Column(
@@ -105,32 +106,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                     );
                   }),
                    const Divider(color: Colors.black38,thickness: 1,),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //   children:   [
-                  //     SizedBox(
-                  //         width: 180,
-                  //         child: Text('Cart Discount',textAlign: TextAlign.start,)),
-                  //     SizedBox(
-                  //
-                  //         width: 80,
-                  //         child: Center(child: Text('\$$cartDiscount',style: TextStyle(fontWeight: FontWeight.bold,),))),
-                  //   ],
-                  // ),
-                  // const Divider(color: Colors.transparent,),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //   children:   [
-                  //     SizedBox(
-                  //         width: 180,
-                  //         child: Text('Items Discount',textAlign: TextAlign.start,)),
-                  //     SizedBox(
-                  //
-                  //         width: 80,
-                  //         child: Center(child: Text('\$${itemDiscount.toStringAsFixed(2)}',style: TextStyle(fontWeight: FontWeight.bold),))),
-                  //   ],
-                  // ),
-                  // const Divider(color: Colors.black38,thickness: 1,),
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children:   [
@@ -188,7 +164,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                 ],
               ),
             ),
-           widget.type == 'history'?
+           widget.type == 'history' || widget.type == 'delivered'?
 
            Padding(
              padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 20),

@@ -22,11 +22,11 @@ class Notification{
 class _NotificationPageState extends State<NotificationPage> {
 
   List<Notification> notification = [
-      Notification("https://tse3.mm.bing.net/th?id=OIP.0l7k5zqRUVQ5Yq9eTpW2LgHaLJ&pid=Api&P=0&h=180", "Test Notification 1"),
-      Notification("https://tse2.mm.bing.net/th?id=OIP.BkTHfOW0ET6fM3tzmkNrxgHaE8&pid=Api&P=0&h=180", "Test Notification 2"),
-      Notification("https://tse2.mm.bing.net/th?id=OIP.Yj2jc7gOT84nZ3DQwckQFAHaFf&pid=Api&P=0&h=180", "Test Notification 3"),
-      Notification("https://tse2.mm.bing.net/th?id=OIP.XsSykoLo4Dz42hC-tmyZnwHaE8&pid=Api&P=0&h=180", "Test Notification 4"),
-      Notification("https://tse1.mm.bing.net/th?id=OIP.dyACuQY7xRsGzjWAVITMPAHaF3&pid=Api&P=0&h=180", "Test Notification 5"),
+      Notification("https://wisdomexperience.org/wp-content/uploads/2019/10/blank-profile-picture-973460_960_720.png", "Test Notification 1"),
+      Notification("https://wisdomexperience.org/wp-content/uploads/2019/10/blank-profile-picture-973460_960_720.png", "Test Notification 2"),
+      Notification("https://wisdomexperience.org/wp-content/uploads/2019/10/blank-profile-picture-973460_960_720.png", "Test Notification 3"),
+      Notification("https://wisdomexperience.org/wp-content/uploads/2019/10/blank-profile-picture-973460_960_720.png", "Test Notification 4"),
+      Notification("https://wisdomexperience.org/wp-content/uploads/2019/10/blank-profile-picture-973460_960_720.png", "Test Notification 5"),
   ];
 
   @override

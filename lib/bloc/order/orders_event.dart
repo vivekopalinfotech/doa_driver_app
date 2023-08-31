@@ -5,8 +5,9 @@ abstract class OrdersEvent extends Equatable {
 }
 
 class GetOrders extends OrdersEvent {
-  const GetOrders();
+  int? id;
+   GetOrders(this.id);
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [id!];
 }

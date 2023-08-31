@@ -2,14 +2,21 @@
 
 import 'dart:async';
 import 'dart:io';
-
+import 'package:doa_driver_app/bloc/delivery_update/delivery_update_bloc.dart';
+import 'package:doa_driver_app/bloc/order/order_bloc.dart';
+import 'package:doa_driver_app/bloc/order_status/check_order_status_bloc.dart';
 import 'package:doa_driver_app/constants/app_constants.dart';
 import 'package:doa_driver_app/constants/app_data.dart';
+import 'package:doa_driver_app/constants/app_utils.dart';
 import 'package:doa_driver_app/constants/appstyles.dart';
+import 'package:doa_driver_app/models/order.dart';
+import 'package:doa_driver_app/screens/order/orderdetailscreen.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:location/location.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -30,12 +37,20 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   ScrollController _controller = ScrollController();
+  TextEditingController cancelController = TextEditingController();
+  TextEditingController reScheduleController = TextEditingController();
+  TextEditingController dateController = TextEditingController();
+  TextEditingController timeController = TextEditingController();
   late bool serviceEnabled;
   final PanelController _pc = PanelController();
   String latlng = "-1";
   final Completer<GoogleMapController> controller = Completer();
   LatLng? sourceLocation;
+  bool start = false;
 
+  toggleStart(){
+    start = !start;
+  }
   static const LatLng destination = LatLng(23.03085995, 72.53501535);
   List<LatLng> polylineCoordinates = [];
   BitmapDescriptor sourceIcon = BitmapDescriptor.defaultMarker;
@@ -56,18 +71,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
         destinationIcon = icon;
       },
     );
-    BitmapDescriptor.fromAssetImage(ImageConfiguration.empty, "assets/images/cars.png").then(
+    BitmapDescriptor.fromAssetImage(ImageConfiguration.empty, "assets/images/bike.png").then(
       (icon) {
         currentLocationIcon = icon;
       },
     );
   }
 
+
+
+
   void getPolyPoints() async {
     PolylinePoints polylinePoints = PolylinePoints();
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
       AppConstants.kGoogleApiKey, // Your Google Map Key
-      PointLatLng(sourceLocation!.latitude!, sourceLocation!.longitude!),
+      PointLatLng(sourceLocation!.latitude, sourceLocation!.longitude),
       PointLatLng(destination.latitude, destination.longitude),
     );
     if (result.points.isNotEmpty) {
@@ -117,12 +135,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
     getCurrentLocation();
     //getPolyPoints();
     setCustomMarkerIcon();
-
+    BlocProvider.of<DeliveryUpdateBloc>(context).add( GetDeliveryUpdate(AppData.user!.id));
+    BlocProvider.of<OrdersBloc>(context).add( GetOrders(AppData.user!.id));
     super.initState();
+    print('**********${widget.latitude}');
+    print(widget.longitude);
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: widget.type == 'order'
           ? AppBar(
@@ -151,6 +173,38 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _scrollingList() {
+
+    bool isWithinDistanceThreshold(
+        double currentLat, double currentLon, double destinationLat, double destinationLon, double thresholdMeters) {
+      double distance = AppUtils.calculateDistance(
+        currentLat,
+        currentLon,
+        destinationLat,
+        destinationLon,
+      );
+
+      return distance <= thresholdMeters;
+    }
+
+    double thresholdMeters = 10.0;
+
+    bool withinThreshold = isWithinDistanceThreshold(
+      currentLocation!.latitude!,
+      currentLocation!.longitude!,
+      destination.latitude,
+      destination.longitude,
+      thresholdMeters,
+    );
+
+    double distanceInMiles = AppUtils.calculateDistanceInMiles(
+      currentLocation!.latitude!,
+      currentLocation!.longitude!,
+      destination.latitude,
+      destination.longitude,
+    );
+
+
+
     return Column(
       mainAxisSize: MainAxisSize.max,
       children: [
@@ -204,7 +258,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                         children: [
                                           Text(
                                             '${AppData.user!.firstName} ${AppData.user!.lastName}',
-                                            style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
+                                            style: const TextStyle(color:
+                                            AppStyles.MAIN_COLOR,
+                                                fontWeight: FontWeight.bold, fontSize: 16),
                                           ),
                                           const SizedBox(
                                             height: 10,
@@ -238,7 +294,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               ],
                             ),
                           ),
-                          Padding(
+                            BlocBuilder<DeliveryUpdateBloc, DeliveryUpdateState>(
+                            builder: (context, state) {
+                            if (state is DeliveryUpdateLoaded) {
+
+                            return Padding(
                             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                             child: Container(
                               padding: const EdgeInsets.symmetric(vertical: 10),
@@ -247,20 +307,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: [
+
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                    children: const [
-                                      Icon(
-                                        Icons.access_time_outlined,
-                                        size: 45,
+                                    children: [
+                                      Image.asset(
+                                        'assets/images/completed.png',
+                                        height: 45,
                                         color: AppStyles.SECOND_COLOR,
                                       ),
                                       Text(
-                                        '22',
-                                        style: TextStyle(fontSize: 26, color: Colors.white, fontWeight: FontWeight.w500),
+                                        state.deliveryUpdateResponse
+                                            .complete_order.toString(),
+                                        style: const TextStyle(fontSize: 26, color: Colors.white, fontWeight: FontWeight.w500),
                                       ),
-                                      Text(
-                                        "Today's Delivery",
+                                      const Text(
+                                        'Complete Delivery',
                                         style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 12),
                                       ),
                                     ],
@@ -269,13 +331,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                     children: [
                                       Image.asset(
-                                        'assets/images/distance.png',
-                                        height: 40,
+                                        'assets/images/pending.png',
+                                        height: 45,
                                         color: AppStyles.SECOND_COLOR,
                                       ),
-                                      const Text(
-                                        '12',
-                                        style: TextStyle(fontSize: 26, color: Colors.white, fontWeight: FontWeight.w500),
+                                       Text(
+                                        state.deliveryUpdateResponse
+                                            .Pending_order.toString(),
+                                        style: const TextStyle(fontSize: 26, color: Colors.white, fontWeight: FontWeight.w500),
                                       ),
                                       const Text(
                                         'Pending Delivery',
@@ -285,29 +348,43 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   ),
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                    children: [
+                                    children:  [
                                       Image.asset(
-                                        'assets/images/scooter.png',
-                                        height: 40,
+                                        'assets/images/today.png',
+                                        height: 45,
                                         color: AppStyles.SECOND_COLOR,
                                       ),
-                                      const Text(
-                                        '40',
-                                        style: TextStyle(fontSize: 26, color: Colors.white, fontWeight: FontWeight.w500),
+                                      Text(
+                                        state.deliveryUpdateResponse
+                                            .today_order.toString(),
+                                        style: const TextStyle(fontSize: 26, color: Colors.white, fontWeight: FontWeight.w500),
                                       ),
                                       const Text(
-                                        'Total Delivery',
+                                        "Today's Delivery",
                                         style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 12),
                                       ),
                                     ],
-                                  )
+                                  ),
                                 ],
                               ),
                             ),
-                          )
+                          );
+                          }
+                          return const Center(
+                            child: CircularProgressIndicator(
+                              color: AppStyles.MAIN_COLOR,
+                            ),
+                          );
+                          },
+                          ),
+
                         ],
                       )
-                    : Container(
+                    : BlocBuilder<OrdersBloc, OrdersState>(
+                      builder: (context, state) {
+                      if (state is OrdersLoaded) {
+
+                      return Container(
                         height: 260,
                         color: Colors.white,
                         child: Padding(
@@ -338,15 +415,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                           ),
                                           Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
-                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                            mainAxisAlignment: MainAxisAlignment.start,
                                             children: [
-                                              const Text(
-                                                'Dank of America',
-                                                style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
+                                               Text(
+                                                '${state.ordersData[0]
+                                                    .delivery_first_name} ${state.ordersData[0].delivery_last_name}',
+                                                style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
                                               ),
                                               Text(
-                                                'OBD Store',
-                                                style: TextStyle(color: Colors.grey.shade400, fontWeight: FontWeight.bold, fontSize: 14),
+                                                '${state.ordersData[0]
+                                                    .warehouse!
+                                                    .warehouse_name}',
+                                                style: const TextStyle(color: AppStyles.MAIN_COLOR,
+                                                    fontWeight: FontWeight.bold, fontSize: 14),
                                               ),
                                             ],
                                           ),
@@ -361,24 +442,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.end,
                                         children: [
-                                          const Text(
-                                            '\$230.00',
-                                            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
+                                           Text(
+                                            '\$${state.ordersData[0]
+                                                .order_price}',
+                                            style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
                                           ),
-                                          const Text(
-                                            '2.5 km',
-                                            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 14),
+                                           Text(
+                                            '${distanceInMiles.toStringAsFixed(2)} mi',
+                                            style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 14),
                                           ),
-                                          InkWell(
+                                         start == false? InkWell(
                                               splashColor: Colors.transparent,
                                               highlightColor: Colors.transparent,
                                               onTap: () {
-                                                //    widget.navigateToNext(OrderDetailScreen(navigateToNext: widget.navigateToNext, ordersData: '',));
+                                                 widget.navigateToNext(OrderDetailScreen(navigateToNext: widget.navigateToNext,
+                                                   ordersData: state.ordersData[0], orderDetail: state.ordersData[0].orderDetail,));
                                               },
-                                              child: const Text(
-                                                'Order Details >',
-                                                style: TextStyle(color: AppStyles.MAIN_COLOR, fontWeight: FontWeight.bold, fontSize: 11),
-                                              )),
+                                              child: const Text('Order Details >',style: TextStyle(color: AppStyles.SECOND_COLOR,fontWeight: FontWeight.bold,fontSize: 14),
+                                              )):const SizedBox(),
                                         ],
                                       ),
                                     ),
@@ -387,32 +468,86 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               ),
                               const Text(
                                 'Pick Up',
-                                style: TextStyle(color: Colors.grey, fontSize: 12),
+                                style: TextStyle(color: AppStyles
+                                    .SECOND_COLOR,
+                                    fontSize: 12),
                               ),
-                              const SizedBox(
+                               SizedBox(
                                 width: 250,
                                 child: Text(
-                                  '123,ABC Building,Near Mall Road...',
-                                  style: TextStyle(color: Colors.black, fontSize: 14),
+                                  '${state.ordersData[0].warehouse!
+                                      .warehouse_address}',
+                                  style: const TextStyle(color: Colors.black, fontSize: 14),
                                 ),
                               ),
                               const Text(
                                 'Drop Off',
-                                style: TextStyle(color: Colors.grey, fontSize: 12),
+                                style: TextStyle(color: AppStyles
+                                    .SECOND_COLOR, fontSize: 12),
                               ),
-                              const SizedBox(
+                               SizedBox(
                                 width: 250,
                                 child: Text(
-                                  '3rd Floor, william street, Twin Tower ',
-                                  style: TextStyle(color: Colors.black, fontSize: 14),
+                                  '${state.ordersData[0]
+                                      .billing_street_aadress}, ${state
+                                      .ordersData[0].billing_city},${state
+                                      .ordersData[0].billing_postcode}',
+                                  style: const TextStyle(color: Colors.black, fontSize: 14),
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ),
-                              InkWell(
+                           start == false? InkWell(
                                 splashColor: Colors.transparent,
                                 highlightColor: Colors.transparent,
                                 onTap: () {
-                                  showAlertDialog1(context);
+                                  // showAlertDialog1(context);
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        contentPadding: EdgeInsets.zero,
+                                        title: Row(
+                                          children: [
+                                            Image.asset(
+                                              'assets/images/logo.png',
+                                              height: 50,
+                                            ),
+                                            Container(
+                                              padding: const EdgeInsets.only(left: 10),
+                                              width: 200,
+                                              child: const Text(
+                                                "Are You Ready For Start This Delivery?",
+                                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppStyles.MAIN_COLOR),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                            child: const Text(
+                                              "Cancel",
+                                              style: TextStyle(color: AppStyles.MAIN_COLOR, fontWeight: FontWeight.bold),
+                                            ),
+                                            onPressed: () {
+                                              Navigator.of(context, rootNavigator: true).pop();
+                                            },
+                                          ),
+                                          TextButton(
+                                            child: const Text("Start", style: TextStyle(color: AppStyles.MAIN_COLOR, fontWeight: FontWeight.bold)),
+                                            onPressed: () async {
+                                              BlocProvider.of<OrderStatusBloc>(context).add(CheckOrderStatus(state.ordersData[0].orderId.toString(), 'Shipped'));
+                                              toggleStart();
+                                              _pc.close();
+                                              getPolyPoints();
+                                              Navigator.of(context, rootNavigator: true).pop();
+
+                                            },
+                                          )
+                                        ],
+                                      );
+                                    },
+                                  );
+
                                 },
                                 child: Container(
                                   height: 45,
@@ -427,11 +562,82 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     ),
                                   ),
                                 ),
+                              ):
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    InkWell(
+                                      splashColor: Colors.transparent,
+                                      highlightColor: Colors.transparent,
+                                      onTap: () {
+                                        showAlertDialog1(context,state.ordersData[0]);
+                                        _pc.close();
+                                      },
+                                      child: Container(
+                                        height: 45,
+                                        width: MediaQuery.of(context).size.width*.4,
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(40),
+                                            color: AppStyles.SECOND_COLOR,
+                                            boxShadow: const [BoxShadow(color: Colors.black12, spreadRadius: 2, blurRadius: 4)]),
+                                        child: const Center(
+                                          child: Text(
+                                            'Cancel',
+                                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    InkWell(
+                                      splashColor: Colors.transparent,
+                                      highlightColor: Colors.transparent,
+                                      onTap: () {
+                                        if (withinThreshold) {
+                                          BlocProvider.of<OrderStatusBloc>(context).add(CheckOrderStatus(state.ordersData[0].orderId.toString(), 'Complete'));
+                                          widget.navigateToNext(OrderDetailScreen(navigateToNext: widget.navigateToNext,
+                                            ordersData: state.ordersData[0], orderDetail: state.ordersData[0].orderDetail,type: 'delivered',));
+                                        } else {
+
+                                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                              backgroundColor: AppStyles.MAIN_COLOR,
+                                              content: Center(child: Text('Sorry! you are not reached to the location',
+                                                style: TextStyle(color: Colors.white),),)));
+                                          print('Destination is beyond $thresholdMeters meters from the current location.');
+                                        }
+                                      },
+                                      child: Container(
+                                        height: 45,
+                                        width: MediaQuery.of(context).size.width*.4,
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(40),
+                                            color: AppStyles.MAIN_COLOR,
+                                            boxShadow: const [BoxShadow(color: Colors.black12, spreadRadius: 2, blurRadius: 4)]),
+                                        child: const Center(
+                                          child: Text(
+                                            'Delivered',
+                                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
                             ],
                           ),
                         ),
-                      ))),
+                      );
+                }
+                return const Center(
+                  child: CircularProgressIndicator(
+                    color: AppStyles.MAIN_COLOR,
+                  ),
+                );
+                },
+                ),
+    )),
       ],
     );
   }
@@ -444,7 +650,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           height: Platform.isIOS ? MediaQuery.of(context).size.height - 285 : MediaQuery.of(context).size.height - 235,
           child: Stack(
             children: [
-              currentLocation == null
+              widget.latitude == ''
                   ? GoogleMap(
                       compassEnabled: false,
                       mapType: MapType.hybrid,
@@ -452,7 +658,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       rotateGesturesEnabled: true,
                       zoomGesturesEnabled: true,
                       initialCameraPosition: CameraPosition(
-                        target: LatLng(double.parse(widget.latitude.toString()), double.parse(widget.longitude.toString())),
+                        target: LatLng(widget.latitude,
+                            widget.longitude),
                         zoom: 14,
                       ),
                       myLocationButtonEnabled: true,
@@ -460,9 +667,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       onCameraIdle: () {},
                       onCameraMove: (position) {},
                     )
-                  :
-
-                  //Text(currentLocation!.longitude!.toString()),
+                  : //Text(currentLocation!.longitude!.toString()),
                   GoogleMap(
                       compassEnabled: false,
                       mapType: MapType.normal,
@@ -470,15 +675,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       rotateGesturesEnabled: true,
                       zoomGesturesEnabled: true,
                       initialCameraPosition: CameraPosition(
-                        target: LatLng(double.parse(widget.latitude.toString()), double.parse(widget.longitude.toString())),
+                        target: LatLng(widget.latitude, widget.longitude),
                         zoom: 14,
                       ),
                       markers: {
                         Marker(
                           markerId: const MarkerId("currentLocation"),
                           icon: currentLocationIcon,
-                          rotation: currentLocation!.heading!,
-                          position: LatLng(currentLocation!.latitude!, currentLocation!.longitude!),
+                       //   rotation: currentLocation!.heading!,
+                          position: LatLng(widget.latitude, widget.longitude),
                         ),
                         Marker(
                           markerId: const MarkerId("source"),
@@ -499,7 +704,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           polylineId: const PolylineId("route"),
                           points: polylineCoordinates,
                           color: AppStyles.MAIN_COLOR,
-                          width: 4,
+                          width: 6,
                         ),
                       },
                       myLocationButtonEnabled: true,
@@ -553,7 +758,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           ],
                         ),
                       )
-                    : currentLocation!.latitude!=null?Text('${currentLocation!.latitude!}===${currentLocation!.longitude!}'):SizedBox(),
+                    : currentLocation?.latitude!=null?Text('${currentLocation!.latitude!}===${currentLocation!.longitude!}'):const SizedBox(),
               )
             ],
           ),
@@ -562,51 +767,293 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  void showAlertDialog1(BuildContext context) {
-    Widget cancelButton = TextButton(
-      child: const Text(
-        "Cancel",
-        style: TextStyle(color: AppStyles.MAIN_COLOR, fontWeight: FontWeight.bold),
-      ),
-      onPressed: () {
-        Navigator.of(context, rootNavigator: true).pop();
-      },
-    );
-    Widget continueButton = TextButton(
-      child: const Text("Start", style: TextStyle(color: AppStyles.MAIN_COLOR, fontWeight: FontWeight.bold)),
-      onPressed: () async {
-        _pc.close();
-        getPolyPoints();
-        Navigator.of(context, rootNavigator: true).pop();
-      },
-    );
-    AlertDialog alert = AlertDialog(
-      contentPadding: EdgeInsets.zero,
-      title: Row(
-        children: [
-          Image.asset(
-            'assets/images/logo.png',
-            height: 50,
-          ),
-          Container(
-            padding: const EdgeInsets.only(left: 10),
-            width: 200,
-            child: const Text(
-              "Are You Ready For Start This Delivery?",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppStyles.MAIN_COLOR),
+  Future _selectDate() async {
+    final now = DateTime.now();
+    DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(now.year, now.month, now.day + 1),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            colorScheme: ColorScheme.fromSwatch(
+              primarySwatch: Colors.brown,
+              primaryColorDark: Colors.brown,
+              accentColor: Colors.brown,
             ),
+            dialogBackgroundColor:Colors.white,
           ),
-        ],
-      ),
-      actions: [
-        cancelButton,
-        continueButton,
-      ],
+          child: child!,
+        );
+      },
     );
+    if(picked != null ){
+      String formattedDate = DateFormat('yyyy/MM/dd').format(picked);
+      setState(() => dateController.text = formattedDate);
+
+    }
+  }
+  Future<void> _selectTime() async {
+    TimeOfDay? selectedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(), // Set the initial time (optional)
+    );
+
+    if (selectedTime != null) {
+      // Handle the selected time (e.g., update UI);
+      setState(() => timeController.text = selectedTime.toString().replaceAll('TimeOfDay(', '').replaceAll(')', ""));
+    }
+  }
+
+  bool schedule = false;
+  toggleSchedule(){
+   setState(() {
+     schedule = !schedule;
+   });
+  }
+
+  bool cancel = false;
+  toggleCancel(){
+    setState(() {
+      cancel = !cancel;
+    });
+  }
+  void showAlertDialog1(BuildContext context,OrdersData? ordersData) {
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return alert;
+        return StatefulBuilder(
+          builder: (context, setStateInsideDialog) {
+          return  AlertDialog(
+            contentPadding: EdgeInsets.zero,
+            titlePadding: const EdgeInsets.all(16),
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+
+                InkWell(
+                  onTap: (){
+                    setStateInsideDialog(() {
+                      toggleSchedule();
+                    });
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        color: AppStyles.SECOND_COLOR
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text('Reschedule',style: TextStyle(
+                            color: AppStyles.MAIN_COLOR,fontWeight: FontWeight.w500
+                        ),),
+                        Icon(schedule == true?Icons.arrow_drop_up:Icons.arrow_drop_down)
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10,),
+                schedule==true? Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+
+                    TextFormField(
+                      minLines: 1,
+                      maxLines: 5,
+                      cursorColor: AppStyles.MAIN_COLOR,
+                      controller: reScheduleController,
+                      style: const TextStyle(
+                          color: AppStyles.MAIN_COLOR,
+                          fontSize: 14),
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: const BorderSide(
+                              width: 0,
+                              style: BorderStyle.none,
+                            ),
+                          ),
+                          fillColor:  AppStyles.COLOR_LITE_GREY_LIGHT,
+                          filled: true,
+                          contentPadding: const EdgeInsets.only(left: 10,right: 10),
+                          hintText: "Why you Reschedule this delivery?",
+                          hintStyle: const TextStyle(
+                              color: AppStyles.SECOND_COLOR,
+                              fontSize: 14)),
+                    ),
+                    const SizedBox(height: 16,),
+                    const Text('Rescheduled Delivery:',style: TextStyle(fontSize: 18),),
+                    const SizedBox(height: 12,),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const Text('Delivery Date:   ', style: TextStyle(color: Colors.black,fontSize: 16),),
+                        InkWell(
+                            onTap: (){
+                              setStateInsideDialog(() {
+                                _selectDate();
+                              });
+                            },
+                            child: Row(
+                              children: [
+                                dateController.text.isNotEmpty?
+                                Text(
+                                  AppUtils.splitDate(dateController.text),
+                                  style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 16,color: AppStyles.SECOND_COLOR),):
+                                const Text('',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: AppStyles.MAIN_COLOR,fontSize: 16),),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                                  child: Icon(
+                                      Icons.calendar_month,size: 16,color:dateController.text.isNotEmpty? AppStyles.MAIN_COLOR:Colors.black),
+                                )
+                              ],
+                            ))
+                      ],
+                    ),
+                    const SizedBox(height: 8,),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const Text('Delivery Time:   ', style: TextStyle(color: Colors.black,fontSize: 16),),
+                        InkWell(
+
+                            onTap: (){
+                              setStateInsideDialog(() {
+                                _selectTime();
+                              });
+                            },
+                            child: Row(
+                              children: [
+                                timeController.text.isNotEmpty?
+                                Text(
+                                  AppUtils.splitTime(timeController.text),
+                                  style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 16,color: AppStyles.SECOND_COLOR),):
+                                const Text('',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: AppStyles.MAIN_COLOR,fontSize: 16),),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                                  child: Icon(
+                                      Icons.access_time_outlined,size: 16,color:timeController.text.isNotEmpty? AppStyles.MAIN_COLOR:Colors.black),
+                                )
+                              ],
+                            ))
+                      ],
+                    ),
+                  ],
+                ):const SizedBox(),
+                const SizedBox(height: 20,),
+                InkWell(
+                  onTap: (){
+                    setStateInsideDialog(() {
+                      toggleCancel();
+                    });
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        color: AppStyles.SECOND_COLOR
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text('Cancel',style: TextStyle(
+                            color: AppStyles.MAIN_COLOR,fontWeight: FontWeight.w500
+                        ),),
+                        Icon(cancel == true?Icons.arrow_drop_up:Icons.arrow_drop_down)
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10,),
+                cancel==true? TextFormField(
+                  minLines: 1,
+                  maxLines: 5,
+                  controller: cancelController,
+                  cursorColor: AppStyles.MAIN_COLOR,
+                  style: const TextStyle(
+                      color: AppStyles.MAIN_COLOR,
+                      fontSize: 14),
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: const BorderSide(
+                          width: 0,
+                          style: BorderStyle.none,
+                        ),
+                      ),
+                      fillColor:  AppStyles.COLOR_LITE_GREY_LIGHT,
+                      filled: true,
+                      contentPadding: const EdgeInsets.only(left: 10,right: 10),
+                      hintText: "Why you cancel this delivery?",
+                      hintStyle: const TextStyle(
+                          color: AppStyles.SECOND_COLOR,
+                          fontSize: 14)),
+                ):const SizedBox(),
+              ],
+            ),
+
+            actions: [
+              // cancelButton,
+              schedule== true? Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: TextButton(
+                  style: ButtonStyle(
+                    backgroundColor: const MaterialStatePropertyAll(AppStyles.MAIN_COLOR),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0), // Adjust the radius as needed
+                      ),
+                    ),
+                  ),
+                  child: const Text(
+                    "Reschedule",
+                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500,fontSize: 16),
+                  ),
+                  onPressed: () {
+                    BlocProvider.of<OrderStatusBloc>(context).add(CheckOrderStatus(ordersData!.orderId.toString(), 'Inprocess'));
+                    Navigator.of(context, rootNavigator: true).pop();
+                  },
+                ),
+              ) :Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: TextButton(
+                  style: ButtonStyle(
+                    backgroundColor: const MaterialStatePropertyAll(AppStyles.MAIN_COLOR),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0), // Adjust the radius as needed
+                      ),
+                    ),
+                  ),
+                  child: const Text(
+                    "Cancel",
+                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500,fontSize: 16),
+                  ),
+                  onPressed: () {
+                    cancelController.text.isNotEmpty?
+                    BlocProvider.of<OrderStatusBloc>(context).add(CheckOrderStatus(ordersData!.orderId.toString(), 'Cancel')):
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                            backgroundColor: AppStyles.MAIN_COLOR,
+                            content: Center(child: Text('Please give reason why you cancel this order?',
+                        style: TextStyle(color: Colors.white),),)));
+                    Navigator.of(context, rootNavigator: true).pop();
+                  },
+                ),
+              )
+            ],
+          );
+        });
       },
     );
   }

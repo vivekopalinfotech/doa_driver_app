@@ -7,7 +7,8 @@ import 'package:url_launcher/url_launcher.dart';
 
 class DetailCard extends StatefulWidget {
   final OrdersData ordersData;
-  const DetailCard({super.key, required this.ordersData});
+  final miles;
+  const DetailCard({super.key, required this.ordersData, this.miles});
 
   @override
   State<DetailCard> createState() => _DetailCardState();
@@ -122,9 +123,9 @@ class _DetailCardState extends State<DetailCard> {
                     fontSize: 16),
               ),
              // SizedBox(height: 5,),
-              const Text(
-                '2.5 km',
-                style: TextStyle(
+               Text(
+                '${widget.miles} mi',
+                style: const TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
                     fontSize: 14),

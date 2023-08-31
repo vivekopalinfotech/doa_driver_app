@@ -1,6 +1,5 @@
 // ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
 import 'package:doa_driver_app/bloc/auth/auth_bloc.dart';
-import 'package:doa_driver_app/bloc/login/mobile_bloc.dart';
 import 'package:doa_driver_app/constants/app_data.dart';
 import 'package:doa_driver_app/mainscreen.dart';
 import 'package:doa_driver_app/models/user.dart';
@@ -21,14 +20,15 @@ class _SplashScreenState extends State<SplashScreen> with  SingleTickerProviderS
   late AnimationController controller;
   bool isLogin = false;
 
-  String latitude = "";
-  String longitude = "";
+   double? latitude;
+   double? longitude;
+
   late bool serviceEnabled;
 
   Future<void> _callSplashScreen() async {
     Position position = await _getGeoLocationPosition();
-    latitude = position.latitude.toString();
-    longitude = position.longitude.toString();
+    latitude = position.latitude;
+    longitude = position.longitude;
   }
   Future<Position> _getGeoLocationPosition() async {
     LocationPermission permission;
@@ -95,7 +95,7 @@ class _SplashScreenState extends State<SplashScreen> with  SingleTickerProviderS
       Future.microtask(() => Navigator.of(context).pushReplacement(
           MaterialPageRoute(
               builder: (BuildContext context) =>
-               SignInScreen())));
+               const SignInScreen())));
     }
   }
 

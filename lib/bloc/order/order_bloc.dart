@@ -18,7 +18,7 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
   Stream<OrdersState> mapEventToState(OrdersEvent event) async* {
     if (event is GetOrders) {
       try {
-        final ordersResponse = await ordersRepo.getOrder();
+        final ordersResponse = await ordersRepo.getOrder(event.id!);
         if (ordersResponse.status == AppConstants.STATUS_SUCCESS &&
             ordersResponse.data != null) {
           yield OrdersLoaded(ordersResponse.data!);
