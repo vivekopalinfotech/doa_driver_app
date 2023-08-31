@@ -5,6 +5,7 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:doa_driver_app/api/login_interceptors.dart';
+import 'package:doa_driver_app/api/responses/delivery_update_response.dart';
 import 'package:doa_driver_app/api/responses/login_response.dart';
 import 'package:doa_driver_app/api/responses/logout_response.dart';
 import 'package:doa_driver_app/api/responses/mobile_rsponse.dart';
@@ -40,6 +41,8 @@ class ApiProvider {
           ? ""
           : 'Bearer ${AppData.accessToken}',
     });
+    print(_dio?.options.headers);
+    print(AppData.accessToken);
     _dio?.interceptors.add(LoggingInterceptor());
   }
 
@@ -123,6 +126,16 @@ class ApiProvider {
       return OrderResponse.fromJson(response.data);
     } catch (error) {
       return OrderResponse.withError(_handleError(error as TypeError));
+    }
+  }
+
+  Future<DeliveryUpdateResponse> getDeliveryUpdate() async {
+    try {
+      Response response = await _dio!.get("${_baseUrl}delivery_update/2");
+      log(jsonEncode(response.data));
+      return DeliveryUpdateResponse.fromJson(response.data);
+    } catch (error) {
+      return DeliveryUpdateResponse.withError(_handleError(error as TypeError));
     }
   }
 

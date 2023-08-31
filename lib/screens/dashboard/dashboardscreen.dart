@@ -2,12 +2,15 @@
 
 import 'dart:async';
 import 'dart:io';
-
+import 'package:doa_driver_app/bloc/delivery_update/delivery_update_bloc.dart';
+import 'package:doa_driver_app/bloc/order/order_bloc.dart';
 import 'package:doa_driver_app/constants/app_constants.dart';
 import 'package:doa_driver_app/constants/app_data.dart';
 import 'package:doa_driver_app/constants/appstyles.dart';
+import 'package:doa_driver_app/screens/order/orderdetailscreen.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
@@ -67,7 +70,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     PolylinePoints polylinePoints = PolylinePoints();
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
       AppConstants.kGoogleApiKey, // Your Google Map Key
-      PointLatLng(sourceLocation!.latitude!, sourceLocation!.longitude!),
+      PointLatLng(sourceLocation!.latitude, sourceLocation!.longitude),
       PointLatLng(destination.latitude, destination.longitude),
     );
     if (result.points.isNotEmpty) {
@@ -117,7 +120,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
     getCurrentLocation();
     //getPolyPoints();
     setCustomMarkerIcon();
-
+    BlocProvider.of<DeliveryUpdateBloc>(context).add(const GetDeliveryUpdate());
+    BlocProvider.of<OrdersBloc>(context).add(const GetOrders());
     super.initState();
   }
 
@@ -204,7 +208,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                         children: [
                                           Text(
                                             '${AppData.user!.firstName} ${AppData.user!.lastName}',
-                                            style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
+                                            style: const TextStyle(color:
+                                            AppStyles.MAIN_COLOR,
+                                                fontWeight: FontWeight.bold, fontSize: 16),
                                           ),
                                           const SizedBox(
                                             height: 10,
@@ -238,7 +244,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               ],
                             ),
                           ),
-                          Padding(
+                            BlocBuilder<DeliveryUpdateBloc, DeliveryUpdateState>(
+                            builder: (context, state) {
+                            if (state is DeliveryUpdateLoaded) {
+
+                            return Padding(
                             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                             child: Container(
                               padding: const EdgeInsets.symmetric(vertical: 10),
@@ -247,20 +257,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: [
+
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                    children: const [
-                                      Icon(
-                                        Icons.access_time_outlined,
-                                        size: 45,
+                                    children: [
+                                      Image.asset(
+                                        'assets/images/scooter.png',
+                                        height: 40,
                                         color: AppStyles.SECOND_COLOR,
                                       ),
                                       Text(
-                                        '22',
-                                        style: TextStyle(fontSize: 26, color: Colors.white, fontWeight: FontWeight.w500),
+                                        state.deliveryUpdateResponse
+                                            .complete_order.toString(),
+                                        style: const TextStyle(fontSize: 26, color: Colors.white, fontWeight: FontWeight.w500),
                                       ),
-                                      Text(
-                                        "Today's Delivery",
+                                      const Text(
+                                        'Complete Delivery',
                                         style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 12),
                                       ),
                                     ],
@@ -273,9 +285,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                         height: 40,
                                         color: AppStyles.SECOND_COLOR,
                                       ),
-                                      const Text(
-                                        '12',
-                                        style: TextStyle(fontSize: 26, color: Colors.white, fontWeight: FontWeight.w500),
+                                       Text(
+                                        state.deliveryUpdateResponse
+                                            .Pending_order.toString(),
+                                        style: const TextStyle(fontSize: 26, color: Colors.white, fontWeight: FontWeight.w500),
                                       ),
                                       const Text(
                                         'Pending Delivery',
@@ -285,29 +298,45 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   ),
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Image.asset(
-                                        'assets/images/scooter.png',
-                                        height: 40,
+                                    children:  [
+                                      const Icon(
+                                        Icons.access_time_outlined,
+                                        size: 40,
                                         color: AppStyles.SECOND_COLOR,
                                       ),
-                                      const Text(
-                                        '40',
-                                        style: TextStyle(fontSize: 26, color: Colors.white, fontWeight: FontWeight.w500),
+                                      Text(
+                                        state.deliveryUpdateResponse
+                                            .today_order.toString(),
+                                        style: const TextStyle(fontSize: 26, color: Colors.white, fontWeight: FontWeight.w500),
                                       ),
                                       const Text(
-                                        'Total Delivery',
+                                        "Today's Delivery",
                                         style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 12),
                                       ),
                                     ],
-                                  )
+                                  ),
                                 ],
                               ),
                             ),
-                          )
+                          );
+                          }
+                          return const Center(
+                            child: CircularProgressIndicator(
+                              color: AppStyles.MAIN_COLOR,
+                            ),
+                          );
+                          },
+                          ),
+
                         ],
                       )
-                    : Container(
+                    :
+
+                      BlocBuilder<OrdersBloc, OrdersState>(
+                      builder: (context, state) {
+                      if (state is OrdersLoaded) {
+
+                      return Container(
                         height: 260,
                         color: Colors.white,
                         child: Padding(
@@ -338,15 +367,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                           ),
                                           Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
-                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                            mainAxisAlignment: MainAxisAlignment.center,
                                             children: [
-                                              const Text(
-                                                'Dank of America',
-                                                style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
+                                               Text(
+                                                '${state.ordersData[0]
+                                                    .delivery_first_name} ${state.ordersData[0].delivery_last_name}',
+                                                style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
                                               ),
                                               Text(
-                                                'OBD Store',
-                                                style: TextStyle(color: Colors.grey.shade400, fontWeight: FontWeight.bold, fontSize: 14),
+                                                '${state.ordersData[0]
+                                                    .warehouse!
+                                                    .warehouse_name}',
+                                                style: TextStyle(color: AppStyles.MAIN_COLOR,
+                                                    fontWeight: FontWeight.bold, fontSize: 14),
                                               ),
                                             ],
                                           ),
@@ -361,24 +394,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.end,
                                         children: [
-                                          const Text(
-                                            '\$230.00',
-                                            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
+                                           Text(
+                                            '\$${state.ordersData[0]
+                                                .order_price}',
+                                            style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
                                           ),
                                           const Text(
-                                            '2.5 km',
+                                            '2.5 mi',
                                             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 14),
                                           ),
                                           InkWell(
                                               splashColor: Colors.transparent,
                                               highlightColor: Colors.transparent,
                                               onTap: () {
-                                                //    widget.navigateToNext(OrderDetailScreen(navigateToNext: widget.navigateToNext, ordersData: '',));
+                                                 widget.navigateToNext(OrderDetailScreen(navigateToNext: widget.navigateToNext,
+                                                   ordersData: state.ordersData[0], orderDetail: state.ordersData[0].orderDetail,));
                                               },
-                                              child: const Text(
-                                                'Order Details >',
-                                                style: TextStyle(color: AppStyles.MAIN_COLOR, fontWeight: FontWeight.bold, fontSize: 11),
-                                              )),
+                                              child: const Text('Order Details >',style: TextStyle(color: AppStyles.SECOND_COLOR,fontWeight: FontWeight.bold,fontSize: 14),)),
                                         ],
                                       ),
                                     ),
@@ -387,24 +419,31 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               ),
                               const Text(
                                 'Pick Up',
-                                style: TextStyle(color: Colors.grey, fontSize: 12),
+                                style: TextStyle(color: AppStyles
+                                    .SECOND_COLOR,
+                                    fontSize: 12),
                               ),
-                              const SizedBox(
+                               SizedBox(
                                 width: 250,
                                 child: Text(
-                                  '123,ABC Building,Near Mall Road...',
-                                  style: TextStyle(color: Colors.black, fontSize: 14),
+                                  '${state.ordersData[0].warehouse!
+                                      .warehouse_address}',
+                                  style: const TextStyle(color: Colors.black, fontSize: 14),
                                 ),
                               ),
                               const Text(
                                 'Drop Off',
-                                style: TextStyle(color: Colors.grey, fontSize: 12),
+                                style: TextStyle(color: AppStyles
+                                    .SECOND_COLOR, fontSize: 12),
                               ),
-                              const SizedBox(
+                               SizedBox(
                                 width: 250,
                                 child: Text(
-                                  '3rd Floor, william street, Twin Tower ',
-                                  style: TextStyle(color: Colors.black, fontSize: 14),
+                                  '${state.ordersData[0]
+                                      .billing_street_aadress}, ${state
+                                      .ordersData[0].billing_city},${state
+                                      .ordersData[0].billing_postcode}',
+                                  style: const TextStyle(color: Colors.black, fontSize: 14),
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ),
@@ -431,7 +470,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             ],
                           ),
                         ),
-                      ))),
+                      );
+                }
+                return const Center(
+                  child: CircularProgressIndicator(
+                    color: AppStyles.MAIN_COLOR,
+                  ),
+                );
+                },
+                ),
+    )),
       ],
     );
   }
@@ -452,7 +500,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       rotateGesturesEnabled: true,
                       zoomGesturesEnabled: true,
                       initialCameraPosition: CameraPosition(
-                        target: LatLng(double.parse(widget.latitude.toString()), double.parse(widget.longitude.toString())),
+                        target: LatLng(double.parse(widget.latitude), double
+                            .parse(widget.longitude)),
                         zoom: 14,
                       ),
                       myLocationButtonEnabled: true,
@@ -470,7 +519,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       rotateGesturesEnabled: true,
                       zoomGesturesEnabled: true,
                       initialCameraPosition: CameraPosition(
-                        target: LatLng(double.parse(widget.latitude.toString()), double.parse(widget.longitude.toString())),
+                        target: LatLng(double.parse(widget.latitude), double.parse(widget.longitude)),
                         zoom: 14,
                       ),
                       markers: {
@@ -553,7 +602,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           ],
                         ),
                       )
-                    : currentLocation!.latitude!=null?Text('${currentLocation!.latitude!}===${currentLocation!.longitude!}'):SizedBox(),
+                    : currentLocation!.latitude!=null?Text('${currentLocation!.latitude!}===${currentLocation!.longitude!}'):const SizedBox(),
               )
             ],
           ),

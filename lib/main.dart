@@ -1,5 +1,6 @@
 
 import 'package:doa_driver_app/bloc/auth/auth_bloc.dart';
+import 'package:doa_driver_app/bloc/delivery_update/delivery_update_bloc.dart';
 import 'package:doa_driver_app/bloc/history/history_bloc.dart';
 import 'package:doa_driver_app/bloc/login/mobile_bloc.dart';
 import 'package:doa_driver_app/bloc/online/online_bloc.dart';
@@ -11,6 +12,7 @@ import 'package:doa_driver_app/repos/mobile_repo.dart';
 import 'package:doa_driver_app/repos/online_repo.dart';
 import 'package:doa_driver_app/repos/order_repo.dart';
 import 'package:doa_driver_app/repos/otp_repo.dart';
+import 'package:doa_driver_app/repos/update_delivery.dart';
 import 'package:doa_driver_app/screens/splashscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,6 +28,7 @@ void main() {
         BlocProvider(create: (context) => OtpBloc(RealOtpRepo())),
         BlocProvider(create: (context) => OrdersBloc(RealOrderRepo()),),
         BlocProvider(create: (context) => HistoryBloc(RealHistoryRepo()),),
+        BlocProvider(create: (context) => DeliveryUpdateBloc(RealDeliveryUpdateRepo()),),
       ],
       child: const MyApp(),
     ),
