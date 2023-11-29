@@ -160,7 +160,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       body: SlidingUpPanel(
         borderRadius: const BorderRadius.only(topLeft: Radius.circular(40), topRight: Radius.circular(40)),
         controller: _pc,
-        minHeight: widget.type == 'order' ? 150 : 90,
+        minHeight: widget.type == 'order' ? 150 : 100,
         maxHeight: 290,
         onPanelOpened: () {},
         panelBuilder: (ScrollController sc) {
@@ -384,11 +384,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       builder: (context, state) {
                       if (state is OrdersLoaded) {
 
-                      return Container(
+                      return state.ordersData.isNotEmpty?Container(
                         height: 260,
                         color: Colors.white,
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15),
+                          padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 15),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -628,6 +628,155 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             ],
                           ),
                         ),
+                      ):Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 15),
+                            child: Row(
+                              children: [
+                                Flexible(
+                                  flex: 10,
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      const CircleAvatar(
+                                        backgroundColor: Colors.white,
+                                        radius: 25,
+                                        backgroundImage: NetworkImage(
+                                          'https://wisdomexperience.org/wp-content/uploads/2019/10/blank-profile-picture-973460_960_720.png',
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 12,
+                                      ),
+                                      Column(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            '${AppData.user!.firstName} ${AppData.user!.lastName}',
+                                            style: const TextStyle(color:
+                                            AppStyles.MAIN_COLOR,
+                                                fontWeight: FontWeight.bold, fontSize: 16),
+                                          ),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                'Basic Level',
+                                                style: TextStyle(color: Colors.grey.shade400, fontWeight: FontWeight.bold, fontSize: 12),
+                                              ),
+                                              const Text(
+                                                ' | ',
+                                                style: TextStyle(color: AppStyles.MAIN_COLOR, fontWeight: FontWeight.bold, fontSize: 14),
+                                              ),
+                                              Image.asset(
+                                                'assets/images/licence.png',
+                                                height: 10,
+                                              ),
+                                              const SizedBox(width: 3),
+                                              Text(
+                                                'ACX ${AppData.user!.vehicle_registration_no}',
+                                                style: TextStyle(color: Colors.grey.shade400, fontWeight: FontWeight.bold, fontSize: 12),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          BlocBuilder<DeliveryUpdateBloc, DeliveryUpdateState>(
+                            builder: (context, state) {
+                              if (state is DeliveryUpdateLoaded) {
+
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(vertical: 10),
+                                    height: 150,
+                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), color: AppStyles.MAIN_COLOR),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                      children: [
+
+                                        Column(
+                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            Image.asset(
+                                              'assets/images/completed.png',
+                                              height: 45,
+                                              color: AppStyles.SECOND_COLOR,
+                                            ),
+                                            Text(
+                                              state.deliveryUpdateResponse
+                                                  .complete_order.toString(),
+                                              style: const TextStyle(fontSize: 26, color: Colors.white, fontWeight: FontWeight.w500),
+                                            ),
+                                            const Text(
+                                              'Complete Delivery',
+                                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 12),
+                                            ),
+                                          ],
+                                        ),
+                                        Column(
+                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            Image.asset(
+                                              'assets/images/pending.png',
+                                              height: 45,
+                                              color: AppStyles.SECOND_COLOR,
+                                            ),
+                                            Text(
+                                              state.deliveryUpdateResponse
+                                                  .Pending_order.toString(),
+                                              style: const TextStyle(fontSize: 26, color: Colors.white, fontWeight: FontWeight.w500),
+                                            ),
+                                            const Text(
+                                              'Pending Delivery',
+                                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 12),
+                                            ),
+                                          ],
+                                        ),
+                                        Column(
+                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                          children:  [
+                                            Image.asset(
+                                              'assets/images/today.png',
+                                              height: 45,
+                                              color: AppStyles.SECOND_COLOR,
+                                            ),
+                                            Text(
+                                              state.deliveryUpdateResponse
+                                                  .today_order.toString(),
+                                              style: const TextStyle(fontSize: 26, color: Colors.white, fontWeight: FontWeight.w500),
+                                            ),
+                                            const Text(
+                                              "Today's Delivery",
+                                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 12),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              }
+                              return const Center(
+                                child: CircularProgressIndicator(
+                                  color: AppStyles.MAIN_COLOR,
+                                ),
+                              );
+                            },
+                          ),
+
+                        ],
                       );
                 }
                 return const Center(

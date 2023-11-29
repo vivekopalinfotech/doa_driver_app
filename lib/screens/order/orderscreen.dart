@@ -21,30 +21,36 @@ class OrderScreen extends StatefulWidget {
   final Function(Widget widget) navigateToNext;
   final Function() openDrawer;
 
-   OrderScreen(this.navigateToNext, this.openDrawer,this.online,this.lat,this.lng, {super.key, this.type, });
+  OrderScreen(
+    this.navigateToNext,
+    this.openDrawer,
+    this.online,
+    this.lat,
+    this.lng, {
+    super.key,
+    this.type,
+  });
 
   @override
   _OrderScreenState createState() => _OrderScreenState();
 }
 
 class _OrderScreenState extends State<OrderScreen> {
-
-  bool  online = false;
+  bool online = false;
 
   LocationData? currentLocation;
   final Completer<GoogleMapController> controller = Completer();
   void getCurrentLocation() async {
     Location location = Location();
     location.getLocation().then(
-          (location) {
+      (location) {
         currentLocation = location;
-
       },
     );
 
     GoogleMapController googleMapController = await controller.future;
     location.onLocationChanged.listen(
-          (newLoc) {
+      (newLoc) {
         currentLocation = newLoc;
         googleMapController.animateCamera(
           CameraUpdate.newCameraPosition(
@@ -61,68 +67,68 @@ class _OrderScreenState extends State<OrderScreen> {
       },
     );
   }
+
   @override
   void initState() {
-    BlocProvider.of<OrdersBloc>(context).add( GetOrders(AppData.user!.id));
+    BlocProvider.of<OrdersBloc>(context).add(GetOrders(AppData.user!.id));
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
-
-    return  Scaffold(
+    return Scaffold(
       backgroundColor: AppStyles.SECOND_COLOR.withOpacity(.2),
-        appBar: widget.type == 'order' ? AppBar(
-            elevation: 0,
-            backgroundColor: AppStyles.MAIN_COLOR,
-            iconTheme: const IconThemeData(color: AppStyles.SECOND_COLOR),
-            title: const Text(
-              "Orders",
-              // AppLocalizations.of(context)!.translate('app_name')!,
-              style: TextStyle(
-                  fontSize: 20.0,
-                  fontFamily: "MontserratBold",
-                  fontWeight: FontWeight.bold,
-                  color: AppStyles.SECOND_COLOR
-              ),
-            )
-
-        ) : const PreferredSize(preferredSize: Size.zero, child: SizedBox()),
-
-
-        body:  BlocBuilder<OrdersBloc, OrdersState>(
-          builder: (context, state) {
-            if (state is OrdersLoaded) {
-
-              return SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 6.0),
-                child: ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: state.ordersData.length,
-                  itemBuilder: (context,index){
-                    return CustomCard(navigateToNext:  widget.navigateToNext,
-                        type: 'order',online: widget.online,
-                        ordersData: state.ordersData[index],
-                        lat:widget.lat,lng: widget.lng,
-                    customerAddress: state.ordersData[index].customerId!=null?
-                    state.ordersData[index].customerId!.customer_address![index]:'',);
-                  },),
-              ),
-            ],
-          ),
-        );
-      }
-    return const Center(
-      child: CircularProgressIndicator(
-        color: AppStyles.MAIN_COLOR,
+      appBar: widget.type == 'order'
+          ? AppBar(
+              elevation: 0,
+              backgroundColor: AppStyles.MAIN_COLOR,
+              iconTheme: const IconThemeData(color: AppStyles.SECOND_COLOR),
+              title: const Text(
+                "Orders",
+                // AppLocalizations.of(context)!.translate('app_name')!,
+                style: TextStyle(fontSize: 20.0, fontFamily: "MontserratBold", fontWeight: FontWeight.bold, color: AppStyles.SECOND_COLOR),
+              ))
+          : const PreferredSize(preferredSize: Size.zero, child: SizedBox()),
+      body: BlocBuilder<OrdersBloc, OrdersState>(
+        builder: (context, state) {
+          if (state is OrdersLoaded) {
+            return state.ordersData.isNotEmpty
+                ? SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 6.0),
+                          child: ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: state.ordersData.length,
+                            itemBuilder: (context, index) {
+                              return CustomCard(
+                                navigateToNext: widget.navigateToNext,
+                                type: 'order',
+                                online: widget.online,
+                                ordersData: state.ordersData[index],
+                                lat: widget.lat,
+                                lng: widget.lng,
+                                customerAddress: state.ordersData[index].customerId != null ? state.ordersData[index].customerId!.customer_address![index] : '',
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                : const Center(
+                    child: Text('No Orders'),
+                  );
+          }
+          return const Center(
+            child: CircularProgressIndicator(
+              color: AppStyles.MAIN_COLOR,
+            ),
+          );
+        },
       ),
     );
-    },
-        ),
-    );
   }
-
 }

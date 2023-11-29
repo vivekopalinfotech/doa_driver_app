@@ -1,4 +1,5 @@
-import 'dart:math';
+
+// ignore_for_file: must_be_immutable
 
 import 'package:doa_driver_app/bloc/order/order_bloc.dart';
 import 'package:doa_driver_app/constants/app_utils.dart';
@@ -44,8 +45,6 @@ class _CustomCardState extends State<CustomCard> {
         widget.ordersData.customerId!= null? double.parse(widget.customerAddress.lattitude.toString()):23.03085995,
       widget.ordersData.customerId!= null?double.parse(widget.customerAddress.longitude.toString()):72.53501535,
     );
-
-
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 12,vertical: 6),
