@@ -1,17 +1,13 @@
 // ignore_for_file: library_private_types_in_public_api, prefer_typing_uninitialized_variables, must_be_immutable
 import 'dart:async';
-import 'dart:math';
-
 import 'package:doa_driver_app/bloc/order/order_bloc.dart';
 import 'package:doa_driver_app/constants/app_data.dart';
-import 'package:doa_driver_app/constants/app_utils.dart';
 import 'package:doa_driver_app/constants/appstyles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'widgets/customcards.dart';
-import 'package:geolocator/geolocator.dart';
 
 class OrderScreen extends StatefulWidget {
   final lat;

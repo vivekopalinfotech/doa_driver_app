@@ -1,7 +1,6 @@
-// ignore_for_file: library_private_types_in_public_api
+// ignore_for_file: library_private_types_in_public_api, must_be_immutable, prefer_typing_uninitialized_variables
 
 import 'package:doa_driver_app/bloc/history/history_bloc.dart';
-import 'package:doa_driver_app/bloc/order/order_bloc.dart';
 import 'package:doa_driver_app/constants/app_data.dart';
 import 'package:doa_driver_app/constants/appstyles.dart';
 import 'package:doa_driver_app/screens/order/widgets/customcards.dart';
@@ -56,7 +55,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
               },
 
             ),
-                )):Center(
+                )):const Center(
                 child: Text('No History'),
               );
           }

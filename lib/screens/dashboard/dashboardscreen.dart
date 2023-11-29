@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names, avoid_function_literals_in_foreach_calls, library_private_types_in_public_api, must_be_immutable, prefer_typing_uninitialized_variables
+// ignore_for_file: non_constant_identifier_names, avoid_function_literals_in_foreach_calls, library_private_types_in_public_api, must_be_immutable, prefer_typing_uninitialized_variables, avoid_print
 
 import 'dart:async';
 import 'dart:io';

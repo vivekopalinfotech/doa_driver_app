@@ -1,12 +1,10 @@
-// ignore_for_file: library_private_types_in_public_api, must_be_immutable
+// ignore_for_file: library_private_types_in_public_api, must_be_immutable, prefer_typing_uninitialized_variables, no_logic_in_create_state
 import 'package:doa_driver_app/bloc/online/online_bloc.dart';
-import 'package:doa_driver_app/constants/app_data.dart';
 import 'package:doa_driver_app/constants/appstyles.dart';
 import 'package:doa_driver_app/tweaks/shared_pref_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_switch/flutter_switch.dart';
-import 'package:geolocator/geolocator.dart';
 import 'screens/history/historyscreen.dart';
 import 'screens/dashboard/dashboardscreen.dart';
 import 'screens/order/orderscreen.dart';
@@ -22,7 +20,7 @@ class MainScreen extends StatefulWidget {
    MainScreen({super.key,this.lat,this.lng});
 
   @override
-  // ignore: no_logic_in_create_state
+
   _MainScreenState createState() => _MainScreenState(online);
 }
 
