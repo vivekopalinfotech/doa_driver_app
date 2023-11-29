@@ -1,5 +1,5 @@
 
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, prefer_typing_uninitialized_variables
 
 import 'package:doa_driver_app/bloc/order/order_bloc.dart';
 import 'package:doa_driver_app/constants/app_utils.dart';
@@ -404,7 +404,7 @@ class _CustomCardState extends State<CustomCard> {
                            ],
                          ),
                        ))):
-               SizedBox();
+               const SizedBox();
              },
              child: Container(
                height: 40,

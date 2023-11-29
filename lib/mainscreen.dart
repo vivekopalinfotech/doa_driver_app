@@ -9,7 +9,7 @@ import 'screens/history/historyscreen.dart';
 import 'screens/dashboard/dashboardscreen.dart';
 import 'screens/order/orderscreen.dart';
 import 'screens/settings/settingscreen.dart';
-import 'utils/widgets/bottonnavigation.dart';
+import 'utils/widgets/bottomnavigation.dart';
 
 final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
