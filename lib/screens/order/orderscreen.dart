@@ -73,7 +73,7 @@ class _OrderScreenState extends State<OrderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppStyles.SECOND_COLOR.withOpacity(.2),
+      backgroundColor: Colors.white,
       appBar: widget.type == 'order'
           ? AppBar(
               elevation: 0,
@@ -81,7 +81,6 @@ class _OrderScreenState extends State<OrderScreen> {
               iconTheme: const IconThemeData(color: AppStyles.SECOND_COLOR),
               title: const Text(
                 "Orders",
-                // AppLocalizations.of(context)!.translate('app_name')!,
                 style: TextStyle(fontSize: 20.0, fontFamily: "MontserratBold", fontWeight: FontWeight.bold, color: AppStyles.SECOND_COLOR),
               ))
           : const PreferredSize(preferredSize: Size.zero, child: SizedBox()),
