@@ -19,16 +19,14 @@ class CustomTextfield extends StatefulWidget {
 class _CustomTextfieldState extends State<CustomTextfield> {
   @override
   Widget build(BuildContext context) {
-    return  Container(
+    return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
       padding: const EdgeInsets.symmetric(horizontal: 10),
       height: 50,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: AppStyles.SECOND_COLOR),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: AppStyles.SECOND_COLOR),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children:  [
+        children: [
           Flexible(
             flex: 5,
             child: TextFormField(
@@ -42,18 +40,18 @@ class _CustomTextfieldState extends State<CustomTextfield> {
                 fontWeight: FontWeight.w700,
               ),
               decoration: InputDecoration(
-                  hintText: widget.hint,
-                  hintStyle: const TextStyle(
-                    color: AppStyles.COLOR_GREY_LIGHT,
-                  ),
-                  border: InputBorder.none,),
+                hintText: widget.hint,
+                hintStyle: const TextStyle(
+                  color: AppStyles.COLOR_GREY_LIGHT,
+                ),
+                border: InputBorder.none,
+              ),
             ),
           ),
-           Flexible(
-              flex: 1,
-              child:
-                widget.fieldIcon,
-           )
+          Flexible(
+            flex: 1,
+            child: widget.fieldIcon,
+          )
         ],
       ),
     );

@@ -45,6 +45,7 @@ class OrdersData {
   String? payment_method;
   String? transaction_id;
   String? order_status;
+  String? delivery_status;
   String? delivery_boy_id;
   String? total_tax;
   String? order_date;
@@ -100,6 +101,7 @@ class OrdersData {
     this.payment_method,
     this.transaction_id,
     this.order_status,
+    this.delivery_status,
     this.delivery_boy_id,
     this.total_tax,
     this.order_date,
@@ -160,6 +162,7 @@ class OrdersData {
     payment_method = json['payment_method'];
     transaction_id = json['transaction_id'];
     order_status = json['order_status'];
+    delivery_status = json['delivery_status'];
     delivery_boy_id = json['delivery_boy_id'];
     total_tax = json['total_tax'];
     order_date = json['order_date'];
@@ -242,6 +245,7 @@ class OrdersData {
     data['payment_method'] = payment_method;
     data['transaction_id'] = transaction_id;
     data['order_status'] = order_status;
+    data['delivery_status'] = delivery_status;
     data['delivery_boy_id'] = delivery_boy_id;
     data['total_tax'] = total_tax;
     data['order_date'] = order_date;
@@ -270,8 +274,8 @@ class CustomerId {
   String? customer_last_name;
   String? customer_email;
   String? customer_hash;
-  String? customer_proof;
-  String? customer_doctor;
+  // String? customer_proof;
+  // String? customer_doctor;
   String? is_seen;
   String? customer_status;
   List<CustomerAddress>? customer_address;
@@ -282,8 +286,8 @@ class CustomerId {
     this.customer_last_name,
     this.customer_email,
     this.customer_hash,
-    this.customer_proof,
-    this.customer_doctor,
+ //   this.customer_proof,
+ //   this.customer_doctor,
     this.is_seen,
     this.customer_status,
     this.customer_address,
@@ -295,8 +299,8 @@ class CustomerId {
     customer_last_name = json['customer_last_name'];
     customer_email = json['customer_email'];
     customer_hash = json['customer_hash'];
-    customer_proof = json['customer_proof'];
-    customer_doctor = json['customer_doctor'];
+  //  customer_proof = json['customer_proof'];
+ //   customer_doctor = json['customer_doctor'];
     is_seen = json['is_seen'];
     customer_status = json['customer_status'];
     if (json['customer_address'] != null) {
@@ -314,8 +318,8 @@ class CustomerId {
     data['customer_last_name'] = customer_last_name;
     data['customer_email'] = customer_email;
     data['customer_hash'] = customer_hash;
-    data['customer_proof'] = customer_proof;
-    data['customer_doctor'] = customer_doctor;
+ //   data['customer_proof'] = customer_proof;
+ //   data['customer_doctor'] = customer_doctor;
     data['is_seen'] = is_seen;
     data['customer_status'] = customer_status;
     if (customer_address != null) {

@@ -11,7 +11,6 @@ import 'package:doa_driver_app/constants/app_utils.dart';
 import 'package:doa_driver_app/constants/appstyles.dart';
 import 'package:doa_driver_app/models/order.dart';
 import 'package:doa_driver_app/screens/order/orderdetailscreen.dart';
-import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
@@ -861,54 +860,54 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       onCameraIdle: () {},
                       //onCameraMove: (position) {},
                     ),
-              Positioned(
-                child: widget.online == false && widget.type != 'order'
-                    ? Container(
-                        height: 75,
-                        color: AppStyles.MAIN_COLOR,
-                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                        child: Row(
-                          children: [
-                            Flexible(
-                              flex: 1,
-                              child: DottedBorder(
-                                  padding: const EdgeInsets.all(3),
-                                  borderType: BorderType.Circle,
-                                  child: CircleAvatar(
-                                      radius: 20,
-                                      backgroundColor: AppStyles.SECOND_COLOR,
-                                      child: Image.asset(
-                                        'assets/images/offline.png',
-                                        height: 25,
-                                      ))),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Flexible(
-                                flex: 6,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: const [
-                                    Text(
-                                      'You are offline.!',
-                                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 16),
-                                    ),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    Text(
-                                      'Go online to start accepting orders',
-                                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 12),
-                                    )
-                                  ],
-                                ))
-                          ],
-                        ),
-                      )
-                    : currentLocation?.latitude!=null?Text('${currentLocation!.latitude!}===${currentLocation!.longitude!}'):const SizedBox(),
-              )
+              // Positioned(
+              //   child: widget.online == false && widget.type != 'order'
+              //       ? Container(
+              //           height: 75,
+              //           color: AppStyles.MAIN_COLOR,
+              //           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              //           child: Row(
+              //             children: [
+              //               Flexible(
+              //                 flex: 1,
+              //                 child: DottedBorder(
+              //                     padding: const EdgeInsets.all(3),
+              //                     borderType: BorderType.Circle,
+              //                     child: CircleAvatar(
+              //                         radius: 20,
+              //                         backgroundColor: AppStyles.SECOND_COLOR,
+              //                         child: Image.asset(
+              //                           'assets/images/offline.png',
+              //                           height: 25,
+              //                         ))),
+              //               ),
+              //               const SizedBox(
+              //                 width: 10,
+              //               ),
+              //               Flexible(
+              //                   flex: 6,
+              //                   child: Column(
+              //                     mainAxisAlignment: MainAxisAlignment.center,
+              //                     crossAxisAlignment: CrossAxisAlignment.start,
+              //                     children: const [
+              //                       Text(
+              //                         'You are offline.!',
+              //                         style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 16),
+              //                       ),
+              //                       SizedBox(
+              //                         height: 5,
+              //                       ),
+              //                       Text(
+              //                         'Go online to start accepting orders',
+              //                         style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 12),
+              //                       )
+              //                     ],
+              //                   ))
+              //             ],
+              //           ),
+              //         )
+              //       : currentLocation?.latitude!=null?Text('${currentLocation!.latitude!}===${currentLocation!.longitude!}'):const SizedBox(),
+              // )
             ],
           ),
         ),

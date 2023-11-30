@@ -128,10 +128,34 @@ class _SplashScreenState extends State<SplashScreen> with  SingleTickerProviderS
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
-      body: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          child: Image.asset('assets/images/splash.jpg',
-            fit: BoxFit.cover,)));
+      body: Stack(
+        children: [
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            child: Image.asset(
+              "assets/images/splash.jpg",
+              fit: BoxFit.cover,
+            ),
+          ),
+          Center(
+              child: Image.asset(
+                "assets/images/logo.png",
+                scale: 2.5,
+              )),
+          const Padding(
+            padding: EdgeInsets.only(bottom: 20.0),
+            child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Text(
+                  "© Royal Kush",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold),
+                )),
+          )
+        ],
+      ),);
   }
 }

@@ -38,7 +38,6 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   flutter_switch: ^0.3.2
-  salomon_bottom_bar: ^3.3.2
   dotted_border: ^2.0.0+3
   dio: ^4.0.0
   google_maps_place_picker_mb: ^2.0.0-mb.22
@@ -55,6 +54,7 @@ dependencies:
   carousel_slider: ^4.1.1
   intl: ^0.17.0
   geolocator: ^9.0.2
+
 
 
 

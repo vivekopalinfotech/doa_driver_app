@@ -1,8 +1,6 @@
-
 import 'package:doa_driver_app/constants/appstyles.dart';
 import 'package:flutter/material.dart';
-import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
-
+//import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
 class MyBottomNavigation extends StatelessWidget {
   final Function(int position) selectCurrentItem;
@@ -12,46 +10,45 @@ class MyBottomNavigation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SalomonBottomBar(
-      selectedColorOpacity: .3,
-      backgroundColor: AppStyles.MAIN_COLOR,
-      margin: const EdgeInsets.all(10),
-      onTap: (value) {
-        selectCurrentItem(value);
+    return BottomNavigationBar(
+        showSelectedLabels: true,
+        showUnselectedLabels: true,
+        selectedItemColor: AppStyles.MAIN_COLOR,
+        unselectedItemColor: Colors.grey,
+        currentIndex: selectedIndex,
+        backgroundColor: Colors.white,
+        selectedLabelStyle: TextStyle(
+
+        ),
+        onTap: (value) {
+          selectCurrentItem(value);
         },
-      currentIndex: selectedIndex,
-      items: [
-        SalomonBottomBarItem(
-          title: const Text('Dashboard'),
-          icon: const Icon(Icons.home_outlined,size: 30,),
-          //Image.asset("assets/images/home.png",height: 25,width: 25,),
-          unselectedColor: Colors.grey,
-          selectedColor: AppStyles.SECOND_COLOR,
-        ),
-        SalomonBottomBarItem(
-          title: const Text('Orders'),
-          icon:  const Icon(Icons.list_alt_outlined,size: 30,),
-          //Image.asset("assets/images/order.png",height: 25,width: 25,),
-          unselectedColor: Colors.grey,
-          selectedColor: AppStyles.SECOND_COLOR,
-        ),
-        SalomonBottomBarItem(
-          title: const Text('History'),
-          icon:  const Icon(Icons.history,size: 30,),
-          //Image.asset("assets/images/history.png",height: 25,width: 25,),
-          unselectedColor: Colors.grey,
-          selectedColor: AppStyles.SECOND_COLOR,
-        ),
-
-        SalomonBottomBarItem(
-          title: const Text('settings'),
-          icon: const Icon(Icons.settings_outlined,size: 30,),
-          //Image.asset("assets/images/settings.png",height: 25,width: 25,),
-          unselectedColor: Colors.grey,
-          selectedColor: AppStyles.SECOND_COLOR,
-        ),
-
-      ],
-    );
+        type: BottomNavigationBarType.fixed,
+        items: [
+          BottomNavigationBarItem(
+              icon: Image.asset(
+                'assets/images/delivery-truck.png',
+                height: 20,
+                color: Colors.grey,
+              ),
+              label: 'Delivery',
+              activeIcon: Image.asset(
+                'assets/images/delivery-truck.png',
+                height: 24,
+                color: AppStyles.MAIN_COLOR,
+              )),
+          BottomNavigationBarItem(
+              icon: Image.asset(
+                'assets/images/download.png',
+                height: 20,
+                color: Colors.grey,
+              ),
+              label: 'Shifts',
+              activeIcon: Image.asset(
+                'assets/images/download.png',
+                height: 24,
+                color: AppStyles.MAIN_COLOR,
+              )),
+        ]);
   }
 }
