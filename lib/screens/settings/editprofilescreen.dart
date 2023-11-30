@@ -42,8 +42,32 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       appBar: AppBar(
         elevation: 1,
         backgroundColor: AppStyles.MAIN_COLOR,
-        title: const Text('Edit Profile',style: TextStyle(color: AppStyles.SECOND_COLOR),),
-        iconTheme: const IconThemeData(color: AppStyles.SECOND_COLOR),
+        leadingWidth: 80,
+        leading: InkWell(
+          onTap: () {
+            Navigator.of(context).pop();
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: const [
+              Padding(
+                  padding: EdgeInsets.only(left: 16),
+                  child: Icon(
+                    Icons.arrow_back_ios_new,
+                    color: Colors.white,
+                    size: 18,
+                  )),
+              Text(' Back',
+                textScaleFactor: 1,
+                style: TextStyle(color: Colors.white, fontSize: 14),
+              )
+            ],
+          ),
+        ),
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+        title: const Text('Edit Profile',style: TextStyle(color: Colors.white),),
+
       ),
       body: SingleChildScrollView(
         child: Column(

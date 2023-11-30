@@ -111,7 +111,7 @@ class ApiProvider {
 
    checkOrderStatus(String id,String orderStatus) async {
     try {
-      Response response = await _dio!.put("${_baseUrl}order_status_by_delivery_boy/$id",
+      Response response = await _dio!.put("${_baseUrl}delivery_status_by_delivery_boy/$id",
           data: jsonEncode({
             "order_status": orderStatus,
           }));
@@ -123,7 +123,7 @@ class ApiProvider {
 
   Future<OrderResponse> getOrder(int id) async {
     try {
-      Response response = await _dio!.get("${_baseUrl}order?delivery_boy_id=$id&productDetail=1&pending_orders=1&order_shipped=1&order_inprocess=1");
+      Response response = await _dio!.get("${_baseUrl}order?delivery_boy_id=$id&productDetail=1&delivery_status=0");
       log(jsonEncode(response.data));
       return OrderResponse.fromJson(response.data);
     } catch (error) {
@@ -133,7 +133,7 @@ class ApiProvider {
 
   Future<OrderResponse> getHistory(int id) async {
     try {
-      Response response = await _dio!.get("${_baseUrl}order?delivery_boy_id=$id&productDetail=1&complete_orders=1");
+      Response response = await _dio!.get("${_baseUrl}order?delivery_boy_id=$id&productDetail=1&delivery_status=1");
       log(jsonEncode(response.data));
       return OrderResponse.fromJson(response.data);
     } catch (error) {

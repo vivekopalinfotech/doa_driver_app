@@ -108,7 +108,7 @@ class _CustomCardState extends State<CustomCard> {
                           highlightColor: Colors.transparent,
                           onTap: (){
                             widget.navigateToNext(OrderDetailScreen(
-                              type: widget.type, navigateToNext: widget.navigateToNext,online: widget.online, ordersData: widget.ordersData,
+                              type: widget.type, navigateToNext: widget.navigateToNext, ordersData: widget.ordersData,
                               orderDetail: widget.ordersData.orderDetail,miles: distanceInMiles.toStringAsFixed(2),
                             ));
                           },
