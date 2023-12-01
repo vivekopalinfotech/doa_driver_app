@@ -5,6 +5,7 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:doa_driver_app/api/login_interceptors.dart';
+import 'package:doa_driver_app/api/responses/delivery_status_response.dart';
 import 'package:doa_driver_app/api/responses/delivery_update_response.dart';
 import 'package:doa_driver_app/api/responses/login_response.dart';
 import 'package:doa_driver_app/api/responses/logout_response.dart';
@@ -109,15 +110,18 @@ class ApiProvider {
     }
   }
 
-   checkOrderStatus(String id,String orderStatus) async {
+  Future<DeliveryStatusResponse> checkOrderStatus(String id,String orderStatus, double paid_cash,double paid_cc_terminal) async {
     try {
       Response response = await _dio!.put("${_baseUrl}delivery_status_by_delivery_boy/$id",
           data: jsonEncode({
-            "order_status": orderStatus,
+            "delivery_status": orderStatus,
+            "paid_cash": paid_cash,
+            "paid_cc_terminal": paid_cc_terminal,
           }));
-      return response.data;
+      // log(jsonEncode(response.data));
+      return DeliveryStatusResponse.fromJson(response.data);
     } catch (error) {
-      return error.toString();
+      return DeliveryStatusResponse.withError(_handleError(error as TypeError));
     }
   }
 

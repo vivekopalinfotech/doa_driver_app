@@ -38,12 +38,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).brightness == Brightness.dark ? Theme.of(context).scaffoldBackgroundColor :  Colors.white,
+
       appBar: AppBar(
         elevation: 1,
         backgroundColor: AppStyles.MAIN_COLOR,
         leadingWidth: 80,
         leading: InkWell(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
           onTap: () {
             Navigator.of(context).pop();
           },

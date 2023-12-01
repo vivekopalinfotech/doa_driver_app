@@ -4,30 +4,24 @@ import 'package:doa_driver_app/bloc/order/order_bloc.dart';
 import 'package:doa_driver_app/constants/app_data.dart';
 import 'package:doa_driver_app/constants/app_utils.dart';
 import 'package:doa_driver_app/constants/appstyles.dart';
-import 'package:doa_driver_app/screens/dashboard/dashboardscreen.dart';
 import 'package:doa_driver_app/screens/order/orderdetailscreen.dart';
-import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'widgets/customcards.dart';
+import 'package:geolocator/geolocator.dart';
+
 
 class OrderScreen extends StatefulWidget {
-  final lat;
-  final lng;
+
   final type;
 
   final Function(Widget widget) navigateToNext;
   final Function() openDrawer;
 
-  OrderScreen(
+  const OrderScreen(
     this.navigateToNext,
     this.openDrawer,
 
-    this.lat,
-    this.lng, {
+     {
     super.key,
     this.type,
   });
@@ -38,43 +32,51 @@ class OrderScreen extends StatefulWidget {
 
 class _OrderScreenState extends State<OrderScreen> {
   bool online = false;
-
-  LocationData? currentLocation;
-  final Completer<GoogleMapController> controller = Completer();
-  void getCurrentLocation() async {
-    Location location = Location();
-    location.getLocation().then(
-      (location) {
-        currentLocation = location;
-      },
-    );
-
-    GoogleMapController googleMapController = await controller.future;
-    location.onLocationChanged.listen(
-      (newLoc) {
-        currentLocation = newLoc;
-        googleMapController.animateCamera(
-          CameraUpdate.newCameraPosition(
-            CameraPosition(
-              zoom: 13.5,
-              target: LatLng(
-                newLoc.latitude!,
-                newLoc.longitude!,
-              ),
-            ),
-          ),
-        );
-        setState(() {});
-      },
-    );
+  late bool serviceEnabled;
+  double latitude = 0.0;
+  double longitude = 0.0;
+  Future<void> _callSplashScreen() async {
+    Position position = await _getGeoLocationPosition();
+    latitude = position.latitude;
+    longitude = position.longitude;
   }
+
+  Future<Position> _getGeoLocationPosition() async {
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error('Location permissions are permanently denied, we cannot request permissions.');
+    } else {
+
+    }
+
+    return await Geolocator.getCurrentPosition();
+  }
+
 
   @override
   void initState() {
     BlocProvider.of<OrdersBloc>(context).add(GetOrders(AppData.user!.id));
+    _callSplashScreen();
     super.initState();
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _callSplashScreen();
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -94,7 +96,14 @@ class _OrderScreenState extends State<OrderScreen> {
         builder: (context, state) {
           if (state is OrdersLoaded) {
 
-            return state.ordersData.isNotEmpty
+            return RefreshIndicator(
+              onRefresh: () async {
+                setState(() {
+
+                });
+                BlocProvider.of<OrdersBloc>(context).add(GetOrders(AppData.user!.id));
+
+              },child: state.ordersData.isNotEmpty
                 ? SingleChildScrollView(
                     child: Column(
                       children: [
@@ -106,8 +115,8 @@ class _OrderScreenState extends State<OrderScreen> {
                             itemCount: state.ordersData.length,
                             itemBuilder: (context, index) {
                               double distanceInMiles = AppUtils.calculateDistanceInMiles(
-                                widget.lat,
-                                widget.lng,
+                              latitude,
+                            longitude,
                                 state.ordersData[index].customerId!= null? double.parse(state.ordersData[index].customerId!.customer_address![index].lattitude.toString()):23.03085995,
                                 state.ordersData[index].customerId!= null?double.parse(state.ordersData[index].customerId!.customer_address![index].longitude.toString()):72.53501535,
                               );
@@ -118,8 +127,8 @@ class _OrderScreenState extends State<OrderScreen> {
                                   widget.navigateToNext(OrderDetailScreen(
                                     type: widget.type, navigateToNext: widget.navigateToNext, ordersData: state.ordersData[index],
                                     orderDetail: state.ordersData[index].orderDetail,miles: distanceInMiles.toStringAsFixed(2),
-                                 lat: state.ordersData[index].customerId!= null? double.parse(state.ordersData[index].customerId!.customer_address![index].lattitude.toString()):23.03085995,
-                                  lng: state.ordersData[index].customerId!= null?double.parse(state.ordersData[index].customerId!.customer_address![index].longitude.toString()):72.53501535,
+                                 lat: double.parse(state.ordersData[index].latlong.toString().split(',')[0]),
+                                  lng: double.parse(state.ordersData[index].latlong.toString().split(',')[1]),
                                     location:'${state.ordersData[index].billing_street_aadress.toString().toUpperCase()}, ${state.ordersData[index].billing_city.toString().toUpperCase()}, ${state.ordersData[index].billing_postcode}',
                                   ));
                                 },
@@ -140,27 +149,11 @@ class _OrderScreenState extends State<OrderScreen> {
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
                                               Flexible(
-                                                child: Text( '#Order${state.ordersData[index].orderId}',
+                                                child: Text( 'Order #${state.ordersData[index].orderId}',
                                                   style: const TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 20),),
                                               ),
 
-                                            Row(
-                                              children: [
-                                                Image.asset("assets/images/invoice.png",
-                                                  height: 20,
-                                                ),
-                                                const SizedBox(width: 16,),
-                                                Container(
-                                                  color: Colors.grey.shade100,
-                                                  padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8),
-
-                                                  child: const Center(
-                                                    child: Text( 'ETA: - ',
-                                                      style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 16),),
-                                                  ),
-                                                )
-                                              ],
-                                            )
+                                          const Icon(Icons.remove_red_eye_outlined),
                                             ],
                                           ),
                                           const SizedBox(height: 8,),
@@ -195,7 +188,7 @@ class _OrderScreenState extends State<OrderScreen> {
                                                     AppUtils.formattedDate(state.ordersData[index].delivery_dt.toString()):'N/A',
                                                     style: const TextStyle(color: Colors.black54,fontSize: 16),),
                                                   const SizedBox(width: 5,),
-                                                  Text(state.ordersData[index].delivery_time??'N/A',
+                                                  Text(state.ordersData[index].delivery_time??'',
                                                     style: const TextStyle(color: Colors.black54,fontSize: 16),),
                                                 ],
                                               ),
@@ -230,7 +223,7 @@ class _OrderScreenState extends State<OrderScreen> {
                   )
                 : const Center(
                     child: Text('No Orders'),
-                  );
+                  ));
           }
           return const Center(
             child: CircularProgressIndicator(
@@ -241,13 +234,5 @@ class _OrderScreenState extends State<OrderScreen> {
       ),
     );
   }
-  Future<void> _makePhoneCall(String phone) async {
-    final Uri launchUri = Uri.parse('tel:$phone');
-    await launchUrl(launchUri);
-  }
 
-  Future<void> _textMsg(String phone) async {
-    final Uri launchUri = Uri.parse('sms:$phone');
-    await launchUrl(launchUri);
-  }
 }

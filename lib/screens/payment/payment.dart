@@ -1,4 +1,7 @@
+import 'package:doa_driver_app/bloc/order/order_bloc.dart';
 import 'package:doa_driver_app/bloc/order_status/check_order_status_bloc.dart';
+import 'package:doa_driver_app/bloc/payment/payment_bloc.dart';
+import 'package:doa_driver_app/constants/app_data.dart';
 import 'package:doa_driver_app/constants/appstyles.dart';
 import 'package:doa_driver_app/constants/showsnackbar.dart';
 import 'package:doa_driver_app/mainscreen.dart';
@@ -18,8 +21,32 @@ class Payment extends StatefulWidget {
 class _PaymentState extends State<Payment> {
   TextEditingController controller = TextEditingController();
   TextEditingController ccController = TextEditingController();
+
+  void updateTextFieldValues(String value, int textFieldNumber) {
+    setState(() {
+      // Update the corresponding text field based on user input
+      double enteredValue = double.tryParse(value) ?? 0.0;
+      double remainingValue = double.parse(widget.amount) - enteredValue;
+
+      if (textFieldNumber == 1) {
+        ccController.text = remainingValue.toString();
+      } else {
+        controller.text = remainingValue.toString();
+      }
+    });
+  }
+
   @override
   void initState() {
+    print(widget.amount);
+    if (widget.type == 'Cash') {
+      controller.text = widget.amount.toString();
+    } else if (widget.type == 'cc') {
+      ccController.text = widget.amount.toString();
+    } else {
+      controller.text = (0).toString();
+      ccController.text = (0).toString();
+    }
 
     super.initState();
   }
@@ -27,202 +54,238 @@ class _PaymentState extends State<Payment> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: AppStyles.MAIN_COLOR,
-        leadingWidth: 80,
-        leading: InkWell(
-          onTap: () {
-            Navigator.of(context).pop();
-          },
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: const [
-              Padding(
-                  padding: EdgeInsets.only(left: 16),
-                  child: Icon(
-                    Icons.arrow_back_ios_new,
-                    color: Colors.white,
-                    size: 18,
-                  )),
-              Text(
-                ' Back',
-                textScaleFactor: 1,
-                style: TextStyle(color: Colors.white, fontSize: 14),
-              )
-            ],
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          backgroundColor: AppStyles.MAIN_COLOR,
+          leadingWidth: 80,
+          leading: InkWell(
+            onTap: () {
+              Navigator.of(context).pop();
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: const [
+                Padding(
+                    padding: EdgeInsets.only(left: 16),
+                    child: Icon(
+                      Icons.arrow_back_ios_new,
+                      color: Colors.white,
+                      size: 18,
+                    )),
+                Text(
+                  ' Back',
+                  textScaleFactor: 1,
+                  style: TextStyle(color: Colors.white, fontSize: 14),
+                )
+              ],
+            ),
           ),
+          elevation: 0,
         ),
-        elevation: 0,
-      ),
-      body: BlocConsumer<OrderStatusBloc, OrderStatusState>(listener: (context, state) async {
-        if (state is OrderStatusSuccess) {
-          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => MainScreen()), (route) => false);
-        }
-        if (state is OrderStatusFailed) {
-          showSnackBar(context, 'Error');
-        }
-      }, builder: (context, state) {
-        return Stack(
-          children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height,
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                  child: Column(
-                    children: [
-                      Center(
-                        child: Text(
-                          widget.type == 'split' ? '\$${widget.amount}' : '${widget.amount}',
-                          style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w500, fontSize: 24),
+        body: BlocListener<PaymentBloc, PaymentState>(
+            listener: (BuildContext context, state) {
+              if (state is PaymentSuccess) {
+                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => MainScreen()), (route) => false);
+                BlocProvider.of<OrdersBloc>(context).add(GetOrders(AppData.user!.id));
+              }
+              if (state is PaymentFailed) {
+                showSnackBar(context, 'Error');
+              }
+
+              if (state is PaymentLoading) {
+                showSnackBar(context, 'Error');
+              }
+
+            },
+            child: Stack(children: [
+              SizedBox(
+                height: MediaQuery.of(context).size.height,
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                    child: Column(
+                      children: [
+                        Center(
+                          child: Text(
+                            '\$${widget.amount}',
+                            style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w500, fontSize: 24),
+                          ),
                         ),
-                      ),
-                      const Divider(
-                        height: 32,
-                        color: Colors.black38,
-                      ),
-                      widget.type == 'Cash' || widget.type == 'split'
-                          ? Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 8),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      CircleAvatar(
-                                        backgroundColor: Colors.white,
-                                        radius: 25,
-                                        child: Center(
-                                          child: Image.asset(
-                                            'assets/images/money.png',
-                                            height: 30,
+                        const Divider(
+                          height: 32,
+                          color: Colors.black38,
+                        ),
+                        widget.type == 'Cash' || widget.type == 'split'
+                            ? Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 8),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        CircleAvatar(
+                                          backgroundColor: Colors.white,
+                                          radius: 25,
+                                          child: Center(
+                                            child: Image.asset(
+                                              'assets/images/money.png',
+                                              height: 30,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      const SizedBox(
-                                        width: 16,
-                                      ),
-                                      const Text(
-                                        'Cash',
-                                        style: TextStyle(color: Colors.black, fontWeight: FontWeight.w400, fontSize: 16),
-                                      )
-                                    ],
-                                  ),
-                                  widget.type == 'split'
-                                      ? SizedBox(
-                                          width: 60,
-                                          child: TextField(
-                                            onChanged: (value) {
-                                              setState(() {
-                                                controller.text = (widget.amount - ccController.text).toString();
-                                              });
-                                            },
-                                            controller: controller,
-                                            decoration: const InputDecoration(
-                                                prefix: Text(
-                                              '\$ ',
-                                              style: TextStyle(color: Colors.black),
-                                            )),
-                                          ))
-                                      : Text(
-                                          '${widget.amount}',
-                                          style: const TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w400),
+                                        const SizedBox(
+                                          width: 16,
+                                        ),
+                                        const Text(
+                                          'Cash',
+                                          style: TextStyle(color: Colors.black, fontWeight: FontWeight.w400, fontSize: 16),
                                         )
-                                ],
-                              ),
-                            )
-                          : const SizedBox(),
-                      widget.type == 'Cash' || widget.type == 'split' ? const Divider() : const SizedBox(),
-                      widget.type == 'cc' || widget.type == 'split'
-                          ? Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 8),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      CircleAvatar(
-                                        backgroundColor: Colors.white,
-                                        radius: 25,
-                                        child: Center(
-                                          child: Image.asset(
-                                            'assets/images/credit-card-machine.png',
-                                            height: 30,
+                                      ],
+                                    ),
+                                    widget.type == 'split'
+                                        ? SizedBox(
+                                            width: 60,
+                                            child: TextField(
+                                              onChanged: (value) {
+                                                updateTextFieldValues(value, 1);
+                                              },
+                                              controller: controller,
+                                              decoration: const InputDecoration(
+                                                  prefix: Text(
+                                                '\$ ',
+                                                style: TextStyle(color: Colors.black),
+                                              )),
+                                            ))
+                                        : Text(
+                                            '\$${widget.amount}',
+                                            style: const TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w400),
+                                          )
+                                  ],
+                                ),
+                              )
+                            : const SizedBox(),
+                        widget.type == 'Cash' || widget.type == 'split' ? const Divider() : const SizedBox(),
+                        widget.type == 'cc' || widget.type == 'split'
+                            ? Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 8),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        CircleAvatar(
+                                          backgroundColor: Colors.white,
+                                          radius: 25,
+                                          child: Center(
+                                            child: Image.asset(
+                                              'assets/images/credit-card-machine.png',
+                                              height: 30,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      const SizedBox(
-                                        width: 16,
-                                      ),
-                                      const Text(
-                                        'CC Terminal',
-                                        style: TextStyle(color: Colors.black, fontWeight: FontWeight.w400, fontSize: 16),
-                                      )
-                                    ],
-                                  ),
-                                  widget.type == 'split'
-                                      ? SizedBox(
-                                          width: 60,
-                                          child: TextField(
-                                            onChanged: (value) {
-                                              setState(() {
-                                                ccController.text = widget.amount - controller.text;
-                                              });
-                                            },
-                                            controller: ccController,
-                                            decoration: const InputDecoration(
-                                                prefix: Text(
-                                              '\$ ',
-                                              style: TextStyle(color: Colors.black),
-                                            )),
-                                          ))
-                                      : Text(
-                                          '${widget.amount}',
-                                          style: const TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w400),
+                                        const SizedBox(
+                                          width: 16,
+                                        ),
+                                        const Text(
+                                          'CC Terminal',
+                                          style: TextStyle(color: Colors.black, fontWeight: FontWeight.w400, fontSize: 16),
                                         )
-                                ],
-                              ),
-                            )
-                          : const SizedBox(),
-                      widget.type == 'cc' || widget.type == 'split' ? const Divider() : const SizedBox(),
-                    ],
+                                      ],
+                                    ),
+                                    widget.type == 'split'
+                                        ? SizedBox(
+                                            width: 60,
+                                            child: TextField(
+                                              onChanged: (value) {
+                                                updateTextFieldValues(value, 2);
+                                              },
+                                              controller: ccController,
+                                              decoration: const InputDecoration(
+                                                  prefix: Text(
+                                                '\$ ',
+                                                style: TextStyle(color: Colors.black),
+                                              )),
+                                            ))
+                                        : Text(
+                                            '\$${widget.amount}',
+                                            style: const TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w400),
+                                          )
+                                  ],
+                                ),
+                              )
+                            : const SizedBox(),
+                        widget.type == 'cc' || widget.type == 'split' ? const Divider() : const SizedBox(),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-            controller.text + ccController.text == widget.amount
-                ? Positioned(
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      child: InkWell(
-                        splashColor: Colors.transparent,
-                        highlightColor: Colors.transparent,
-                        onTap: () {
-                          BlocProvider.of<OrderStatusBloc>(context).add(CheckOrderStatus(widget.orderId.toString(), 'Delivered'));
-                        },
-                        child: Container(
-                          height: 60,
-                          decoration: const BoxDecoration(
-                            color: AppStyles.MAIN_COLOR,
-                          ),
-                          child: const Center(
-                            child: Text(
-                              'Mark as Paid',
-                              style: TextStyle(fontWeight: FontWeight.w400, fontSize: 20, color: Colors.white),
+              widget.type == 'split' && isSumEqualToTotalValue()
+                  ? Positioned(
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        child: InkWell(
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onTap: () {
+                            BlocProvider.of<PaymentBloc>(context).add(CheckPayment(widget.orderId.toString(), 'Delivered', double.parse(controller.text), double.parse(ccController.text)));
+                          },
+                          child: Container(
+                            height: 60,
+                            decoration: const BoxDecoration(
+                              color: AppStyles.MAIN_COLOR,
+                            ),
+                            child: const Center(
+                              child: Text(
+                                'Mark as Paid',
+                                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 20, color: Colors.white),
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  )
-                : const SizedBox()
-          ],
-        );
-      }),
-    );
+                    )
+                  : widget.type == 'Cash' || widget.type == 'cc'
+                      ? Positioned(
+                          left: 0,
+                          right: 0,
+                          bottom: 0,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                            child: InkWell(
+                              splashColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              onTap: () {
+                                widget.type == 'Cash'
+                                    ? BlocProvider.of<PaymentBloc>(context).add(CheckPayment(widget.orderId.toString(), 'Delivered', double.parse(controller.text), 0))
+                                    : BlocProvider.of<PaymentBloc>(context).add(CheckPayment(widget.orderId.toString(), 'Delivered', 0, double.parse(ccController.text)));
+                              },
+                              child: Container(
+                                height: 60,
+                                decoration: const BoxDecoration(
+                                  color: AppStyles.MAIN_COLOR,
+                                ),
+                                child: const Center(
+                                  child: Text(
+                                    'Mark as Paid',
+                                    style: TextStyle(fontWeight: FontWeight.w400, fontSize: 20, color: Colors.white),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        )
+                      : SizedBox()
+            ])));
+  }
+
+  bool isSumEqualToTotalValue() {
+    double value1 = double.tryParse(controller.text) ?? 0.0;
+    double value2 = double.tryParse(ccController.text) ?? 0.0;
+
+    return (value1 + value2) == double.parse(widget.amount);
   }
 }

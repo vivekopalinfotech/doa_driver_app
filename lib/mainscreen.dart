@@ -27,53 +27,20 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
 
-  late bool serviceEnabled;
+
   final List<GlobalKey<NavigatorState>> _navigatorKeys = [GlobalKey<NavigatorState>(), GlobalKey<NavigatorState>(), GlobalKey<NavigatorState>(), GlobalKey<NavigatorState>()];
 
   _MainScreenState();
 
-  String latitude = "";
-  String longitude = "";
-  Future<void> _callSplashScreen() async {
-    Position position = await _getGeoLocationPosition();
-    latitude = position.latitude.toString();
-    longitude = position.longitude.toString();
-  }
 
-  Future<Position> _getGeoLocationPosition() async {
-    LocationPermission permission;
-
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return Future.error('Location services are disabled.');
-    }
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        return Future.error('Location permissions are denied');
-      }
-    }
-    if (permission == LocationPermission.deniedForever) {
-      return Future.error('Location permissions are permanently denied, we cannot request permissions.');
-    } else {
-
-    }
-
-    return await Geolocator.getCurrentPosition();
-  }
 
   @override
   void initState() {
-    _callSplashScreen();
+
     super.initState();
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _callSplashScreen();
-  }
+
 
   final keyCounter = GlobalKey();
 
@@ -116,7 +83,7 @@ class _MainScreenState extends State<MainScreen> {
               ),
               centerTitle: true,
               title: _selectedIndex == 1
-                  ? const Center(child: Text('AM'))
+                  ? const Center(child: Text('Shifts'))
                   : Container(
                       padding: const EdgeInsets.all(2),
                       decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppStyles.SECOND_COLOR),
@@ -272,12 +239,11 @@ class _MainScreenState extends State<MainScreen> {
       '/': (context) {
         return [
           TabBarView(children: [
-            OrderScreen(_navigateToNext, _openHomeDrawer, widget.lat ?? latitude, widget.lng??longitude),
+            OrderScreen(_navigateToNext, _openHomeDrawer, ),
             HistoryScreen(
               _navigateToNext,
               _openHomeDrawer,
-              lat: widget.lat ?? latitude,
-              lng: widget.lng??longitude
+
             ),
           ]),
           //   OrderScreen(_navigateToNext, _openHomeDrawer,online,latitude,longitude),

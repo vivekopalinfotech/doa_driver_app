@@ -71,7 +71,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       child: InkWell(
                         onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => Payment(amount:  '\$${widget.amount}',type: 'Cash',orderId: widget.orderId,)));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => Payment(amount:  widget.amount,type: 'Cash',orderId: widget.orderId,)));
                         },
                         child: Row(
                           children: [
@@ -101,7 +101,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       child: InkWell(
                         onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => Payment(amount:  '\$${widget.amount}',type: 'cc',orderId: widget.orderId)));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => Payment(amount:  widget.amount,type: 'cc',orderId: widget.orderId)));
                         },
                         child: Row(
                           children: [

@@ -2,19 +2,20 @@
 
 import 'package:doa_driver_app/bloc/history/history_bloc.dart';
 import 'package:doa_driver_app/constants/app_data.dart';
+import 'package:doa_driver_app/constants/app_utils.dart';
 import 'package:doa_driver_app/constants/appstyles.dart';
+import 'package:doa_driver_app/screens/order/orderdetailscreen.dart';
 import 'package:doa_driver_app/screens/order/widgets/customcards.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
 
 class HistoryScreen extends StatefulWidget {
   final Function(Widget widget) navigateToNext;
   final Function() openDrawer;
+  final type;
 
-  final lat;
-  final lng;
-
-  HistoryScreen(this.navigateToNext, this.openDrawer,  {super.key, this.lat, this.lng});
+  HistoryScreen(this.navigateToNext, this.openDrawer,  {super.key, this.type,});
 
   @override
   _HistoryScreenState createState() => _HistoryScreenState();
@@ -22,10 +23,48 @@ class HistoryScreen extends StatefulWidget {
 
 class _HistoryScreenState extends State<HistoryScreen> {
   bool online = false;
+  late bool serviceEnabled;
+  double latitude = 0.0;
+  double longitude = 0.0;
+  Future<void> _callSplashScreen() async {
+    Position position = await _getGeoLocationPosition();
+    latitude = position.latitude;
+    longitude = position.longitude;
+  }
+
+  Future<Position> _getGeoLocationPosition() async {
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error('Location permissions are permanently denied, we cannot request permissions.');
+    } else {
+
+    }
+
+    return await Geolocator.getCurrentPosition();
+  }
   @override
   void initState() {
     BlocProvider.of<HistoryBloc>(context).add( GetHistory(AppData.user!.id));
+    _callSplashScreen();
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _callSplashScreen();
   }
 
   @override
@@ -35,30 +74,135 @@ class _HistoryScreenState extends State<HistoryScreen> {
       body: BlocBuilder<HistoryBloc, HistoryState>(
         builder: (context, state) {
           if (state is HistoryLoaded) {
-            return
-              state.ordersData.isNotEmpty
-                  ?
-              SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 6.0),
-                  child: ListView.builder(
-                    shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: state.ordersData.length,
-              itemBuilder: (context, index) {
-                  return  CustomCard(
-                    type: 'history',
-                    navigateToNext: widget.navigateToNext,
-                    ordersData: state.ordersData[index],
-                    lat: widget.lat,
-                    lng: widget.lng,
-                  );
-              },
 
-            ),
-                )): const Center(
-                child: Text('No Orders'),
-              );
+            return RefreshIndicator(
+              onRefresh: () async {
+                setState(() {
+
+                });
+                BlocProvider.of<HistoryBloc>(context).add( GetHistory(AppData.user!.id));
+
+              },child: state.ordersData.isNotEmpty
+                ? SingleChildScrollView(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 6.0),
+                    child: ListView.separated(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: state.ordersData.length,
+                      itemBuilder: (context, index) {
+                        double distanceInMiles = AppUtils.calculateDistanceInMiles(
+                          latitude,
+                          longitude,
+                          state.ordersData[index].customerId!= null? double.parse(state.ordersData[index].customerId!.customer_address![index].lattitude.toString()):23.03085995,
+                          state.ordersData[index].customerId!= null?double.parse(state.ordersData[index].customerId!.customer_address![index].longitude.toString()):72.53501535,
+                        );
+                        return  InkWell(
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onTap: (){
+                            widget.navigateToNext(OrderDetailScreen(
+                              type: 'history', navigateToNext: widget.navigateToNext, ordersData: state.ordersData[index],
+                              orderDetail: state.ordersData[index].orderDetail,miles: distanceInMiles.toStringAsFixed(2),
+                              lat: double.parse(state.ordersData[index].latlong.toString().split(',')[0]),
+                              lng: double.parse(state.ordersData[index].latlong.toString().split(',')[1]),
+                              location:'${state.ordersData[index].billing_street_aadress.toString().toUpperCase()}, ${state.ordersData[index].billing_city.toString().toUpperCase()}, ${state.ordersData[index].billing_postcode}',
+                            ));
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 12,vertical: 6),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.white
+                            ),
+
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10.0,horizontal: 15),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Flexible(
+                                        child: Text( 'Order #${state.ordersData[index].orderId}',
+                                          style: const TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 20),),
+                                      ),
+
+                                      const Icon(Icons.remove_red_eye_outlined),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 8,),
+                                  Row(
+                                    children:  [
+                                      const Icon(Icons.verified_outlined,color: Colors.black26,size: 18,),
+                                      Text( state.ordersData[index].delivery_status.toString(),
+                                        style: const TextStyle(color: Colors.black26,fontWeight: FontWeight.bold,fontSize: 14),),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 8,),
+                                  Text( AppUtils.capitalizeFirstLetter('${state.ordersData[index].billing_first_name} ${state.ordersData[index].billing_last_name}'),
+                                    style: const TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 16),),
+
+                                  const SizedBox(height: 8,),
+
+                                  SizedBox(
+                                    width: 250,
+                                    child: Text('${state.ordersData[index].billing_street_aadress.toString().toUpperCase()}\n${state.ordersData[index].billing_city.toString().toUpperCase()}, ${state.ordersData[index].billing_postcode}',
+                                      maxLines: 2,
+                                      style: const TextStyle(color: Colors.black,fontSize: 14),overflow: TextOverflow.ellipsis,),
+                                  ),
+                                  const SizedBox(height: 8,),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        children:  [
+
+                                          Text(
+                                            state.ordersData[index].delivery_dt!=null?
+                                            AppUtils.formattedDate(state.ordersData[index].delivery_dt.toString()):'N/A',
+                                            style: const TextStyle(color: Colors.black54,fontSize: 16),),
+                                          const SizedBox(width: 5,),
+                                          Text(state.ordersData[index].delivery_time??'N/A',
+                                            style: const TextStyle(color: Colors.black54,fontSize: 16),),
+                                        ],
+                                      ),
+
+                                    ],
+                                  ),
+
+                                ],
+                              ),
+                            ),
+
+                          ),
+                        );
+                        //   CustomCard(
+                        //   navigateToNext: widget.navigateToNext,
+                        //   type: 'order',
+                        //   online: widget.online,
+                        //   ordersData: state.ordersData[index],
+                        //   lat: widget.lat,
+                        //   lng: widget.lng,
+                        //   customerAddress: state.ordersData[index].customerId != null ? state.ordersData[index].customerId!.customer_address![index] : '',
+                        // );
+                      }, separatorBuilder: (BuildContext context, int index) {
+                      return const Divider(
+                        color: Colors.black12,
+                      );
+                    },
+                    ),
+                  ),
+                ],
+              ),
+            )
+                : const Center(
+              child: Text('No Orders'),
+            ));
           }
           return const Center(
             child: CircularProgressIndicator(

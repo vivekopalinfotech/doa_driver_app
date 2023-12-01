@@ -1,3 +1,4 @@
+import 'package:doa_driver_app/constants/app_constants.dart';
 import 'package:doa_driver_app/repos/check_order_status_repo.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,14 +14,19 @@ class OrderStatusBloc extends Bloc<OrderStatusEvent, OrderStatusState> {
   Stream<OrderStatusState> mapEventToState(OrderStatusEvent event) async* {
     if (event is CheckOrderStatus) {
       try {
-        final orderStatusResponse = await orderStatusRepo.checkOrderStatus(event.id,event.status);
-        if (orderStatusResponse.isNotEmpty) {
-          yield OrderStatusSuccess(orderStatusResponse);
+        final orderStatusResponse = await orderStatusRepo.checkOrderStatus(event.id,event.status,event.paid_cash,event.paid_cc_terminal);
+        print(orderStatusResponse.status);
+        if (orderStatusResponse.status == AppConstants.STATUS_SUCCESS ) {
+          yield OrderStatusSuccess(orderStatusResponse.message);
+          yield const OrderStatusInitial();
         } else {
-          yield OrderStatusFailed(orderStatusResponse);
+          yield OrderStatusFailed(orderStatusResponse.message);
+          yield const OrderStatusInitial();
         }
+
       } on Error {
         yield const OrderStatusFailed("Some Error");
+        yield const OrderStatusInitial();
       }
     }
   }

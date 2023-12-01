@@ -35,7 +35,7 @@ class _DetailCardState extends State<DetailCard> {
 
         color: Colors.white,
 
-    height: 220,
+
     child: Padding(
     padding: const EdgeInsets.all(8.0),
     child: Column(
@@ -101,13 +101,18 @@ class _DetailCardState extends State<DetailCard> {
                    ),
 
                    Flexible(
-                     child: Text(
-                       widget.ordersData.billing_phone??'',
-                       style: const TextStyle(
-                         color:  AppStyles.SECOND_COLOR,
-                         fontSize: 14,
-                         decoration: TextDecoration.underline,
-                         decorationStyle: TextDecorationStyle.solid,
+                     child: InkWell(
+                       onTap: (){
+                         _makePhoneCall(widget.ordersData.billing_phone??'');
+                       },
+                       child: Text(
+                         widget.ordersData.billing_phone??'',
+                         style: const TextStyle(
+                           color:  AppStyles.SECOND_COLOR,
+                           fontSize: 14,
+                           decoration: TextDecoration.underline,
+                           decorationStyle: TextDecorationStyle.solid,
+                         ),
                        ),
                      ),
                    ),        ],
@@ -144,7 +149,7 @@ class _DetailCardState extends State<DetailCard> {
                    const SizedBox(height: 5,),
                    Flexible(
                      child: Text(
-                       widget.ordersData.delivery_time??"Not Available",
+                       widget.ordersData.delivery_time??"N/A",
                        style: const TextStyle(
                          color:  Colors.black,
                          fontSize: 14,

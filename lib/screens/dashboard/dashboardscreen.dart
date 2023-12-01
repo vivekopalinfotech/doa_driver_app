@@ -534,7 +534,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                           TextButton(
                                             child: const Text("Start", style: TextStyle(color: AppStyles.MAIN_COLOR, fontWeight: FontWeight.bold)),
                                             onPressed: () async {
-                                              BlocProvider.of<OrderStatusBloc>(context).add(CheckOrderStatus(state.ordersData[0].orderId.toString(), 'Shipped'));
+                                              BlocProvider.of<OrderStatusBloc>(context).add(CheckOrderStatus(state.ordersData[0].orderId.toString(), 'Shipped',0,0));
                                               toggleStart();
                                               _pc.close();
                                               getPolyPoints();
@@ -594,7 +594,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       highlightColor: Colors.transparent,
                                       onTap: () {
                                         if (withinThreshold) {
-                                          BlocProvider.of<OrderStatusBloc>(context).add(CheckOrderStatus(state.ordersData[0].orderId.toString(), 'Complete'));
+                                          BlocProvider.of<OrderStatusBloc>(context).add(CheckOrderStatus(state.ordersData[0].orderId.toString(), 'Complete',0,0));
                                           widget.navigateToNext(OrderDetailScreen(navigateToNext: widget.navigateToNext,
                                             ordersData: state.ordersData[0], orderDetail: state.ordersData[0].orderDetail,type: 'delivered',));
                                         } else {
@@ -1169,7 +1169,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500,fontSize: 16),
                   ),
                   onPressed: () {
-                    BlocProvider.of<OrderStatusBloc>(context).add(CheckOrderStatus(ordersData!.orderId.toString(), 'Inprocess'));
+                    BlocProvider.of<OrderStatusBloc>(context).add(CheckOrderStatus(ordersData!.orderId.toString(), 'Inprocess',0,0));
                     Navigator.of(context, rootNavigator: true).pop();
                   },
                 ),
@@ -1190,7 +1190,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                   onPressed: () {
                     cancelController.text.isNotEmpty?
-                    BlocProvider.of<OrderStatusBloc>(context).add(CheckOrderStatus(ordersData!.orderId.toString(), 'Cancel')):
+                    BlocProvider.of<OrderStatusBloc>(context).add(CheckOrderStatus(ordersData!.orderId.toString(), 'Cancel',0,0)):
                         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                             backgroundColor: AppStyles.MAIN_COLOR,
                             content: Center(child: Text('Please give reason why you cancel this order?',
