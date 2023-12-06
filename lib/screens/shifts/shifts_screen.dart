@@ -71,7 +71,7 @@ class _ShiftScreenState extends State<ShiftScreen> {
                             style: TextStyle(color: Colors.black38, fontWeight: FontWeight.w500),
                           )),
                           Text(
-                            '\$${state.shiftsDataResponse.data!.Total_Deliver_Order!.toStringAsFixed(2)}',
+                            '\$${state.shiftsDataResponse.data!.Total_Deliver_Amount!.toStringAsFixed(2)}',
                             style: const TextStyle(fontSize: 18),
                           )
                         ],
@@ -89,7 +89,7 @@ class _ShiftScreenState extends State<ShiftScreen> {
                             style: TextStyle(color: Colors.black38, fontWeight: FontWeight.w500),
                           )),
                           Text(
-                            '\$${state.shiftsDataResponse.data!.Total_Pending_Order!.toStringAsFixed(2)}',
+                            '\$${state.shiftsDataResponse.data!.Total_Pending_Amount!.toStringAsFixed(2)}',
                             style: const TextStyle(fontSize: 18),
                           )
                         ],
