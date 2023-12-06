@@ -154,6 +154,20 @@ class ApiProvider {
       return DeliveryUpdateResponse.withError(_handleError(error as TypeError));
     }
   }
+  Future updateShift(int id, status, token) async {
+    try {
+      Response response = await _dio!.post("${_baseUrl}update_availability/$id",
+          data: jsonEncode({
+            "fcm_token" : token,
+            "shift_status" : status,
+            "availability_status" : status
+          }));
+      log(jsonEncode(response.data));
+      //return DeliveryUpdateResponse.fromJson(response.data);
+    } catch (error) {
+      //return DeliveryUpdateResponse.withError(_handleError(error as TypeError));
+    }
+  }
 
 
   String _handleError(Error error) {

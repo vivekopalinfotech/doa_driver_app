@@ -11,6 +11,7 @@ class MyBottomNavigation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
+
         showSelectedLabels: true,
         showUnselectedLabels: true,
         selectedItemColor: AppStyles.MAIN_COLOR,

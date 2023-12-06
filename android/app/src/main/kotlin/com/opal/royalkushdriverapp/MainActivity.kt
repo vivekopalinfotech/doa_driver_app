@@ -1,4 +1,4 @@
-package com.example.doa_driver_app
+package com.opal.royalkushdriverapp
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -85,18 +85,18 @@ class _MainScreenState extends State<MainScreen> {
               title: _selectedIndex == 1
                   ? const Center(child: Text('Shifts'))
                   : Container(
-                      padding: const EdgeInsets.all(2),
+                      padding: const EdgeInsets.all(1),
                       decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppStyles.SECOND_COLOR),
                       child: TabBar(
                         tabs: const [
                           Center(
                               child: Padding(
-                            padding: EdgeInsets.all(8.0),
+                            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 2),
                             child: Text('Incomplete',textScaleFactor: 1,),
                           )),
                           Center(
                               child: Padding(
-                            padding: EdgeInsets.all(8.0),
+                            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 2),
                             child: Text(
                               'Completed',textScaleFactor: 1
                             ),
@@ -135,7 +135,7 @@ class _MainScreenState extends State<MainScreen> {
               _buildOffstageNavigator(1),
             ],
           ),
-          bottomNavigationBar: SizedBox(height: 70, child: MyBottomNavigation(_selectCurrentItem, _selectedIndex)),
+          bottomNavigationBar: SizedBox(height: 90, child: MyBottomNavigation(_selectCurrentItem, _selectedIndex)),
         ),
       ),
     );

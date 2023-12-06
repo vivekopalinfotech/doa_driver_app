@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "203281484288",
+    "project_id": "royal-kush---doa",
+    "storage_bucket": "royal-kush---doa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:203281484288:android:525222167edd498c7826e5",
+        "android_client_info": {
+          "package_name": "com.opal.doa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "203281484288-uv4jd0qlu8s9mli5kui38raj35svr1u9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDREuv26IohD_qvBPRi6N44KagKdRgSrjE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "203281484288-uv4jd0qlu8s9mli5kui38raj35svr1u9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:203281484288:android:49e2d79907bc06067826e5",
+        "android_client_info": {
+          "package_name": "com.opal.royalkushdriverapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "203281484288-uv4jd0qlu8s9mli5kui38raj35svr1u9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDREuv26IohD_qvBPRi6N44KagKdRgSrjE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "203281484288-uv4jd0qlu8s9mli5kui38raj35svr1u9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
