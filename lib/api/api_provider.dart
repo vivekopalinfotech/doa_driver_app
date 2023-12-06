@@ -11,6 +11,7 @@ import 'package:doa_driver_app/api/responses/login_response.dart';
 import 'package:doa_driver_app/api/responses/logout_response.dart';
 import 'package:doa_driver_app/api/responses/mobile_rsponse.dart';
 import 'package:doa_driver_app/api/responses/order_response.dart';
+import 'package:doa_driver_app/api/responses/shifts_data_response.dart';
 import 'package:doa_driver_app/constants/app_config.dart';
 import 'package:doa_driver_app/constants/app_data.dart';
 
@@ -118,7 +119,7 @@ class ApiProvider {
             "paid_cash": paid_cash,
             "paid_cc_terminal": paid_cc_terminal,
           }));
-      // log(jsonEncode(response.data));
+
       return DeliveryStatusResponse.fromJson(response.data);
     } catch (error) {
       return DeliveryStatusResponse.withError(_handleError(error as TypeError));
@@ -142,6 +143,16 @@ class ApiProvider {
       return OrderResponse.fromJson(response.data);
     } catch (error) {
       return OrderResponse.withError(_handleError(error as TypeError));
+    }
+  }
+
+  Future<ShiftsDataResponse>getShiftsData(int id) async {
+    try {
+      Response response = await _dio!.post("${_baseUrl}driver_stats/$id");
+      log(jsonEncode(response.data));
+      return ShiftsDataResponse.fromJson(response.data);
+    } catch (error) {
+      return ShiftsDataResponse.withError(_handleError(error as TypeError));
     }
   }
 

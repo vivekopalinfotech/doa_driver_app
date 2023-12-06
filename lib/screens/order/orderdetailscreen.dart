@@ -54,7 +54,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     tax = widget.ordersData.total_tax.toString();
     // orderTotal = widget.ordersData.order_price.toString();
     for (int i = 0; i < widget.orderDetail!.length; i++) {
-      itemDiscount += (double.parse(widget.orderDetail![i].productQty.toString())) * (double.parse(widget.orderDetail![i].productPrice) - 0);
+      itemDiscount += (double.parse(widget.orderDetail![i].productQty.toString())) * (double.parse(widget.orderDetail![i].productPrice) - double.parse(widget.orderDetail![i].productDiscount));
       cartDiscount = double.parse(widget.orderDetail![i].productDiscount);
       itemTotal += double.parse(widget.orderDetail![i].productPrice) * double.parse(widget.orderDetail![i].productQty.toString());
     }

@@ -248,11 +248,7 @@ class _MainScreenState extends State<MainScreen> {
           ]),
           //   OrderScreen(_navigateToNext, _openHomeDrawer,online,latitude,longitude),
 
-          ShiftScreen(
-            navigateToNext: _navigateToNext,
-            navigateToRemoveUntil: _navigateToNextRemoveUntil,
-            openDrawer: _openHomeDrawer,
-          ),
+          ShiftScreen(),
         ].elementAt(index);
       },
     };
