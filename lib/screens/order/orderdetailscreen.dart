@@ -234,6 +234,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                 height: 16,
                               ),
                               Container(
+                                margin: const EdgeInsets.only(bottom: 100),
                                 padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
                                 color: Colors.white,
                                 child: Column(
