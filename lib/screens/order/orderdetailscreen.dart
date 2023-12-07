@@ -421,314 +421,318 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                 ),
               Positioned(
                 bottom: 0,right: 0,left: 0,
-                child:   widget.type == 'history' || widget.type == 'delivered'
-                  ? Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        'Product Delivered',
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.green),
-                      ),
-                      Image.asset(
-                        'assets/images/success.gif',
-                        height: 30,
-                      )
-                    ],
-                  ))
-                  : widget.ordersData.delivery_status == 'On Route'
-                  ? Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Flexible(
-                      child: InkWell(
-                        splashColor: Colors.transparent,
-                        highlightColor: Colors.transparent,
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => PaymentScreen(
-                                    amount: orderTotal.toStringAsFixed(2),
-                                    orderId: widget.ordersData.orderId.toString(),
-                                  )));
-                        },
-                        child: Container(
-                          height: 60,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(color: AppStyles.MAIN_COLOR),
+                child:  Container(
+                  padding: EdgeInsets.symmetric(vertical: 8),
+                  color: Colors.white,
+                  child:  widget.type == 'history' || widget.type == 'delivered'
+                      ? Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            'Product Delivered',
+                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.green),
                           ),
-                          child: const Center(
-                            child: Text(
-                              'Check Out',
-                              style: TextStyle(fontWeight: FontWeight.w400, fontSize: 20, color: AppStyles.MAIN_COLOR),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 12,
-                    ),
-                    InkWell(
-                      splashColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                      onTap: () {
-                        showModalBottomSheet(
-                          context: context,
-                          builder: (context) {
-                            return Container(
-                              height: 200,
-                              color: Colors.white,
-                              child: Padding(
-                                padding: const EdgeInsets.all(24),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    InkWell(
-                                      splashColor: Colors.transparent,
-                                      highlightColor: Colors.transparent,
-                                      onTap: () {
-                                        BlocProvider.of<OrderStatusBloc>(context).add(CheckOrderStatus(widget.ordersData.orderId.toString(), 'Delivery Cancel',0,0));
-                                      },
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        children: const [
-                                          Icon(
-                                            Icons.cancel_outlined,
-                                            color: Colors.red,
-                                          ),
-                                          Text(
-                                            '  Cancel Delivery',
-                                            style: TextStyle(fontWeight: FontWeight.w400, fontSize: 20, color: Colors.black),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    const Divider(),
-                                    InkWell(
-                                      splashColor: Colors.transparent,
-                                      highlightColor: Colors.transparent,
-                                      onTap: () {
-                                        BlocProvider.of<OrderStatusBloc>(context).add(CheckOrderStatus(widget.ordersData.orderId.toString(), 'Delivery Stop',0,0));
-                                      },
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        children: const [
-                                          Icon(
-                                            Icons.block_outlined,
-                                            color: Colors.red,
-                                          ),
-                                          Text(
-                                            '  Stop Delivery',
-                                            style: TextStyle(fontWeight: FontWeight.w400, fontSize: 20, color: Colors.black),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    const Divider(),
-                                    InkWell(
-                                      splashColor: Colors.transparent,
-                                      highlightColor: Colors.transparent,
-                                      onTap: () {
-                                        BlocProvider.of<OrderStatusBloc>(context).add(CheckOrderStatus(widget.ordersData.orderId.toString(), 'Not At Home',0,0));
-                                      },
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        children: const [
-                                          Icon(
-                                            Icons.backspace_outlined,
-                                            color: Colors.red,
-                                          ),
-                                          Text(
-                                            '  Not Home',
-                                            style: TextStyle(fontWeight: FontWeight.w400, fontSize: 20, color: Colors.black),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
+                          Image.asset(
+                            'assets/images/success.gif',
+                            height: 30,
+                          )
+                        ],
+                      ))
+                      : widget.ordersData.delivery_status == 'On Route'
+                      ? Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Flexible(
+                          child: InkWell(
+                            splashColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => PaymentScreen(
+                                        amount: orderTotal.toStringAsFixed(2),
+                                        orderId: widget.ordersData.orderId.toString(),
+                                      )));
+                            },
+                            child: Container(
+                              height: 60,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                border: Border.all(color: AppStyles.MAIN_COLOR),
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  'Check Out',
+                                  style: TextStyle(fontWeight: FontWeight.w400, fontSize: 20, color: AppStyles.MAIN_COLOR),
                                 ),
                               ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 12,
+                        ),
+                        InkWell(
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onTap: () {
+                            showModalBottomSheet(
+                              context: context,
+                              builder: (context) {
+                                return Container(
+                                  height: 200,
+                                  color: Colors.white,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(24),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        InkWell(
+                                          splashColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          onTap: () {
+                                            BlocProvider.of<OrderStatusBloc>(context).add(CheckOrderStatus(widget.ordersData.orderId.toString(), 'Delivery Cancel',0,0));
+                                          },
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: const [
+                                              Icon(
+                                                Icons.cancel_outlined,
+                                                color: Colors.red,
+                                              ),
+                                              Text(
+                                                '  Cancel Delivery',
+                                                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 20, color: Colors.black),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        const Divider(),
+                                        InkWell(
+                                          splashColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          onTap: () {
+                                            BlocProvider.of<OrderStatusBloc>(context).add(CheckOrderStatus(widget.ordersData.orderId.toString(), 'Delivery Stop',0,0));
+                                          },
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: const [
+                                              Icon(
+                                                Icons.block_outlined,
+                                                color: Colors.red,
+                                              ),
+                                              Text(
+                                                '  Stop Delivery',
+                                                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 20, color: Colors.black),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        const Divider(),
+                                        InkWell(
+                                          splashColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          onTap: () {
+                                            BlocProvider.of<OrderStatusBloc>(context).add(CheckOrderStatus(widget.ordersData.orderId.toString(), 'Not At Home',0,0));
+                                          },
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: const [
+                                              Icon(
+                                                Icons.backspace_outlined,
+                                                color: Colors.red,
+                                              ),
+                                              Text(
+                                                '  Not Home',
+                                                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 20, color: Colors.black),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
                             );
                           },
-                        );
-                      },
-                      child: CircleAvatar(
-                        radius: 30,
-                        backgroundColor: Colors.grey.shade200,
-                        child: const Center(
-                          child: Icon(
-                            Icons.more_vert_outlined,
-                            size: 34,
-                            color: Colors.black45,
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              )
-                  : Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    start == true
-                        ? Flexible(
-                      child: InkWell(
-                        splashColor: Colors.transparent,
-                        highlightColor: Colors.transparent,
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => PaymentScreen(
-                                    amount: orderTotal.toStringAsFixed(2),
-                                    orderId: widget.ordersData.orderId.toString(),
-                                  )));
-                        },
-                        child: Container(
-                          height: 60,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(color: AppStyles.MAIN_COLOR),
-                          ),
-                          child: const Center(
-                            child: Text(
-                              'Check Out',
-                              style: TextStyle(fontWeight: FontWeight.w400, fontSize: 20, color: AppStyles.MAIN_COLOR),
+                          child: CircleAvatar(
+                            radius: 30,
+                            backgroundColor: Colors.grey.shade200,
+                            child: const Center(
+                              child: Icon(
+                                Icons.more_vert_outlined,
+                                size: 34,
+                                color: Colors.black45,
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                    )
-                        : Flexible(
-                      child: InkWell(
-                        splashColor: Colors.transparent,
-                        highlightColor: Colors.transparent,
-                        onTap: () {
-                          BlocProvider.of<OrderStatusBloc>(context).add(CheckOrderStatus(widget.ordersData.orderId.toString(), 'On Route',0,0));
-                        },
-                        child: Container(
-                          height: 60,
-                          decoration: const BoxDecoration(color: AppStyles.MAIN_COLOR, boxShadow: [BoxShadow(color: Colors.black12, spreadRadius: 2, blurRadius: 4)]),
-                          child: const Center(
-                            child: Text(
-                              'Start Delivery',
-                              style: TextStyle(fontWeight: FontWeight.w400, fontSize: 20, color: Colors.white),
-                            ),
-                          ),
-                        ),
-                      ),
+                        )
+                      ],
                     ),
-                    const SizedBox(
-                      width: 12,
-                    ),
-                    InkWell(
-                      splashColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                      onTap: () {
-                        showModalBottomSheet(
-                          context: context,
-                          builder: (context) {
-                            return Container(
-                              height: 200,
-                              color: Colors.white,
-                              child: Padding(
-                                padding: const EdgeInsets.all(24),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    InkWell(
-                                      splashColor: Colors.transparent,
-                                      highlightColor: Colors.transparent,
-                                      onTap: () {
-                                        BlocProvider.of<OrderStatusBloc>(context).add(CheckOrderStatus(widget.ordersData.orderId.toString(), 'Delivery Cancel',0,0));
-                                        Navigator.of(context).pop(true);
-                                      },
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        children: const [
-                                          Icon(
-                                            Icons.cancel_outlined,
-                                            color: Colors.red,
-                                          ),
-                                          Text(
-                                            '  Cancel Delivery',
-                                            style: TextStyle(fontWeight: FontWeight.w400, fontSize: 20, color: Colors.black),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    const Divider(),
-                                    InkWell(
-                                      splashColor: Colors.transparent,
-                                      highlightColor: Colors.transparent,
-                                      onTap: () {
-                                        BlocProvider.of<OrderStatusBloc>(context).add(CheckOrderStatus(widget.ordersData.orderId.toString(), 'Delivery Stop',0,0));
-                                      },
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        children: const [
-                                          Icon(
-                                            Icons.block_outlined,
-                                            color: Colors.red,
-                                          ),
-                                          Text(
-                                            '  Stop Delivery',
-                                            style: TextStyle(fontWeight: FontWeight.w400, fontSize: 20, color: Colors.black),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    const Divider(),
-                                    InkWell(
-                                      splashColor: Colors.transparent,
-                                      highlightColor: Colors.transparent,
-                                      onTap: () {
-                                        BlocProvider.of<OrderStatusBloc>(context).add(CheckOrderStatus(widget.ordersData.orderId.toString(), 'Not At Home',0,0));
-                                      },
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        children: const [
-                                          Icon(
-                                            Icons.backspace_outlined,
-                                            color: Colors.red,
-                                          ),
-                                          Text(
-                                            '  Not Home',
-                                            style: TextStyle(fontWeight: FontWeight.w400, fontSize: 20, color: Colors.black),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
+                  )
+                      : Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        start == true
+                            ? Flexible(
+                          child: InkWell(
+                            splashColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => PaymentScreen(
+                                        amount: orderTotal.toStringAsFixed(2),
+                                        orderId: widget.ordersData.orderId.toString(),
+                                      )));
+                            },
+                            child: Container(
+                              height: 60,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                border: Border.all(color: AppStyles.MAIN_COLOR),
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  'Check Out',
+                                  style: TextStyle(fontWeight: FontWeight.w400, fontSize: 20, color: AppStyles.MAIN_COLOR),
                                 ),
                               ),
-                            );
-                          },
-                        );
-                      },
-                      child: CircleAvatar(
-                        radius: 30,
-                        backgroundColor: Colors.grey.shade200,
-                        child: const Center(
-                          child: Icon(
-                            Icons.more_vert_outlined,
-                            size: 34,
-                            color: Colors.black45,
+                            ),
+                          ),
+                        )
+                            : Flexible(
+                          child: InkWell(
+                            splashColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
+                            onTap: () {
+                              BlocProvider.of<OrderStatusBloc>(context).add(CheckOrderStatus(widget.ordersData.orderId.toString(), 'On Route',0,0));
+                            },
+                            child: Container(
+                              height: 60,
+                              decoration: const BoxDecoration(color: AppStyles.MAIN_COLOR, boxShadow: [BoxShadow(color: Colors.black12, spreadRadius: 2, blurRadius: 4)]),
+                              child: const Center(
+                                child: Text(
+                                  'Start Delivery',
+                                  style: TextStyle(fontWeight: FontWeight.w400, fontSize: 20, color: Colors.white),
+                                ),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    )
-                  ],
-                ),
-              ),)
+                        const SizedBox(
+                          width: 12,
+                        ),
+                        InkWell(
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onTap: () {
+                            showModalBottomSheet(
+                              context: context,
+                              builder: (context) {
+                                return Container(
+                                  height: 200,
+                                  color: Colors.white,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(24),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        InkWell(
+                                          splashColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          onTap: () {
+                                            BlocProvider.of<OrderStatusBloc>(context).add(CheckOrderStatus(widget.ordersData.orderId.toString(), 'Delivery Cancel',0,0));
+                                            Navigator.of(context).pop(true);
+                                          },
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: const [
+                                              Icon(
+                                                Icons.cancel_outlined,
+                                                color: Colors.red,
+                                              ),
+                                              Text(
+                                                '  Cancel Delivery',
+                                                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 20, color: Colors.black),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        const Divider(),
+                                        InkWell(
+                                          splashColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          onTap: () {
+                                            BlocProvider.of<OrderStatusBloc>(context).add(CheckOrderStatus(widget.ordersData.orderId.toString(), 'Delivery Stop',0,0));
+                                          },
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: const [
+                                              Icon(
+                                                Icons.block_outlined,
+                                                color: Colors.red,
+                                              ),
+                                              Text(
+                                                '  Stop Delivery',
+                                                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 20, color: Colors.black),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        const Divider(),
+                                        InkWell(
+                                          splashColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          onTap: () {
+                                            BlocProvider.of<OrderStatusBloc>(context).add(CheckOrderStatus(widget.ordersData.orderId.toString(), 'Not At Home',0,0));
+                                          },
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: const [
+                                              Icon(
+                                                Icons.backspace_outlined,
+                                                color: Colors.red,
+                                              ),
+                                              Text(
+                                                '  Not Home',
+                                                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 20, color: Colors.black),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                          child: CircleAvatar(
+                            radius: 30,
+                            backgroundColor: Colors.grey.shade200,
+                            child: const Center(
+                              child: Icon(
+                                Icons.more_vert_outlined,
+                                size: 34,
+                                color: Colors.black45,
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ))
               ],
           )
         ),
