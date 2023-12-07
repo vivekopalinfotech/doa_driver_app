@@ -1,10 +1,12 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:doa_driver_app/bloc/otp/otp_bloc.dart';
+import 'package:doa_driver_app/bloc/shift/shift_bloc.dart';
 import 'package:doa_driver_app/constants/app_data.dart';
 import 'package:doa_driver_app/constants/appstyles.dart';
 import 'package:doa_driver_app/mainscreen.dart';
 import 'package:doa_driver_app/tweaks/shared_pref_service.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -185,6 +187,10 @@ class _OtpScreenState extends State<OtpScreen> {
             print(state.user!.email!);
             print(state.user!.mobile!);
             print('***************');
+    FirebaseMessaging.instance.getToken().then((value) {
+      BlocProvider.of<UpdateShiftBloc>(context).add(CheckUpdateShift(int.parse(AppData.user!.id.toString()), int.parse(state.user!.availability_status.toString()), value.toString()));
+    });
+
             Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) =>  MainScreen(lat: widget.lat,lng: widget.lng,)), (route) => false);
           }
         },

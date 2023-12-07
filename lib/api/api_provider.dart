@@ -91,6 +91,7 @@ class ApiProvider {
             "phone_number": phoneNumber,
             "mobile_del_code": otp,
           }));
+
       return LoginResponse.fromJson(response.data);
     } catch (error) {
       return LoginResponse.withError(_handleError(error as TypeError));
@@ -125,6 +126,7 @@ class ApiProvider {
       return DeliveryStatusResponse.withError(_handleError(error as TypeError));
     }
   }
+
 
   Future<OrderResponse> getOrder(int id) async {
     try {

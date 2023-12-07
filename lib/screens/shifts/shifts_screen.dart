@@ -37,7 +37,7 @@ class _ShiftScreenState extends State<ShiftScreen> {
 
   @override
   void initState() {
-    BlocProvider.of<ShiftsDataBloc>(context).add( GetShiftsData(1));
+    BlocProvider.of<ShiftsDataBloc>(context).add( GetShiftsData(AppData.user!.id));
     super.initState();
   }
 
@@ -71,7 +71,7 @@ class _ShiftScreenState extends State<ShiftScreen> {
                             style: TextStyle(color: Colors.black38, fontWeight: FontWeight.w500),
                           )),
                           Text(
-                            '\$${state.shiftsDataResponse.data!.Total_Deliver_Amount!.toStringAsFixed(2)}',
+                            '${state.shiftsDataResponse.data!.Total_Deliver_Order}/\$${state.shiftsDataResponse.data!.Total_Deliver_Amount!.toStringAsFixed(2)}',
                             style: const TextStyle(fontSize: 18),
                           )
                         ],
@@ -89,7 +89,7 @@ class _ShiftScreenState extends State<ShiftScreen> {
                             style: TextStyle(color: Colors.black38, fontWeight: FontWeight.w500),
                           )),
                           Text(
-                            '\$${state.shiftsDataResponse.data!.Total_Pending_Amount!.toStringAsFixed(2)}',
+                            '${state.shiftsDataResponse.data!.Total_Pending_Order}/\$${state.shiftsDataResponse.data!.Total_Pending_Amount!.toStringAsFixed(2)}',
                             style: const TextStyle(fontSize: 18),
                           )
                         ],

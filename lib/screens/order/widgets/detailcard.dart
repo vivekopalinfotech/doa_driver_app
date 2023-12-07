@@ -85,7 +85,7 @@ class _DetailCardState extends State<DetailCard> {
       
         ],
       ),
-   Divider(color: Colors.black38,),
+   const Divider(color: Colors.black38,),
      Row(
        children: [
          Flexible(
@@ -96,28 +96,23 @@ class _DetailCardState extends State<DetailCard> {
                  crossAxisAlignment: CrossAxisAlignment.start,
                  children: [
                    const Text(
-                     'Cell Phone: ',
+                     'Order Notes: ',
                      style: TextStyle(color: Colors.black26, fontSize: 14),
                    ),
 
                    Flexible(
-                     child: InkWell(
-                       onTap: (){
-                         _makePhoneCall(widget.ordersData.billing_phone??'');
-                       },
-                       child: Text(
-                         widget.ordersData.billing_phone??'',
-                         style: const TextStyle(
-                           color:  AppStyles.SECOND_COLOR,
-                           fontSize: 14,
-                           decoration: TextDecoration.underline,
-                           decorationStyle: TextDecorationStyle.solid,
-                         ),
+                     child: Text(
+                       widget.ordersData.customer_order_notes??'',
+                       style: const TextStyle(
+
+                         fontSize: 14,
+
+                         decorationStyle: TextDecorationStyle.solid,
                        ),
                      ),
                    ),        ],
                ),
-               SizedBox(height: 8,),
+               const SizedBox(height: 8,),
                Row(
                  crossAxisAlignment: CrossAxisAlignment.start,
                  children: [
@@ -138,7 +133,7 @@ class _DetailCardState extends State<DetailCard> {
                      ),
                    ),        ],
                ),
-               SizedBox(height: 8,),
+               const SizedBox(height: 8,),
                Row(
                  crossAxisAlignment: CrossAxisAlignment.start,
                  children: [

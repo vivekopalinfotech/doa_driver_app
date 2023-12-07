@@ -1,6 +1,8 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:doa_driver_app/bloc/login/mobile_bloc.dart';
+import 'package:doa_driver_app/bloc/shift/shift_bloc.dart';
+import 'package:doa_driver_app/constants/app_data.dart';
 import 'package:doa_driver_app/constants/appstyles.dart';
 import 'package:doa_driver_app/screens/otp_screen.dart';
 import 'package:doa_driver_app/tweaks/shared_pref_service.dart';
@@ -223,6 +225,7 @@ class _SignInScreenState extends State<SignInScreen> {
             await sharedPrefService.setUserPhone(mobileController.text);
 
             if(state.data != null) {
+
               Navigator.push(
                   context,
                   MaterialPageRoute(
