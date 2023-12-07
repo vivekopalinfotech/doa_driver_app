@@ -91,7 +91,7 @@ class User {
     commission = json['commission'];
     email_address = json['email_address'];
     pin_code = json['pin_code'];
-    availability_status = json['availability_status'];
+    availability_status = json['availability_status'].toString();
     status = json['status'];
     address = json['address'];
     city = json['city'];

@@ -14,23 +14,23 @@ class UpdateShiftInitial extends UpdateShiftState {
 
 
 class UpdateShiftSuccess extends UpdateShiftState {
-  final String? message;
+  final LoginResponse updateShiftResponse;
 
-  const UpdateShiftSuccess(this.message);
+  const UpdateShiftSuccess(this.updateShiftResponse);
 
   @override
-  List<Object> get props => [message!];
+  List<Object> get props => [updateShiftResponse];
 }
 
 
 
 class UpdateShiftFailed extends UpdateShiftState {
-  final String? message;
+  final LoginResponse updateShiftResponse;
 
-  const UpdateShiftFailed(this.message);
+  const UpdateShiftFailed(this.updateShiftResponse);
 
   @override
-  List<Object> get props => [message!];
+  List<Object> get props => [updateShiftResponse];
 }
 
 class UpdateShiftLoading extends UpdateShiftState {

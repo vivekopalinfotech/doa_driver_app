@@ -58,11 +58,12 @@ Future<void> main() async {
   );
 
   runApp(
-      RestartWidget(
-    child: MultiBlocProvider(
+    //  RestartWidget(
+  //  child:
+    MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => AuthBloc(RealAuthRepo())),
-        BlocProvider(create: (context) => OnlineBloc(RealOnlineRepo())),
+
         BlocProvider(create: (context) => MobileBloc(RealMobileRepo())),
         BlocProvider(create: (context) => OtpBloc(RealOtpRepo())),
         BlocProvider(create: (context) => OrdersBloc(RealOrderRepo()),),
@@ -78,13 +79,28 @@ Future<void> main() async {
         child:  MyApp(),
       ),
     ),
-  ));
+ // )
+  );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      // Handle notification
+      context.read<NotificationProvider>().handleNotification();
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
@@ -94,6 +110,7 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
 class RestartWidget extends StatefulWidget {
   const RestartWidget({super.key,  required this.child});
 
@@ -137,10 +154,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      // Handle notification
-      context.read<NotificationProvider>().handleNotification();
-    });
+
 
   }
   @override
