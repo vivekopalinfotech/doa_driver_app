@@ -58,9 +58,8 @@ Future<void> main() async {
   );
 
   runApp(
-    //  RestartWidget(
-  //  child:
-    MultiBlocProvider(
+      RestartWidget(
+    child: MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => AuthBloc(RealAuthRepo())),
 
@@ -79,8 +78,7 @@ Future<void> main() async {
         child:  MyApp(),
       ),
     ),
- // )
-  );
+  ));
 }
 
 class MyApp extends StatefulWidget {
@@ -94,13 +92,13 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    // TODO: implement initState
+
     super.initState();
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      // Handle notification
       context.read<NotificationProvider>().handleNotification();
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
