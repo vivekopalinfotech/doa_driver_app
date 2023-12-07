@@ -6,6 +6,7 @@ import 'package:doa_driver_app/constants/app_data.dart';
 import 'package:doa_driver_app/constants/app_utils.dart';
 import 'package:doa_driver_app/constants/appstyles.dart';
 import 'package:doa_driver_app/screens/order/orderdetailscreen.dart';
+import 'package:doa_driver_app/utils/NotificationProvider.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -63,20 +64,23 @@ class _OrderScreenState extends State<OrderScreen> {
 
   @override
   void initState() {
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      //print(message);
-      BlocProvider.of<OrdersBloc>(context).add(GetOrders(AppData.user!.id));
-      //BlocProvider.of<OrdersBloc>(context).add(GetOrders(AppData.user!.id));
-    });
+
+
+    super.initState();
     BlocProvider.of<OrdersBloc>(context).add(GetOrders(AppData.user!.id));
     _callSplashScreen();
-    super.initState();
-  }
+    context.read<NotificationProvider>().addListener(_refreshPage);
 
+  }
+  _refreshPage(){
+    BlocProvider.of<OrdersBloc>(context).add(GetOrders(AppData.user!.id));
+  }
   @override
   void didChangeDependencies() {
-    super.didChangeDependencies();
+    context.read<NotificationProvider>().removeListener(_refreshPage);
     _callSplashScreen();
+
+    super.didChangeDependencies();
   }
 
   @override

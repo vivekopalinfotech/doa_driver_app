@@ -22,12 +22,14 @@ import 'package:doa_driver_app/repos/update_delivery.dart';
 import 'package:doa_driver_app/repos/update_shift_repo.dart';
 import 'package:doa_driver_app/screens/splashscreen.dart';
 import 'package:doa_driver_app/tweaks/notification_services.dart';
+import 'package:doa_driver_app/utils/NotificationProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 // core Flutter primitives
 import 'package:flutter/foundation.dart';
 // core FlutterFire dependency
 import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
 import 'constants/app_data.dart';
 import 'firebase_options.dart';
 // FlutterFire's Firebase Cloud Messaging plugin
@@ -71,7 +73,10 @@ Future<void> main() async {
         BlocProvider(create: (context) => PaymentBloc(RealOrderStatusRepo()),),
         BlocProvider(create: (context) => UpdateShiftBloc((RealUpdateShiftRepo())),),
       ],
-      child: const MyApp(),
+      child: ChangeNotifierProvider(
+        create: (_) => NotificationProvider(),
+        child:  MyApp(),
+      ),
     ),
   ));
 }
@@ -132,7 +137,10 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      // Handle notification
+      context.read<NotificationProvider>().handleNotification();
+    });
 
   }
   @override

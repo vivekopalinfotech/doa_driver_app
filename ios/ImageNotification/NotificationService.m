@@ -6,7 +6,7 @@
 //
 
 #import "NotificationService.h"
-#import "FirebaseMessaging.h"
+//#import "FirebaseMessaging.h"
 
 @interface NotificationService ()
 
@@ -22,7 +22,7 @@
     self.bestAttemptContent = [request.content mutableCopy];
     
     // Modify the notification content here...
-    [[FIRMessaging extensionHelper] populateNotificationContent:self.bestAttemptContent withContentHandler:contentHandler];
+    //[[FIRMessaging extensionHelper] populateNotificationContent:self.bestAttemptContent withContentHandler:contentHandler];
     
     self.contentHandler(self.bestAttemptContent);
 }
