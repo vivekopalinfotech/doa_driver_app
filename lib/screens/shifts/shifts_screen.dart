@@ -37,7 +37,7 @@ class _ShiftScreenState extends State<ShiftScreen> {
 
   @override
   void initState() {
-    BlocProvider.of<ShiftsDataBloc>(context).add( GetShiftsData(AppData.user!.id));
+    BlocProvider.of<ShiftsDataBloc>(context).add(GetShiftsData(AppData.user!.id));
     super.initState();
   }
 

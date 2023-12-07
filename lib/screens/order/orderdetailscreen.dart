@@ -143,286 +143,284 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
           },
           child: Stack(
               children: [
-                Expanded(
-                  child: SizedBox(
-                    height: MediaQuery.of(context).size.height,
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          Stack(
-                            children: [
-                              SizedBox(
-                                height: 180,
-                                child: GoogleMap(
-                                  initialCameraPosition: CameraPosition(target: LatLng(widget.lat, widget.lng), zoom: 15),
-                                  mapType: MapType.normal,
-                                  myLocationEnabled: false,
-                                  scrollGesturesEnabled: true,
-                                  zoomGesturesEnabled: true,
-                                  zoomControlsEnabled: false,
-                                  minMaxZoomPreference: const MinMaxZoomPreference(0, 20),
-                                  markers: Set.from(markers),
-                                  tiltGesturesEnabled: true,
-                                  mapToolbarEnabled: false,
-                                  onCameraMove: (position) {
-                                    //_customInfoWindowController.onCameraMove!();
-                                  },
-                                  onMapCreated: (GoogleMapController controller) {
-                                    controller = controller;
-                                  },
+                SizedBox(
+                  height: MediaQuery.of(context).size.height,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Stack(
+                          children: [
+                            SizedBox(
+                              height: 180,
+                              child: GoogleMap(
+                                initialCameraPosition: CameraPosition(target: LatLng(widget.lat, widget.lng), zoom: 15),
+                                mapType: MapType.normal,
+                                myLocationEnabled: false,
+                                scrollGesturesEnabled: true,
+                                zoomGesturesEnabled: true,
+                                zoomControlsEnabled: false,
+                                minMaxZoomPreference: const MinMaxZoomPreference(0, 20),
+                                markers: Set.from(markers),
+                                tiltGesturesEnabled: true,
+                                mapToolbarEnabled: false,
+                                onCameraMove: (position) {
+                                  //_customInfoWindowController.onCameraMove!();
+                                },
+                                onMapCreated: (GoogleMapController controller) {
+                                  controller = controller;
+                                },
+                              ),
+                            ),
+                            Positioned(
+                              left: 0,
+                              right: 0,
+                              bottom: 0,
+                              child: InkWell(
+                                splashColor: Colors.transparent,
+                                highlightColor: Colors.transparent,
+                                onTap: () {
+                                  _getDirection();
+                                },
+                                child: Container(
+                                  height: 60,
+                                  color: AppStyles.SECOND_COLOR.withOpacity(.7),
+                                  padding: const EdgeInsets.all(8),
+                                  child: Center(
+                                      child: Text(
+                                    widget.location,
+                                    maxLines: 2,
+                                  )),
                                 ),
                               ),
-                              Positioned(
-                                left: 0,
-                                right: 0,
-                                bottom: 0,
-                                child: InkWell(
-                                  splashColor: Colors.transparent,
-                                  highlightColor: Colors.transparent,
-                                  onTap: () {
-                                    _getDirection();
-                                  },
-                                  child: Container(
-                                    height: 60,
-                                    color: AppStyles.SECOND_COLOR.withOpacity(.7),
-                                    padding: const EdgeInsets.all(8),
-                                    child: Center(
+                            )
+                          ],
+                        ),
+                        DetailCard(
+                          ordersData: widget.ordersData,
+                          miles: widget.miles,
+                        ),
+                        Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: 15.0, top: 10, right: 15),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: const [
+                                  Flexible(
+                                    child: SizedBox(
+                                        width: 160,
                                         child: Text(
-                                      widget.location,
-                                      maxLines: 2,
-                                    )),
+                                          'Items',
+                                          style: TextStyle(fontWeight: FontWeight.bold),
+                                        )),
                                   ),
-                                ),
-                              )
-                            ],
-                          ),
-                          DetailCard(
-                            ordersData: widget.ordersData,
-                            miles: widget.miles,
-                          ),
-                          Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(left: 15.0, top: 10, right: 15),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: const [
-                                    Flexible(
-                                      child: SizedBox(
-                                          width: 160,
+                                  SizedBox(
+                                      child: Center(
                                           child: Text(
-                                            'Items',
-                                            style: TextStyle(fontWeight: FontWeight.bold),
-                                          )),
-                                    ),
-                                    SizedBox(
-                                        child: Center(
-                                            child: Text(
-                                      'Qty',
-                                      style: TextStyle(fontWeight: FontWeight.bold),
-                                    ))),
-                                    SizedBox(
-                                        child: Center(
-                                            child: Text(
-                                      'Price',
-                                      style: TextStyle(fontWeight: FontWeight.bold),
-                                    )))
-                                  ],
-                                ),
+                                    'Qty',
+                                    style: TextStyle(fontWeight: FontWeight.bold),
+                                  ))),
+                                  SizedBox(
+                                      child: Center(
+                                          child: Text(
+                                    'Price',
+                                    style: TextStyle(fontWeight: FontWeight.bold),
+                                  )))
+                                ],
                               ),
-                              const SizedBox(
-                                height: 16,
+                            ),
+                            const SizedBox(
+                              height: 16,
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(bottom: 100),
+                              padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
+                              color: Colors.white,
+                              child: Column(
+                                children: [
+                                  ListView.builder(
+                                      physics: const NeverScrollableScrollPhysics(),
+                                      primary: false,
+                                      padding: EdgeInsets.zero,
+                                      shrinkWrap: true,
+                                      itemCount: widget.ordersData.orderDetail!.length,
+                                      itemBuilder: (context, index) {
+                                        return Container(
+                                          padding: const EdgeInsets.symmetric(vertical: 8),
+                                          child: Column(
+                                            children: [
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  SizedBox(
+                                                      width: 180,
+                                                      child: Text(
+                                                        widget.orderDetail![index].product?.detail![0].title ?? 'Not Available',
+                                                        textAlign: TextAlign.start,
+                                                      )),
+                                                  SizedBox(child: Center(child: Text(widget.orderDetail![index].productQty))),
+                                                  SizedBox(
+                                                      child: Center(
+                                                          child: Column(
+                                                    children: [
+                                                      Text(
+                                                        '\$${widget.orderDetail![index].productPrice}',
+                                                        style: const TextStyle(decoration: TextDecoration.lineThrough),
+                                                      ),
+                                                      Text(
+                                                        '\$${widget.orderDetail![index].productDiscount}',
+                                                      ),
+                                                    ],
+                                                  )))
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      }),
+                                  const Divider(
+                                    color: Colors.black38,
+                                    thickness: 1,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const Flexible(
+                                        child: SizedBox(
+                                            child: Text(
+                                          'Item total',
+                                          textAlign: TextAlign.start,
+                                        )),
+                                      ),
+                                      SizedBox(
+                                          child: Center(
+                                              child: Text(
+                                        '\$${itemTotal.toStringAsFixed(2)}',
+                                        style: const TextStyle(fontWeight: FontWeight.bold),
+                                      ))),
+                                    ],
+                                  ),
+                                  const Divider(
+                                    color: Colors.transparent,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const Flexible(
+                                        child: SizedBox(
+                                            child: Text(
+                                          'Item Discounts',
+                                          textAlign: TextAlign.start,
+                                        )),
+                                      ),
+                                      SizedBox(
+                                          child: Center(
+                                              child: Text(
+                                        '-\$${itemDiscount.toStringAsFixed(2)}',
+                                        style: const TextStyle(fontWeight: FontWeight.bold),
+                                      ))),
+                                    ],
+                                  ),
+                                  const Divider(
+                                    color: Colors.black38,
+                                    thickness: 1,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const Flexible(
+                                        child: SizedBox(
+                                            child: Text(
+                                          'Sub Total',
+                                          textAlign: TextAlign.start,
+                                        )),
+                                      ),
+                                      SizedBox(
+                                          child: Align(
+                                              alignment: Alignment.center,
+                                              child: Text(
+                                                '\$${subtotal.toStringAsFixed(2)}',
+                                                style: const TextStyle(fontWeight: FontWeight.bold),
+                                              ))),
+                                    ],
+                                  ),
+                                  const Divider(
+                                    color: Colors.transparent,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const Flexible(
+                                        child: SizedBox(
+                                            child: Text(
+                                          'Tax',
+                                          textAlign: TextAlign.start,
+                                        )),
+                                      ),
+                                      SizedBox(
+                                          child: Center(
+                                              child: Text(
+                                        '\$$tax',
+                                        style: const TextStyle(fontWeight: FontWeight.bold),
+                                      ))),
+                                    ],
+                                  ),
+                                  const Divider(
+                                    color: Colors.transparent,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const Flexible(
+                                        child: SizedBox(
+                                            child: Text(
+                                          'Delivery Charges',
+                                          textAlign: TextAlign.start,
+                                        )),
+                                      ),
+                                      SizedBox(
+                                          child: Center(
+                                              child: Text(
+                                        '\$${widget.ordersData.shipping_cost}',
+                                        style: const TextStyle(fontWeight: FontWeight.bold),
+                                      ))),
+                                    ],
+                                  ),
+                                  const Divider(
+                                    color: Colors.transparent,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const Flexible(
+                                        child: SizedBox(
+                                            child: Text(
+                                          'Total',
+                                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+                                          textAlign: TextAlign.start,
+                                        )),
+                                      ),
+                                      SizedBox(
+                                          child: Center(
+                                              child: Text(
+                                        '\$${orderTotal.toStringAsFixed(2)}',
+                                        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                      ))),
+                                    ],
+                                  ),
+                                ],
                               ),
-                              Container(
-                                margin: const EdgeInsets.only(bottom: 100),
-                                padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
-                                color: Colors.white,
-                                child: Column(
-                                  children: [
-                                    ListView.builder(
-                                        physics: const NeverScrollableScrollPhysics(),
-                                        primary: false,
-                                        padding: EdgeInsets.zero,
-                                        shrinkWrap: true,
-                                        itemCount: widget.ordersData.orderDetail!.length,
-                                        itemBuilder: (context, index) {
-                                          return Container(
-                                            padding: const EdgeInsets.symmetric(vertical: 8),
-                                            child: Column(
-                                              children: [
-                                                Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                  children: [
-                                                    SizedBox(
-                                                        width: 180,
-                                                        child: Text(
-                                                          widget.orderDetail![index].product?.detail![0].title ?? 'Not Available',
-                                                          textAlign: TextAlign.start,
-                                                        )),
-                                                    SizedBox(child: Center(child: Text(widget.orderDetail![index].productQty))),
-                                                    SizedBox(
-                                                        child: Center(
-                                                            child: Column(
-                                                      children: [
-                                                        Text(
-                                                          '\$${widget.orderDetail![index].productPrice}',
-                                                          style: const TextStyle(decoration: TextDecoration.lineThrough),
-                                                        ),
-                                                        Text(
-                                                          '\$${widget.orderDetail![index].productDiscount}',
-                                                        ),
-                                                      ],
-                                                    )))
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          );
-                                        }),
-                                    const Divider(
-                                      color: Colors.black38,
-                                      thickness: 1,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        const Flexible(
-                                          child: SizedBox(
-                                              child: Text(
-                                            'Item total',
-                                            textAlign: TextAlign.start,
-                                          )),
-                                        ),
-                                        SizedBox(
-                                            child: Center(
-                                                child: Text(
-                                          '\$${itemTotal.toStringAsFixed(2)}',
-                                          style: const TextStyle(fontWeight: FontWeight.bold),
-                                        ))),
-                                      ],
-                                    ),
-                                    const Divider(
-                                      color: Colors.transparent,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        const Flexible(
-                                          child: SizedBox(
-                                              child: Text(
-                                            'Item Discounts',
-                                            textAlign: TextAlign.start,
-                                          )),
-                                        ),
-                                        SizedBox(
-                                            child: Center(
-                                                child: Text(
-                                          '-\$${itemDiscount.toStringAsFixed(2)}',
-                                          style: const TextStyle(fontWeight: FontWeight.bold),
-                                        ))),
-                                      ],
-                                    ),
-                                    const Divider(
-                                      color: Colors.black38,
-                                      thickness: 1,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        const Flexible(
-                                          child: SizedBox(
-                                              child: Text(
-                                            'Sub Total',
-                                            textAlign: TextAlign.start,
-                                          )),
-                                        ),
-                                        SizedBox(
-                                            child: Align(
-                                                alignment: Alignment.center,
-                                                child: Text(
-                                                  '\$${subtotal.toStringAsFixed(2)}',
-                                                  style: const TextStyle(fontWeight: FontWeight.bold),
-                                                ))),
-                                      ],
-                                    ),
-                                    const Divider(
-                                      color: Colors.transparent,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        const Flexible(
-                                          child: SizedBox(
-                                              child: Text(
-                                            'Tax',
-                                            textAlign: TextAlign.start,
-                                          )),
-                                        ),
-                                        SizedBox(
-                                            child: Center(
-                                                child: Text(
-                                          '\$$tax',
-                                          style: const TextStyle(fontWeight: FontWeight.bold),
-                                        ))),
-                                      ],
-                                    ),
-                                    const Divider(
-                                      color: Colors.transparent,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        const Flexible(
-                                          child: SizedBox(
-                                              child: Text(
-                                            'Delivery Charges',
-                                            textAlign: TextAlign.start,
-                                          )),
-                                        ),
-                                        SizedBox(
-                                            child: Center(
-                                                child: Text(
-                                          '\$${widget.ordersData.shipping_cost}',
-                                          style: const TextStyle(fontWeight: FontWeight.bold),
-                                        ))),
-                                      ],
-                                    ),
-                                    const Divider(
-                                      color: Colors.transparent,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        const Flexible(
-                                          child: SizedBox(
-                                              child: Text(
-                                            'Total',
-                                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
-                                            textAlign: TextAlign.start,
-                                          )),
-                                        ),
-                                        SizedBox(
-                                            child: Center(
-                                                child: Text(
-                                          '\$${orderTotal.toStringAsFixed(2)}',
-                                          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                                        ))),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
+                            )
+                          ],
+                        ),
+                      ],
                     ),
                   ),
                 ),
               Positioned(
                 bottom: 0,right: 0,left: 0,
                 child:  Container(
-                  padding: EdgeInsets.symmetric(vertical: 8),
+                  padding: const EdgeInsets.symmetric(vertical: 8),
                   color: Colors.white,
                   child:  widget.type == 'history' || widget.type == 'delivered'
                       ? Padding(
