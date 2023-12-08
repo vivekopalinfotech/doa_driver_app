@@ -262,35 +262,35 @@ class _OrderScreenState extends State<OrderScreen> {
                           ],
                         ),
                       )
-                    : Expanded(
-                        child: Center(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Text('No Orders'),
-                              InkWell(
-                                splashColor: Colors.transparent,
-                                highlightColor: Colors.transparent,
-                                onTap: () => _refreshPage,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                                  child: Container(
-                                    color: Colors.blue,
-                                    height: 60,
-                                    child: const Center(
-                                      child: Text(
-                                        'Refresh',
-                                        style: TextStyle(color: Colors.white, fontSize: 18),
-                                      ),
-                                    ),
+                    : Center(
+                      child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text('No Orders'),
+                            InkWell(
+                              splashColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              onTap: () {
+                                BlocProvider.of<OrdersBloc>(context).add(GetOrders(AppData.user!.id));
+
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                                child: Container(
+                                  width: 20,
+                                  height: 60,
+                                  child: const Center(
+                                    child: Icon(Icons.refresh,color: AppStyles.MAIN_COLOR,size: 18,),
                                   ),
                                 ),
-                              )
-                            ],
-                          ),
+                              ),
+                            )
+                          ],
                         ),
-                      ));
+                    ));
           }
+
           return const Center(
             child: CircularProgressIndicator(
               color: AppStyles.MAIN_COLOR,
