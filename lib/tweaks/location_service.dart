@@ -16,6 +16,7 @@ class LocationService with ChangeNotifier {
     await location.changeSettings(
       accuracy: LocationAccuracy.high,
       interval: 60000,
+      distanceFilter: 500.00
     );
 
     location.onLocationChanged.listen((LocationData locationData) {
