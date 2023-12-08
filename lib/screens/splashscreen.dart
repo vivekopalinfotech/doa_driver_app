@@ -5,6 +5,8 @@ import 'package:doa_driver_app/mainscreen.dart';
 import 'package:doa_driver_app/models/user.dart';
 import 'package:doa_driver_app/screens/signinscreen.dart';
 import 'package:doa_driver_app/tweaks/shared_pref_service.dart';
+import 'package:doa_driver_app/utils/NotificationProvider.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
@@ -109,6 +111,7 @@ class _SplashScreenState extends State<SplashScreen> with  SingleTickerProviderS
   @override
   void initState() {
     super.initState();
+
     _callSplashScreen();
     checkIfUserLoggedIn();
 
