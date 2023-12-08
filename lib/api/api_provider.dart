@@ -172,8 +172,8 @@ class ApiProvider {
       Response response = await _dio!.put("${_baseUrl}update_availability/$id",
           data: jsonEncode({
             "fcm_token" : token,
-            "shift_status" : status,
-            "availability_status" : status
+            "shift_status" : '$status',
+            "availability_status" : '$status'
           }));
       log(jsonEncode(response.data));
      return LoginResponse.fromJson(response.data);

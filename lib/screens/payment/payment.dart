@@ -27,12 +27,20 @@ class _PaymentState extends State<Payment> {
       // Update the corresponding text field based on user input
       double enteredValue = double.tryParse(value) ?? 0.0;
       double remainingValue = double.parse(widget.amount) - enteredValue;
-
-      if (textFieldNumber == 1) {
-        ccController.text = remainingValue.toString();
-      } else {
-        controller.text = remainingValue.toString();
+      if(remainingValue < 0){
+        if (textFieldNumber == 1) {
+          ccController.text = '0';
+        } else {
+          controller.text = '0';
+        }
+      }else{
+        if (textFieldNumber == 1) {
+          ccController.text = remainingValue.toString();
+        } else {
+          controller.text = remainingValue.toString();
+        }
       }
+
     });
   }
 
@@ -138,6 +146,7 @@ class _PaymentState extends State<Payment> {
                                         ),
                                         const Text(
                                           'Cash',
+
                                           style: TextStyle(color: Colors.black, fontWeight: FontWeight.w400, fontSize: 16),
                                         )
                                       ],
@@ -149,6 +158,7 @@ class _PaymentState extends State<Payment> {
                                               onChanged: (value) {
                                                 updateTextFieldValues(value, 1);
                                               },
+                                              keyboardType: TextInputType.number,
                                               controller: controller,
                                               decoration: const InputDecoration(
                                                   prefix: Text(
@@ -199,6 +209,7 @@ class _PaymentState extends State<Payment> {
                                               onChanged: (value) {
                                                 updateTextFieldValues(value, 2);
                                               },
+                                              keyboardType: TextInputType.number,
                                               controller: ccController,
                                               decoration: const InputDecoration(
                                                   prefix: Text(
@@ -231,7 +242,10 @@ class _PaymentState extends State<Payment> {
                           splashColor: Colors.transparent,
                           highlightColor: Colors.transparent,
                           onTap: () {
-                            BlocProvider.of<PaymentBloc>(context).add(CheckPayment(widget.orderId.toString(), 'Delivered', double.parse(controller.text), double.parse(ccController.text)));
+                            var cash = controller.text == '' ? '0' : controller.text;
+
+                            var cc = ccController.text == '' ? '0' : ccController.text;
+                            BlocProvider.of<PaymentBloc>(context).add(CheckPayment(widget.orderId.toString(), 'Delivered', double.parse(cash), double.parse(cc)));
                           },
                           child: Container(
                             height: 60,

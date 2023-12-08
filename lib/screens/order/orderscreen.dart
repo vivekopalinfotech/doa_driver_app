@@ -126,14 +126,24 @@ class _OrderScreenState extends State<OrderScreen> {
                                     splashColor: Colors.transparent,
                                     highlightColor: Colors.transparent,
                                     onTap: () {
+                                      var lat = '0.0';
+                                      var lng = '0.0';
+                                      if(state.ordersData[index].latlong.toString().contains(',')) {
+                                        lat =
+                                        state.ordersData[index].latlong.toString().split(',')[0] == '' ? '0.00' : state.ordersData[index].latlong
+                                            .toString().split(',')[0];
+                                        lng =
+                                        state.ordersData[index].latlong.toString().split(',')[1] == '' ? '0.00' : state.ordersData[index].latlong
+                                            .toString().split(',')[1];
+                                      }
                                       widget.navigateToNext(OrderDetailScreen(
                                         type: widget.type,
                                         navigateToNext: widget.navigateToNext,
                                         ordersData: state.ordersData[index],
                                         orderDetail: state.ordersData[index].orderDetail,
                                         miles: distanceInMiles.toStringAsFixed(2),
-                                        lat: double.parse(state.ordersData[index].latlong.toString().split(',')[0]),
-                                        lng: double.parse(state.ordersData[index].latlong.toString().split(',')[1]),
+                                        lat: double.parse(lat),
+                                        lng: double.parse(lng),
                                         location:
                                             '${state.ordersData[index].billing_street_aadress.toString().toUpperCase()}, ${state.ordersData[index].billing_city.toString().toUpperCase()}, ${state.ordersData[index].billing_postcode}',
                                       ));
