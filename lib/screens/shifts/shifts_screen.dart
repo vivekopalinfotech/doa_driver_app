@@ -212,12 +212,12 @@ class _ShiftScreenState extends State<ShiftScreen> {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                             child: Container(
-                              color:  Colors.blue,
+                              color:  Colors.black12,
                               height: 60,
                               child: const Center(
                                 child: Text(
                                   'Refresh',
-                                  style: TextStyle(color: Colors.white, fontSize: 18),
+                                  style: TextStyle(color: Colors.black, fontSize: 18),
                                 ),
                               ),
                             ),

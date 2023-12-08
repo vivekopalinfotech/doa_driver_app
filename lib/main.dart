@@ -96,6 +96,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
 
     super.initState();
+
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       if(navigatorKey.currentContext != null){
         showAlertDialog(navigatorKey.currentContext!);
