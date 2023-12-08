@@ -8,6 +8,7 @@ import 'package:doa_driver_app/bloc/order/order_bloc.dart';
 import 'package:doa_driver_app/bloc/order_status/check_order_status_bloc.dart';
 import 'package:doa_driver_app/bloc/otp/otp_bloc.dart';
 import 'package:doa_driver_app/bloc/payment/payment_bloc.dart';
+import 'package:doa_driver_app/bloc/profile/profile_bloc.dart';
 import 'package:doa_driver_app/bloc/shift/shift_bloc.dart';
 import 'package:doa_driver_app/bloc/shifts_data/shifts_data_bloc.dart';
 import 'package:doa_driver_app/bloc/shifts_data/shifts_data_event.dart';
@@ -18,6 +19,7 @@ import 'package:doa_driver_app/repos/mobile_repo.dart';
 import 'package:doa_driver_app/repos/online_repo.dart';
 import 'package:doa_driver_app/repos/order_repo.dart';
 import 'package:doa_driver_app/repos/otp_repo.dart';
+import 'package:doa_driver_app/repos/profile_repo.dart';
 import 'package:doa_driver_app/repos/shifts_repo.dart';
 import 'package:doa_driver_app/repos/update_delivery.dart';
 import 'package:doa_driver_app/repos/update_shift_repo.dart';
@@ -74,10 +76,11 @@ Future<void> main() async {
         BlocProvider(create: (context) => OrderStatusBloc(RealOrderStatusRepo()),),
         BlocProvider(create: (context) => PaymentBloc(RealOrderStatusRepo()),),
         BlocProvider(create: (context) => UpdateShiftBloc((RealUpdateShiftRepo())),),
+        BlocProvider(create: (context) => ProfileBloc((RealProfileRepo())),),
       ],
       child: ChangeNotifierProvider(
         create: (_) => NotificationProvider(),
-        child:  MyApp(),
+        child:  const MyApp(),
       ),
     ),
   ));

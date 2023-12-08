@@ -91,6 +91,31 @@ class _SignInScreenState extends State<SignInScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body:  BlocConsumer<MobileBloc, MobileState>(
+        listener: (context, state) async {
+          if (state is MobileSuccess) {
+
+            setState(() {
+              state.data!.mobile = mobileController.text;
+            });
+
+            final sharedPrefService = await SharedPreferencesService.instance;
+            await sharedPrefService.setUserPhone(mobileController.text);
+
+            if(state.data != null) {
+
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          OtpScreen(phone: state.data!.mobile.toString(),
+                            otp: state.data!.Code,
+                            user: state.data!.user,lat: latitude,lng: longitude,)));
+            }else {
+              const ScaffoldMessenger(
+                  child: Text('Enter Valid Phone Number'));
+            }
+          }
+        },
         builder: (context, state) {
       return SingleChildScrollView(
               child: Column(
@@ -214,31 +239,7 @@ class _SignInScreenState extends State<SignInScreen> {
               ),
             );
         },
-        listener: (context, state) async {
-          if (state is MobileSuccess) {
 
-            setState(() {
-              state.data!.mobile = mobileController.text;
-            });
-
-            final sharedPrefService = await SharedPreferencesService.instance;
-            await sharedPrefService.setUserPhone(mobileController.text);
-
-            if(state.data != null) {
-
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          OtpScreen(phone: state.data!.mobile.toString(),
-                            otp: state.data!.Code,
-                            user: state.data!.user,lat: latitude,lng: longitude,)));
-            }else {
-              const ScaffoldMessenger(
-                  child: Text('Enter Valid Phone Number'));
-            }
-          }
-        },
       ));
 
 

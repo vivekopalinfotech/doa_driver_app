@@ -1,34 +1,35 @@
-// import 'package:doa_driver_app/constants/app_constants.dart';
-// import 'package:doa_driver_app/models/order.dart';
-// import 'package:doa_driver_app/repos/order_repo.dart';
-// import 'package:equatable/equatable.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
-//
-//
-// part 'orders_event.dart';
-//
-// part 'orders_state.dart';
-//
-// class ProfileBloc extends Bloc<OrdersEvent, OrdersState> {
-//   final OrderRepo ordersRepo;
-//
-//   ProfileBloc(this.ordersRepo) : super(const OrdersInitial());
-//
-//   @override
-//   Stream<OrdersState> mapEventToState(OrdersEvent event) async* {
-//     if (event is GetOrders) {
-//       try {
-//         final ordersResponse = await ordersRepo.getOrder(event.id!);
-//         if (ordersResponse.status == AppConstants.STATUS_SUCCESS &&
-//             ordersResponse.data != null) {
-//           yield OrdersLoaded(ordersResponse.data!);
-//         } else {
-//           yield OrdersError(ordersResponse.message!);
-//         }
-//       } on Error {
-//         yield const OrdersError("Couldn't fetch weather. Is the device online?");
-//       }
-//     }
-//
-//   }
-// }
+
+
+
+import 'package:doa_driver_app/constants/app_constants.dart';
+import 'package:doa_driver_app/models/user.dart';
+import 'package:doa_driver_app/repos/profile_repo.dart';
+import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+part 'profile_event.dart';
+
+part 'profile_state.dart';
+
+class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
+  final ProfileRepo profileRepo;
+
+  ProfileBloc(this.profileRepo) : super(const ProfileInitial());
+
+  @override
+  Stream<ProfileState> mapEventToState(ProfileEvent event) async* {
+    if (event is UpdateProfile) {
+      try {
+        final profileResponse = await profileRepo.updateProfile(event.id!,event.vehicleNo!,event.vehicleColor!,event.firstName!,event.lastName!,event.code!);
+        if (profileResponse.status == AppConstants.STATUS_SUCCESS ) {
+          yield ProfileLoaded(profileResponse.data);
+        } else {
+          yield ProfileError('Error');
+        }
+      } on Error {
+        yield const ProfileError("Couldn't fetch weather. Is the device online?");
+      }
+    }
+
+  }
+}
