@@ -10,6 +10,7 @@ import 'package:doa_driver_app/bloc/otp/otp_bloc.dart';
 import 'package:doa_driver_app/bloc/payment/payment_bloc.dart';
 import 'package:doa_driver_app/bloc/shift/shift_bloc.dart';
 import 'package:doa_driver_app/bloc/shifts_data/shifts_data_bloc.dart';
+import 'package:doa_driver_app/bloc/shifts_data/shifts_data_event.dart';
 import 'package:doa_driver_app/repos/auth_repo.dart';
 import 'package:doa_driver_app/repos/check_order_status_repo.dart';
 import 'package:doa_driver_app/repos/history_repo.dart';
@@ -110,6 +111,7 @@ class _MyAppState extends State<MyApp> {
       child: const Text("Close"),
       onPressed: () {
         BlocProvider.of<OrdersBloc>(context).add(GetOrders(AppData.user!.id));
+        BlocProvider.of<ShiftsDataBloc>(context).add(GetShiftsData(AppData.user!.id));
         Navigator.pop(context);
       },
     );
