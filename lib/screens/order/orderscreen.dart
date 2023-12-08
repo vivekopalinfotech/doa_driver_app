@@ -6,10 +6,12 @@ import 'package:doa_driver_app/constants/app_data.dart';
 import 'package:doa_driver_app/constants/app_utils.dart';
 import 'package:doa_driver_app/constants/appstyles.dart';
 import 'package:doa_driver_app/screens/order/orderdetailscreen.dart';
+import 'package:doa_driver_app/tweaks/location_service.dart';
 import 'package:doa_driver_app/utils/NotificationProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:provider/provider.dart';
 
 class OrderScreen extends StatefulWidget {
   final type;
@@ -60,10 +62,11 @@ class _OrderScreenState extends State<OrderScreen> {
 
     return await Geolocator.getCurrentPosition();
   }
-
+  LocationService locationService = LocationService();
   @override
   void initState() {
     super.initState();
+    locationService.startLocationService(context);
     BlocProvider.of<OrdersBloc>(context).add(GetOrders(AppData.user!.id));
     _callSplashScreen();
     context.read<NotificationProvider>().addListener(_refreshPage);
@@ -86,6 +89,8 @@ class _OrderScreenState extends State<OrderScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+
     return Scaffold(
       appBar: widget.type == 'order'
           ? AppBar(
@@ -268,6 +273,7 @@ class _OrderScreenState extends State<OrderScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             const Text('No Orders'),
+
                             InkWell(
                               splashColor: Colors.transparent,
                               highlightColor: Colors.transparent,
@@ -285,7 +291,8 @@ class _OrderScreenState extends State<OrderScreen> {
                                   ),
                                 ),
                               ),
-                            )
+                            ),
+
                           ],
                         ),
                     ));

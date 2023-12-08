@@ -2,6 +2,7 @@
 import 'package:doa_driver_app/bloc/auth/auth_bloc.dart';
 import 'package:doa_driver_app/bloc/delivery_update/delivery_update_bloc.dart';
 import 'package:doa_driver_app/bloc/history/history_bloc.dart';
+import 'package:doa_driver_app/bloc/lat_lng/latlng_bloc.dart';
 import 'package:doa_driver_app/bloc/login/mobile_bloc.dart';
 import 'package:doa_driver_app/bloc/online/online_bloc.dart';
 import 'package:doa_driver_app/bloc/order/order_bloc.dart';
@@ -23,7 +24,9 @@ import 'package:doa_driver_app/repos/profile_repo.dart';
 import 'package:doa_driver_app/repos/shifts_repo.dart';
 import 'package:doa_driver_app/repos/update_delivery.dart';
 import 'package:doa_driver_app/repos/update_shift_repo.dart';
+import 'package:doa_driver_app/repos/updatelatlng_repo.dart';
 import 'package:doa_driver_app/screens/splashscreen.dart';
+import 'package:doa_driver_app/tweaks/location_service.dart';
 import 'package:doa_driver_app/tweaks/notification_services.dart';
 import 'package:doa_driver_app/utils/NotificationProvider.dart';
 import 'package:flutter/material.dart';
@@ -77,10 +80,11 @@ Future<void> main() async {
         BlocProvider(create: (context) => PaymentBloc(RealOrderStatusRepo()),),
         BlocProvider(create: (context) => UpdateShiftBloc((RealUpdateShiftRepo())),),
         BlocProvider(create: (context) => ProfileBloc((RealProfileRepo())),),
+        BlocProvider(create: (context) => LatLngBloc((RealLatLngRepo())),),
       ],
       child: ChangeNotifierProvider(
         create: (_) => NotificationProvider(),
-        child:  const MyApp(),
+        child:  MyApp(),
       ),
     ),
   ));
@@ -140,11 +144,13 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return  MaterialApp(
+    return ChangeNotifierProvider(
+        create: (context) => LocationService(),
+    child: MaterialApp(
       debugShowCheckedModeBanner: false,
       navigatorKey: navigatorKey,
       home: const MyHomePage(),
-    );
+    ));
   }
 }
 
@@ -188,7 +194,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
   }

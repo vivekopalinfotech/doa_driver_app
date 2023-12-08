@@ -90,6 +90,20 @@ class ApiProvider {
     }
   }
 
+  Future<String> updateLatLong(String id,String latLng, ) async {
+    try {
+      Response response = await _dio!.post("${_baseUrl}deliveryboy_latlong/$id",
+          data: jsonEncode({
+            "latlong": latLng,
+          }));
+      log(jsonEncode(response.data));
+      print(response);
+      return response.data;
+    } catch (error) {
+      return 'Error';
+    }
+  }
+
   Future<MobileResponse> phoneNo(String phoneNumber) async {
     try {
       Response response = await _dio!.post("${_baseUrl}verifydelivery_mobile",
