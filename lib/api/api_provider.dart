@@ -72,13 +72,21 @@ class ApiProvider {
     }
   }
 
-  Future<LogoutResponse> updateProfile(String id) async {
+  Future<LoginResponse> updateProfile(String id,String vehicleNo, String vehicleColor, String firstName, String lastName, String code) async {
     try {
-      Response response = await _dio!.post("${_baseUrl}deliveryboy_update/$id");
+      Response response = await _dio!.post("${_baseUrl}deliveryboy_update/$id",
+          data: jsonEncode({
+        "vehicle_registration_no": vehicleNo,
+        "vehicle_color": vehicleColor,
+        "first_name": firstName,
+        "last_name": lastName,
+        "mobile_del_code": code,
+      }));
+      log(jsonEncode(response.data));
       print(response);
-      return LogoutResponse.fromJson(response.data);
+      return LoginResponse.fromJson(response.data);
     } catch (error) {
-      return LogoutResponse.withError(_handleError(error as TypeError));
+      return LoginResponse.withError(_handleError(error as TypeError));
     }
   }
 
