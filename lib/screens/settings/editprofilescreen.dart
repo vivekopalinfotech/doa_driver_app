@@ -254,7 +254,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               ),
                             ),
                             // border: InputBorder.none,
-                            hintText: "Password",
+                            hintText: "PassCode",
                             hintStyle: const TextStyle(
                                 color: Colors.brown,
                                 fontSize: 14),
@@ -295,7 +295,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             ),
                             // border: InputBorder.none,
                             hintText:
-                            "Confirm Password",
+                            "Confirm PassCode",
                             hintStyle: const TextStyle(
                                 color: Colors.brown,
                                 fontSize: 14),

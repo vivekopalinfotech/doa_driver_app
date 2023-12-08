@@ -63,16 +63,16 @@ class _OrderScreenState extends State<OrderScreen> {
 
   @override
   void initState() {
-
     super.initState();
     BlocProvider.of<OrdersBloc>(context).add(GetOrders(AppData.user!.id));
     _callSplashScreen();
     context.read<NotificationProvider>().addListener(_refreshPage);
-
   }
-  _refreshPage(){
+
+  _refreshPage() {
     BlocProvider.of<OrdersBloc>(context).add(GetOrders(AppData.user!.id));
   }
+
   @override
   void didChangeDependencies() {
     context.read<NotificationProvider>().removeListener(_refreshPage);
@@ -81,6 +81,8 @@ class _OrderScreenState extends State<OrderScreen> {
     super.didChangeDependencies();
   }
 
+  var lat;
+  var lng;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -112,29 +114,19 @@ class _OrderScreenState extends State<OrderScreen> {
                                 shrinkWrap: true,
                                 itemCount: state.ordersData.length,
                                 itemBuilder: (context, index) {
-                                  double distanceInMiles = AppUtils.calculateDistanceInMiles(
-                                    latitude,
-                                    longitude,
-                                    state.ordersData[index].customerId != null
-                                        ? double.parse(state.ordersData[index].customerId!.customer_address![index].lattitude.toString())
-                                        : 23.03085995,
-                                    state.ordersData[index].customerId != null
-                                        ? double.parse(state.ordersData[index].customerId!.customer_address![index].longitude.toString())
-                                        : 72.53501535,
-                                  );
+                                  lat = double.parse(state.ordersData[index].latlong.toString().split(',')[0]);
+                                  lng = double.parse(state.ordersData[index].latlong.toString().split(',')[1]);
+                                  double distanceInMiles = AppUtils.calculateDistanceInMiles(latitude, longitude, lat, lng);
+
                                   return InkWell(
                                     splashColor: Colors.transparent,
                                     highlightColor: Colors.transparent,
                                     onTap: () {
                                       var lat = '0.0';
                                       var lng = '0.0';
-                                      if(state.ordersData[index].latlong.toString().contains(',')) {
-                                        lat =
-                                        state.ordersData[index].latlong.toString().split(',')[0] == '' ? '0.00' : state.ordersData[index].latlong
-                                            .toString().split(',')[0];
-                                        lng =
-                                        state.ordersData[index].latlong.toString().split(',')[1] == '' ? '0.00' : state.ordersData[index].latlong
-                                            .toString().split(',')[1];
+                                      if (state.ordersData[index].latlong.toString().contains(',')) {
+                                        lat = state.ordersData[index].latlong.toString().split(',')[0] == '' ? '0.00' : state.ordersData[index].latlong.toString().split(',')[0];
+                                        lng = state.ordersData[index].latlong.toString().split(',')[1] == '' ? '0.00' : state.ordersData[index].latlong.toString().split(',')[1];
                                       }
                                       widget.navigateToNext(OrderDetailScreen(
                                         type: widget.type,
@@ -179,8 +171,7 @@ class _OrderScreenState extends State<OrderScreen> {
                                                           ),
                                                           Text(
                                                             state.ordersData[index].delivery_status.toString(),
-                                                            style:
-                                                                const TextStyle(color: Colors.deepOrange, fontWeight: FontWeight.bold, fontSize: 14),
+                                                            style: const TextStyle(color: Colors.deepOrange, fontWeight: FontWeight.bold, fontSize: 14),
                                                           ),
                                                         ],
                                                       ),
@@ -193,10 +184,17 @@ class _OrderScreenState extends State<OrderScreen> {
                                             const SizedBox(
                                               height: 8,
                                             ),
-                                            Text(
-                                              AppUtils.capitalizeFirstLetter(
-                                                  '${state.ordersData[index].billing_first_name} ${state.ordersData[index].billing_last_name}'),
-                                              style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Flexible(
+                                                  child: Text(
+                                                    AppUtils.capitalizeFirstLetter('${state.ordersData[index].billing_first_name} ${state.ordersData[index].billing_last_name}'),
+                                                    style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
+                                                  ),
+                                                ),
+                                                Text('${distanceInMiles.toStringAsFixed(2)} mi')
+                                              ],
                                             ),
                                             const SizedBox(
                                               height: 8,
@@ -216,9 +214,7 @@ class _OrderScreenState extends State<OrderScreen> {
                                                 Row(
                                                   children: [
                                                     Text(
-                                                      state.ordersData[index].delivery_dt != null
-                                                          ? AppUtils.formattedDate(state.ordersData[index].delivery_dt.toString())
-                                                          : 'N/A',
+                                                      state.ordersData[index].delivery_dt != null ? AppUtils.formattedDate(state.ordersData[index].delivery_dt.toString()) : 'N/A',
                                                       style: const TextStyle(color: Colors.black54, fontSize: 16),
                                                     ),
                                                     const SizedBox(

@@ -75,6 +75,8 @@ class _SplashScreenState extends State<SplashScreen> with  SingleTickerProviderS
       user.email = sharedPrefService.userEmail;
       user.mobile = sharedPrefService.userPhone;
       user.vehicle_registration_no = sharedPrefService.userVehicle;
+      user.mobile_del_code = sharedPrefService.loginCode;
+      user.vehicle_color = sharedPrefService.userVehicleColor;
 
       AppData.user = user;
 

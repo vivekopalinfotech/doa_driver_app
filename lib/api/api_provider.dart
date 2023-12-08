@@ -72,12 +72,23 @@ class ApiProvider {
     }
   }
 
+  Future<LogoutResponse> updateProfile(String id) async {
+    try {
+      Response response = await _dio!.post("${_baseUrl}deliveryboy_update/$id");
+      print(response);
+      return LogoutResponse.fromJson(response.data);
+    } catch (error) {
+      return LogoutResponse.withError(_handleError(error as TypeError));
+    }
+  }
+
   Future<MobileResponse> phoneNo(String phoneNumber) async {
     try {
       Response response = await _dio!.post("${_baseUrl}verifydelivery_mobile",
           data: jsonEncode({
             "phone_number": phoneNumber,
           }));
+      log(jsonEncode(response.data));
       return MobileResponse.fromJson(response.data);
     } catch (error) {
       return MobileResponse.withError(_handleError(error as TypeError));

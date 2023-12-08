@@ -11,7 +11,9 @@ class SharedPrefKeys {
   static const String USER_EMAIL = 'user_email';
   static const String USER_PHONE = 'user_phone';
   static const String USER_VEHICLE = 'user_vehicle';
+  static const String USER_VEHICLE_COLOR = 'user_vehicle_color';
   static const String SET_LOCATION = 'set_location';
+  static const String SET_LOGIN_CODE = 'set_login_code';
   static const String USER_TOKEN = 'user_token';
   static const String ONLINE = 'online';
 }
@@ -63,10 +65,20 @@ class SharedPreferencesService {
 
   String ? get userVehicle => _preferences?.getString(SharedPrefKeys.USER_VEHICLE);
 
+  Future<void> setUserVehicleColor(String userVehicleColor) async =>
+      await _preferences?.setString(SharedPrefKeys.USER_VEHICLE_COLOR, userVehicleColor);
+
+  String ? get userVehicleColor => _preferences?.getString(SharedPrefKeys.USER_VEHICLE_COLOR);
+
   Future<void> setLocation(String postLocation) async =>
       await _preferences?.setString(SharedPrefKeys.SET_LOCATION, postLocation);
 
   String ? get postLocation => _preferences?.getString(SharedPrefKeys.SET_LOCATION);
+
+  Future<void> setMobileCode(String loginCode) async =>
+      await _preferences?.setString(SharedPrefKeys.SET_LOGIN_CODE, loginCode);
+
+  String ? get loginCode => _preferences?.getString(SharedPrefKeys.SET_LOGIN_CODE);
 
   Future<void> setUserToken(String userToken) async =>
       await _preferences?.setString(SharedPrefKeys.USER_TOKEN, userToken);
@@ -85,8 +97,10 @@ class SharedPreferencesService {
     _preferences?.remove(SharedPrefKeys.USER_EMAIL);
     _preferences?.remove(SharedPrefKeys.USER_PHONE);
     _preferences?.remove(SharedPrefKeys.USER_VEHICLE);
+    _preferences?.remove(SharedPrefKeys.USER_VEHICLE_COLOR);
+    _preferences?.remove(SharedPrefKeys.SET_LOGIN_CODE);
     _preferences?.remove(SharedPrefKeys.USER_TOKEN);
-    _preferences?.remove(SharedPrefKeys.ONLINE);
+
   }
 
   Future<void> clearLocation() async {

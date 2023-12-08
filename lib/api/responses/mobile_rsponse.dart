@@ -29,7 +29,7 @@ class MobileResponse {
 }
 
 class Data{
-  int? Code;
+  String? Code;
   String? mobile;
   String? user;
 
