@@ -7,7 +7,6 @@ import 'package:doa_driver_app/constants/app_utils.dart';
 import 'package:doa_driver_app/constants/appstyles.dart';
 import 'package:doa_driver_app/screens/order/orderdetailscreen.dart';
 import 'package:doa_driver_app/utils/NotificationProvider.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
@@ -64,7 +63,6 @@ class _OrderScreenState extends State<OrderScreen> {
 
   @override
   void initState() {
-
 
     super.initState();
     BlocProvider.of<OrdersBloc>(context).add(GetOrders(AppData.user!.id));
