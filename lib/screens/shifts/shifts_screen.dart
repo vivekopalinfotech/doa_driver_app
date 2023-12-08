@@ -201,7 +201,28 @@ class _ShiftScreenState extends State<ShiftScreen> {
                                     ),
                                   ),
                                 ),
-                              )
+                              ),
+                        InkWell(
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onTap: () async {
+                            BlocProvider.of<ShiftsDataBloc>(context).add(GetShiftsData(AppData.user!.id));
+
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                            child: Container(
+                              color:  Colors.blue,
+                              height: 60,
+                              child: const Center(
+                                child: Text(
+                                  'Refresh',
+                                  style: TextStyle(color: Colors.white, fontSize: 18),
+                                ),
+                              ),
+                            ),
+                          ),
+                        )
 
                       ],
                     ),

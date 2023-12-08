@@ -83,6 +83,7 @@ class _OrderScreenState extends State<OrderScreen> {
 
   var lat;
   var lng;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -125,8 +126,12 @@ class _OrderScreenState extends State<OrderScreen> {
                                       var lat = '0.0';
                                       var lng = '0.0';
                                       if (state.ordersData[index].latlong.toString().contains(',')) {
-                                        lat = state.ordersData[index].latlong.toString().split(',')[0] == '' ? '0.00' : state.ordersData[index].latlong.toString().split(',')[0];
-                                        lng = state.ordersData[index].latlong.toString().split(',')[1] == '' ? '0.00' : state.ordersData[index].latlong.toString().split(',')[1];
+                                        lat = state.ordersData[index].latlong.toString().split(',')[0] == ''
+                                            ? '0.00'
+                                            : state.ordersData[index].latlong.toString().split(',')[0];
+                                        lng = state.ordersData[index].latlong.toString().split(',')[1] == ''
+                                            ? '0.00'
+                                            : state.ordersData[index].latlong.toString().split(',')[1];
                                       }
                                       widget.navigateToNext(OrderDetailScreen(
                                         type: widget.type,
@@ -171,7 +176,8 @@ class _OrderScreenState extends State<OrderScreen> {
                                                           ),
                                                           Text(
                                                             state.ordersData[index].delivery_status.toString(),
-                                                            style: const TextStyle(color: Colors.deepOrange, fontWeight: FontWeight.bold, fontSize: 14),
+                                                            style:
+                                                                const TextStyle(color: Colors.deepOrange, fontWeight: FontWeight.bold, fontSize: 14),
                                                           ),
                                                         ],
                                                       ),
@@ -189,7 +195,8 @@ class _OrderScreenState extends State<OrderScreen> {
                                               children: [
                                                 Flexible(
                                                   child: Text(
-                                                    AppUtils.capitalizeFirstLetter('${state.ordersData[index].billing_first_name} ${state.ordersData[index].billing_last_name}'),
+                                                    AppUtils.capitalizeFirstLetter(
+                                                        '${state.ordersData[index].billing_first_name} ${state.ordersData[index].billing_last_name}'),
                                                     style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
                                                   ),
                                                 ),
@@ -214,7 +221,9 @@ class _OrderScreenState extends State<OrderScreen> {
                                                 Row(
                                                   children: [
                                                     Text(
-                                                      state.ordersData[index].delivery_dt != null ? AppUtils.formattedDate(state.ordersData[index].delivery_dt.toString()) : 'N/A',
+                                                      state.ordersData[index].delivery_dt != null
+                                                          ? AppUtils.formattedDate(state.ordersData[index].delivery_dt.toString())
+                                                          : 'N/A',
                                                       style: const TextStyle(color: Colors.black54, fontSize: 16),
                                                     ),
                                                     const SizedBox(
@@ -253,8 +262,33 @@ class _OrderScreenState extends State<OrderScreen> {
                           ],
                         ),
                       )
-                    : const Center(
-                        child: Text('No Orders'),
+                    : Expanded(
+                        child: Center(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Text('No Orders'),
+                              InkWell(
+                                splashColor: Colors.transparent,
+                                highlightColor: Colors.transparent,
+                                onTap: () => _refreshPage,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                                  child: Container(
+                                    color: Colors.blue,
+                                    height: 60,
+                                    child: const Center(
+                                      child: Text(
+                                        'Refresh',
+                                        style: TextStyle(color: Colors.white, fontSize: 18),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
                       ));
           }
           return const Center(
