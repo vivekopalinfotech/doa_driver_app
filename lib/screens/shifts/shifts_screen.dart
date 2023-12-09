@@ -35,6 +35,72 @@ class _ShiftScreenState extends State<ShiftScreen> {
     BlocProvider.of<ShiftsDataBloc>(context).add(GetShiftsData(AppData.user!.id));
     super.initState();
   }
+  showOpenAlertDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Builder(
+          builder: (BuildContext context) {
+            // Your dialog content and actions go here
+            return AlertDialog(
+              content: const Text("Are you sure you want to open shift?"),
+              actions: [
+                TextButton(
+                  child: const Text("No"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                TextButton(
+                  child: const Text("Yes"),
+                  onPressed: () {
+                    FirebaseMessaging.instance.getToken().then((value) {
+                      BlocProvider.of<UpdateShiftBloc>(context).add(CheckUpdateShift(int.parse(AppData.user!.id.toString()), 1, value ?? ''));
+                    });
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+
+  }
+
+  void showCloseAlertDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Builder(
+          builder: (BuildContext context) {
+            // Your dialog content and actions go here
+            return AlertDialog(
+              content: const Text("Are you sure you want to close shift?"),
+              actions: [
+                TextButton(
+                  child: const Text("No"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                TextButton(
+                  child: const Text("Yes"),
+                  onPressed: () {
+                    FirebaseMessaging.instance.getToken().then((value) {
+                      BlocProvider.of<UpdateShiftBloc>(context).add(CheckUpdateShift(int.parse(AppData.user!.id.toString()), 0, value ?? ''));
+                    });
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -160,11 +226,10 @@ class _ShiftScreenState extends State<ShiftScreen> {
                                 splashColor: Colors.transparent,
                                 highlightColor: Colors.transparent,
                                 onTap: () async {
-                                  FirebaseMessaging.instance.getToken().then((value) {
-                                    state.shiftsDataResponse.data!.Total_Pending_Order != 0
-                                        ? ''
-                                        : BlocProvider.of<UpdateShiftBloc>(context).add(CheckUpdateShift(int.parse(AppData.user!.id.toString()), 0, value ?? ''));
-                                  });
+                                  state.shiftsDataResponse.data!.Total_Pending_Order != 0
+                                      ? ''
+                                      :
+                                  showCloseAlertDialog(context);
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -183,10 +248,9 @@ class _ShiftScreenState extends State<ShiftScreen> {
                             : InkWell(
                                 splashColor: Colors.transparent,
                                 highlightColor: Colors.transparent,
-                                onTap: () async {
-                                  FirebaseMessaging.instance.getToken().then((value) {
-                                    BlocProvider.of<UpdateShiftBloc>(context).add(CheckUpdateShift(int.parse(AppData.user!.id.toString()), 1, value ?? ''));
-                                  });
+                                onTap: () {
+                                  showOpenAlertDialog(context);
+
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -238,4 +302,6 @@ class _ShiftScreenState extends State<ShiftScreen> {
             //    ),
             ));
   }
+
+
 }

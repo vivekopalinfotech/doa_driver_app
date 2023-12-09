@@ -181,7 +181,7 @@ class _OtpScreenState extends State<OtpScreen> {
             await sharedPrefService.setUserEmail(state.user!.email!);
             await sharedPrefService.setUserPhone(state.user!.mobile!);
             await sharedPrefService.setUserVehicle(state.user!.vehicle_registration_no!);
-            await sharedPrefService.setUserVehicleColor(state.user!.vehicle_color!);
+            await sharedPrefService.setUserVehicleColor(state.user!.vehicle_color?? '');
             await sharedPrefService.setMobileCode(state.user!.mobile_del_code!);
             print('***************');
             print(state.user!.firstName!);

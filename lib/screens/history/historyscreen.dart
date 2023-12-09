@@ -200,9 +200,37 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 ],
               ),
             )
-                : const Center(
-              child: Text('No Orders'),
-            ));
+                : Center(
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text('No Orders'),
+                  InkWell(
+                    splashColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    onTap: () {
+                      BlocProvider.of<HistoryBloc>(context).add( GetHistory(AppData.user!.id));
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                      child: Container(
+                        width: 20,
+                        height: 60,
+                        child: const Center(
+                          child: Icon(
+                            Icons.refresh,
+                            color: AppStyles.MAIN_COLOR,
+                            size: 18,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            );
           }
           return const Center(
             child: CircularProgressIndicator(
