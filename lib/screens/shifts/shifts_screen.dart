@@ -234,7 +234,7 @@ class _ShiftScreenState extends State<ShiftScreen> {
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                                   child: Container(
-                                    color: state.shiftsDataResponse.data!.Total_Pending_Order != 0 ? Colors.grey : AppStyles.MAIN_COLOR,
+                                    color: state.shiftsDataResponse.data!.Total_Pending_Order != 0 ? Colors.grey : Colors.red,
                                     height: 60,
                                     child: const Center(
                                       child: Text(
@@ -255,7 +255,7 @@ class _ShiftScreenState extends State<ShiftScreen> {
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                                   child: Container(
-                                    color: AppStyles.MAIN_COLOR,
+                                    color: Colors.green,
                                     height: 60,
                                     child: const Center(
                                       child: Text(
