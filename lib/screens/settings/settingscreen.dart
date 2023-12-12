@@ -46,13 +46,13 @@ class _SettingScreenState extends State<SettingScreen> {
   _SettingScreenState(this.navigateToNext);
   @override
   void initState() {
-    _firstNameController.text = AppData.user!.firstName!;
-    _lastNameController.text = AppData.user!.lastName!;
-    _phoneController.text = AppData.user!.mobile!;
-    _emailController.text = AppData.user!.email!;
-    _VehicleNumberController.text = AppData.user!.vehicle_registration_no!;
-    _VehicleColorController.text = AppData.user!.vehicle_color!;
-    _passCodeController.text = AppData.user!.mobile_del_code!;
+    _firstNameController.text = AppData.user!.firstName??'';
+    _lastNameController.text = AppData.user!.lastName??'';
+    _phoneController.text = AppData.user!.mobile??'';
+    _emailController.text = AppData.user!.email??'';
+    _VehicleNumberController.text = AppData.user!.vehicle_registration_no??'';
+    _VehicleColorController.text = AppData.user!.vehicle_color??'';
+    _passCodeController.text = AppData.user!.mobile_del_code??'';
     super.initState();
   }
 
@@ -116,13 +116,13 @@ class _SettingScreenState extends State<SettingScreen> {
               AppData.user = state.user;
               final sharedPrefService = await SharedPreferencesService.instance;
               await sharedPrefService.setUserID(state.user!.id!);
-              await sharedPrefService.setUserFirstName(state.user!.firstName!);
-              await sharedPrefService.setUserLastName(state.user!.lastName!);
-              await sharedPrefService.setUserEmail(state.user!.email!);
-              await sharedPrefService.setUserPhone(state.user!.mobile!);
-              await sharedPrefService.setUserVehicle(state.user!.vehicle_registration_no!);
-              await sharedPrefService.setUserVehicleColor(state.user!.vehicle_color!);
-              await sharedPrefService.setMobileCode(state.user!.mobile_del_code!);
+              await sharedPrefService.setUserFirstName(state.user!.firstName??'');
+              await sharedPrefService.setUserLastName(state.user!.lastName??'');
+              await sharedPrefService.setUserEmail(state.user!.email??'');
+              await sharedPrefService.setUserPhone(state.user!.mobile??'');
+              await sharedPrefService.setUserVehicle(state.user!.vehicle_registration_no??'');
+              await sharedPrefService.setUserVehicleColor(state.user!.vehicle_color??'');
+              await sharedPrefService.setMobileCode(state.user!.mobile_del_code??'');
               Navigator.pop(context);
 
 
