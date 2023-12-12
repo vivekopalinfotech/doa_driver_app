@@ -46,13 +46,13 @@ class _SettingScreenState extends State<SettingScreen> {
   _SettingScreenState(this.navigateToNext);
   @override
   void initState() {
-    _firstNameController.text = AppData.user!.firstName!;
-    _lastNameController.text = AppData.user!.lastName!;
-    _phoneController.text = AppData.user!.mobile!;
-    _emailController.text = AppData.user!.email!;
-    _VehicleNumberController.text = AppData.user!.vehicle_registration_no!;
-    _VehicleColorController.text = AppData.user!.vehicle_color!;
-    _passCodeController.text = AppData.user!.mobile_del_code!;
+    _firstNameController.text = AppData.user!.firstName??'';
+    _lastNameController.text = AppData.user!.lastName??'';
+    _phoneController.text = AppData.user!.mobile??'';
+    _emailController.text = AppData.user!.email??'';
+    _VehicleNumberController.text = AppData.user!.vehicle_registration_no??'';
+    _VehicleColorController.text = AppData.user!.vehicle_color??'';
+    _passCodeController.text = AppData.user!.mobile_del_code??'';
     super.initState();
   }
 
@@ -116,432 +116,435 @@ class _SettingScreenState extends State<SettingScreen> {
               AppData.user = state.user;
               final sharedPrefService = await SharedPreferencesService.instance;
               await sharedPrefService.setUserID(state.user!.id!);
-              await sharedPrefService.setUserFirstName(state.user!.firstName!);
-              await sharedPrefService.setUserLastName(state.user!.lastName!);
-              await sharedPrefService.setUserEmail(state.user!.email!);
-              await sharedPrefService.setUserPhone(state.user!.mobile!);
-              await sharedPrefService.setUserVehicle(state.user!.vehicle_registration_no!);
-              await sharedPrefService.setUserVehicleColor(state.user!.vehicle_color!);
-              await sharedPrefService.setMobileCode(state.user!.mobile_del_code!);
+              await sharedPrefService.setUserFirstName(state.user!.firstName??'');
+              await sharedPrefService.setUserLastName(state.user!.lastName??'');
+              await sharedPrefService.setUserEmail(state.user!.email??'');
+              await sharedPrefService.setUserPhone(state.user!.mobile??'');
+              await sharedPrefService.setUserVehicle(state.user!.vehicle_registration_no??'');
+              await sharedPrefService.setUserVehicleColor(state.user!.vehicle_color??'');
+              await sharedPrefService.setMobileCode(state.user!.mobile_del_code??'');
               Navigator.pop(context);
 
 
             }
           },
           builder: (context, state) {
-            return SingleChildScrollView(
-              child: Column(
+            return  Stack(
                 children: [
-                  SizedBox(
-                      width: double.maxFinite,
-                   //   height: MediaQuery.of(context).size.height ,
-                      child: Padding(
-                        padding: const EdgeInsets.all(0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: MediaQuery.of(context).size.width,
-                              color: AppStyles.SECOND_COLOR,
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                              child: const Text(
-                                'Personal Details:',
-                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppStyles.MAIN_COLOR),
+                  SingleChildScrollView(
+                    child: SizedBox(
+                        width: double.maxFinite,
+                      height: MediaQuery.of(context).size.height ,
+                        child: Padding(
+                          padding: const EdgeInsets.all(0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                width: MediaQuery.of(context).size.width,
+                                color: AppStyles.SECOND_COLOR,
+                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                                child: const Text(
+                                  'Personal Details:',
+                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppStyles.MAIN_COLOR),
+                                ),
                               ),
-                            ),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 15),
-                              child: Row(
-                                children: [
-                                  const SizedBox(
-                                    width: 100,
-                                    child: Text(
-                                      'First Name: ',
-                                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppStyles.SECOND_COLOR),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 15),
+                                child: Row(
+                                  children: [
+                                    const SizedBox(
+                                      width: 100,
+                                      child: Text(
+                                        'First Name: ',
+                                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppStyles.SECOND_COLOR),
+                                      ),
                                     ),
-                                  ),
-                                  Flexible(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Container(
-                                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), color: AppStyles.SECOND_COLOR.withOpacity(.3)),
-                                        height: 45,
-                                        child: Theme(
-                                          data: Theme.of(context).copyWith(
-                                            colorScheme: ThemeData().colorScheme.copyWith(
-                                                  primary: AppStyles.MAIN_COLOR,
+                                    Flexible(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), color: AppStyles.SECOND_COLOR.withOpacity(.3)),
+                                          height: 45,
+                                          child: Theme(
+                                            data: Theme.of(context).copyWith(
+                                              colorScheme: ThemeData().colorScheme.copyWith(
+                                                    primary: AppStyles.MAIN_COLOR,
+                                                  ),
+                                            ),
+                                            child: TextField(
+                                              cursorColor: AppStyles.MAIN_COLOR,
+                                              autofocus: false,
+                                              controller: _firstNameController,
+                                              decoration: InputDecoration(
+                                                contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 24),
+                                                border: OutlineInputBorder(
+                                                  borderRadius: BorderRadius.circular(40),
+                                                  borderSide: const BorderSide(
+                                                    width: 0,
+                                                    style: BorderStyle.none,
+                                                  ),
                                                 ),
-                                          ),
-                                          child: TextField(
-                                            cursorColor: AppStyles.MAIN_COLOR,
-                                            autofocus: false,
-                                            controller: _firstNameController,
-                                            decoration: InputDecoration(
-                                              contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 24),
-                                              border: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(40),
-                                                borderSide: const BorderSide(
-                                                  width: 0,
-                                                  style: BorderStyle.none,
-                                                ),
+                                                // border: InputBorder.none,
+                                                hintText: "First Name",
+                                                hintStyle: const TextStyle(color: Colors.brown, fontSize: 14),
                                               ),
-                                              // border: InputBorder.none,
-                                              hintText: "First Name",
-                                              hintStyle: const TextStyle(color: Colors.brown, fontSize: 14),
                                             ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                            const Divider(
-                              height: 1,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 15),
-                              child: Row(
-                                children: [
-                                  const SizedBox(
-                                    width: 100,
-                                    child: Text(
-                                      'Last Name: ',
-                                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppStyles.SECOND_COLOR),
+                              const Divider(
+                                height: 1,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 15),
+                                child: Row(
+                                  children: [
+                                    const SizedBox(
+                                      width: 100,
+                                      child: Text(
+                                        'Last Name: ',
+                                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppStyles.SECOND_COLOR),
+                                      ),
                                     ),
-                                  ),
-                                  Flexible(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Container(
-                                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), color: AppStyles.SECOND_COLOR.withOpacity(.3)),
-                                        height: 45,
-                                        child: Theme(
-                                          data: Theme.of(context).copyWith(
-                                            colorScheme: ThemeData().colorScheme.copyWith(
-                                                  primary: AppStyles.MAIN_COLOR,
+                                    Flexible(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), color: AppStyles.SECOND_COLOR.withOpacity(.3)),
+                                          height: 45,
+                                          child: Theme(
+                                            data: Theme.of(context).copyWith(
+                                              colorScheme: ThemeData().colorScheme.copyWith(
+                                                    primary: AppStyles.MAIN_COLOR,
+                                                  ),
+                                            ),
+                                            child: TextField(
+                                              cursorColor: AppStyles.MAIN_COLOR,
+                                              autofocus: false,
+                                              controller: _lastNameController,
+                                              decoration: InputDecoration(
+                                                contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 24),
+                                                border: OutlineInputBorder(
+                                                  borderRadius: BorderRadius.circular(40),
+                                                  borderSide: const BorderSide(
+                                                    width: 0,
+                                                    style: BorderStyle.none,
+                                                  ),
                                                 ),
-                                          ),
-                                          child: TextField(
-                                            cursorColor: AppStyles.MAIN_COLOR,
-                                            autofocus: false,
-                                            controller: _lastNameController,
-                                            decoration: InputDecoration(
-                                              contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 24),
-                                              border: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(40),
-                                                borderSide: const BorderSide(
-                                                  width: 0,
-                                                  style: BorderStyle.none,
-                                                ),
+                                                // border: InputBorder.none,
+                                                hintText: "First Name",
+                                                hintStyle: const TextStyle(color: Colors.brown, fontSize: 14),
                                               ),
-                                              // border: InputBorder.none,
-                                              hintText: "First Name",
-                                              hintStyle: const TextStyle(color: Colors.brown, fontSize: 14),
                                             ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                            const Divider(
-                              height: 1,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 15),
-                              child: Row(
-                                children: [
-                                  const SizedBox(
-                                    width: 100,
-                                    child: Text(
-                                      'Phone Number: ',
-                                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppStyles.SECOND_COLOR),
+                              const Divider(
+                                height: 1,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 15),
+                                child: Row(
+                                  children: [
+                                    const SizedBox(
+                                      width: 100,
+                                      child: Text(
+                                        'Phone Number: ',
+                                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppStyles.SECOND_COLOR),
+                                      ),
                                     ),
-                                  ),
-                                  Flexible(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Container(
-                                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), color: AppStyles.SECOND_COLOR.withOpacity(.3)),
-                                        height: 45,
-                                        child: Theme(
-                                          data: Theme.of(context).copyWith(
-                                            colorScheme: ThemeData().colorScheme.copyWith(
-                                                  primary: AppStyles.MAIN_COLOR,
+                                    Flexible(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), color: AppStyles.SECOND_COLOR.withOpacity(.3)),
+                                          height: 45,
+                                          child: Theme(
+                                            data: Theme.of(context).copyWith(
+                                              colorScheme: ThemeData().colorScheme.copyWith(
+                                                    primary: AppStyles.MAIN_COLOR,
+                                                  ),
+                                            ),
+                                            child: TextField(
+                                              cursorColor: AppStyles.MAIN_COLOR,
+                                              readOnly: true,
+                                              autofocus: false,
+                                              controller: _phoneController,
+                                              decoration: InputDecoration(
+                                                contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 24),
+                                                border: OutlineInputBorder(
+                                                  borderRadius: BorderRadius.circular(40),
+                                                  borderSide: const BorderSide(
+                                                    width: 0,
+                                                    style: BorderStyle.none,
+                                                  ),
                                                 ),
-                                          ),
-                                          child: TextField(
-                                            cursorColor: AppStyles.MAIN_COLOR,
-                                            readOnly: true,
-                                            autofocus: false,
-                                            controller: _phoneController,
-                                            decoration: InputDecoration(
-                                              contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 24),
-                                              border: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(40),
-                                                borderSide: const BorderSide(
-                                                  width: 0,
-                                                  style: BorderStyle.none,
-                                                ),
+                                                // border: InputBorder.none,
+                                                hintText: "Phone Number",
+                                                hintStyle: const TextStyle(color: Colors.brown, fontSize: 14),
                                               ),
-                                              // border: InputBorder.none,
-                                              hintText: "Phone Number",
-                                              hintStyle: const TextStyle(color: Colors.brown, fontSize: 14),
                                             ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                            const Divider(
-                              height: 1,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 15),
-                              child: Row(
-                                children: [
-                                  const SizedBox(
-                                    width: 100,
-                                    child: Text(
-                                      'Email: ',
-                                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppStyles.SECOND_COLOR),
+                              const Divider(
+                                height: 1,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 15),
+                                child: Row(
+                                  children: [
+                                    const SizedBox(
+                                      width: 100,
+                                      child: Text(
+                                        'Email: ',
+                                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppStyles.SECOND_COLOR),
+                                      ),
                                     ),
-                                  ),
-                                  Flexible(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Container(
-                                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), color: AppStyles.SECOND_COLOR.withOpacity(.3)),
-                                        height: 45,
-                                        child: Theme(
-                                          data: Theme.of(context).copyWith(
-                                            colorScheme: ThemeData().colorScheme.copyWith(
-                                                  primary: AppStyles.MAIN_COLOR,
+                                    Flexible(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), color: AppStyles.SECOND_COLOR.withOpacity(.3)),
+                                          height: 45,
+                                          child: Theme(
+                                            data: Theme.of(context).copyWith(
+                                              colorScheme: ThemeData().colorScheme.copyWith(
+                                                    primary: AppStyles.MAIN_COLOR,
+                                                  ),
+                                            ),
+                                            child: TextField(
+                                              cursorColor: AppStyles.MAIN_COLOR,
+                                              readOnly: true,
+                                              autofocus: false,
+                                              controller: _emailController,
+                                              decoration: InputDecoration(
+                                                contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 24),
+                                                border: OutlineInputBorder(
+                                                  borderRadius: BorderRadius.circular(40),
+                                                  borderSide: const BorderSide(
+                                                    width: 0,
+                                                    style: BorderStyle.none,
+                                                  ),
                                                 ),
-                                          ),
-                                          child: TextField(
-                                            cursorColor: AppStyles.MAIN_COLOR,
-                                            readOnly: true,
-                                            autofocus: false,
-                                            controller: _emailController,
-                                            decoration: InputDecoration(
-                                              contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 24),
-                                              border: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(40),
-                                                borderSide: const BorderSide(
-                                                  width: 0,
-                                                  style: BorderStyle.none,
-                                                ),
+                                                // border: InputBorder.none,
+                                                hintText: "Email Address",
+                                                hintStyle: const TextStyle(color: Colors.brown, fontSize: 14),
                                               ),
-                                              // border: InputBorder.none,
-                                              hintText: "Email Address",
-                                              hintStyle: const TextStyle(color: Colors.brown, fontSize: 14),
                                             ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                            const SizedBox(
-                              height: 16,
-                            ),
-                            Container(
-                              width: MediaQuery.of(context).size.width,
-                              color: AppStyles.SECOND_COLOR,
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                              child: const Text(
-                                'Vehicle Details:',
-                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppStyles.MAIN_COLOR),
+                              const SizedBox(
+                                height: 16,
                               ),
-                            ),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 15),
-                              child: Row(
-                                children: [
-                                  const SizedBox(
-                                    width: 100,
-                                    child: Text(
-                                      'Vehicle No: ',
-                                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppStyles.SECOND_COLOR),
+                              Container(
+                                width: MediaQuery.of(context).size.width,
+                                color: AppStyles.SECOND_COLOR,
+                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                                child: const Text(
+                                  'Vehicle Details:',
+                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppStyles.MAIN_COLOR),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 15),
+                                child: Row(
+                                  children: [
+                                    const SizedBox(
+                                      width: 100,
+                                      child: Text(
+                                        'Vehicle No: ',
+                                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppStyles.SECOND_COLOR),
+                                      ),
                                     ),
-                                  ),
-                                  Flexible(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Container(
-                                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), color: AppStyles.SECOND_COLOR.withOpacity(.3)),
-                                        height: 45,
-                                        child: Theme(
-                                          data: Theme.of(context).copyWith(
-                                            colorScheme: ThemeData().colorScheme.copyWith(
-                                                  primary: AppStyles.MAIN_COLOR,
+                                    Flexible(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), color: AppStyles.SECOND_COLOR.withOpacity(.3)),
+                                          height: 45,
+                                          child: Theme(
+                                            data: Theme.of(context).copyWith(
+                                              colorScheme: ThemeData().colorScheme.copyWith(
+                                                    primary: AppStyles.MAIN_COLOR,
+                                                  ),
+                                            ),
+                                            child: TextField(
+                                              cursorColor: AppStyles.MAIN_COLOR,
+                                              autofocus: false,
+                                              controller: _VehicleNumberController,
+                                              decoration: InputDecoration(
+                                                contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 24),
+                                                border: OutlineInputBorder(
+                                                  borderRadius: BorderRadius.circular(40),
+                                                  borderSide: const BorderSide(
+                                                    width: 0,
+                                                    style: BorderStyle.none,
+                                                  ),
                                                 ),
-                                          ),
-                                          child: TextField(
-                                            cursorColor: AppStyles.MAIN_COLOR,
-                                            autofocus: false,
-                                            controller: _VehicleNumberController,
-                                            decoration: InputDecoration(
-                                              contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 24),
-                                              border: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(40),
-                                                borderSide: const BorderSide(
-                                                  width: 0,
-                                                  style: BorderStyle.none,
-                                                ),
+                                                // border: InputBorder.none,
+                                                hintText: "Vehicle No.",
+                                                hintStyle: const TextStyle(color: Colors.brown, fontSize: 14),
                                               ),
-                                              // border: InputBorder.none,
-                                              hintText: "Vehicle No.",
-                                              hintStyle: const TextStyle(color: Colors.brown, fontSize: 14),
                                             ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                            const Divider(
-                              height: 1,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 15),
-                              child: Row(
-                                children: [
-                                  const SizedBox(
-                                    width: 100,
-                                    child: Text(
-                                      'Vehicle Color: ',
-                                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppStyles.SECOND_COLOR),
+                              const Divider(
+                                height: 1,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 15),
+                                child: Row(
+                                  children: [
+                                    const SizedBox(
+                                      width: 100,
+                                      child: Text(
+                                        'Vehicle Color: ',
+                                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppStyles.SECOND_COLOR),
+                                      ),
                                     ),
-                                  ),
-                                  Flexible(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Container(
-                                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), color: AppStyles.SECOND_COLOR.withOpacity(.3)),
-                                        height: 45,
-                                        child: Theme(
-                                          data: Theme.of(context).copyWith(
-                                            colorScheme: ThemeData().colorScheme.copyWith(
-                                                  primary: AppStyles.MAIN_COLOR,
+                                    Flexible(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), color: AppStyles.SECOND_COLOR.withOpacity(.3)),
+                                          height: 45,
+                                          child: Theme(
+                                            data: Theme.of(context).copyWith(
+                                              colorScheme: ThemeData().colorScheme.copyWith(
+                                                    primary: AppStyles.MAIN_COLOR,
+                                                  ),
+                                            ),
+                                            child: TextField(
+                                              cursorColor: AppStyles.MAIN_COLOR,
+                                              autofocus: false,
+                                              controller: _VehicleColorController,
+                                              decoration: InputDecoration(
+                                                contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 24),
+                                                border: OutlineInputBorder(
+                                                  borderRadius: BorderRadius.circular(40),
+                                                  borderSide: const BorderSide(
+                                                    width: 0,
+                                                    style: BorderStyle.none,
+                                                  ),
                                                 ),
-                                          ),
-                                          child: TextField(
-                                            cursorColor: AppStyles.MAIN_COLOR,
-                                            autofocus: false,
-                                            controller: _VehicleColorController,
-                                            decoration: InputDecoration(
-                                              contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 24),
-                                              border: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(40),
-                                                borderSide: const BorderSide(
-                                                  width: 0,
-                                                  style: BorderStyle.none,
-                                                ),
+                                                // border: InputBorder.none,
+                                                hintText: "Color",
+                                                hintStyle: const TextStyle(color: Colors.brown, fontSize: 14),
                                               ),
-                                              // border: InputBorder.none,
-                                              hintText: "Color",
-                                              hintStyle: const TextStyle(color: Colors.brown, fontSize: 14),
                                             ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                            const SizedBox(
-                              height: 16,
-                            ),
-                            Container(
-                              width: MediaQuery.of(context).size.width,
-                              color: AppStyles.SECOND_COLOR,
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                              child: const Text(
-                                'Login Code:',
-                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppStyles.MAIN_COLOR),
+                              const SizedBox(
+                                height: 16,
                               ),
-                            ),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 15),
-                              child: Row(
-                                children: [
-                                  const SizedBox(
-                                    width: 100,
-                                    child: Text(
-                                      'Pass Code: ',
-                                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppStyles.SECOND_COLOR),
+                              Container(
+                                width: MediaQuery.of(context).size.width,
+                                color: AppStyles.SECOND_COLOR,
+                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                                child: const Text(
+                                  'Login Code:',
+                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppStyles.MAIN_COLOR),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 15),
+                                child: Row(
+                                  children: [
+                                    const SizedBox(
+                                      width: 100,
+                                      child: Text(
+                                        'Pass Code: ',
+                                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppStyles.SECOND_COLOR),
+                                      ),
                                     ),
-                                  ),
-                                  Flexible(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Container(
-                                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), color: AppStyles.SECOND_COLOR.withOpacity(.3)),
-                                        height: 45,
-                                        child: Theme(
-                                          data: Theme.of(context).copyWith(
-                                            colorScheme: ThemeData().colorScheme.copyWith(
-                                                  primary: AppStyles.MAIN_COLOR,
-                                                ),
-                                          ),
-                                          child: TextField(
-                                            cursorColor: AppStyles.MAIN_COLOR,
-                                            keyboardType: TextInputType.number,
-                                            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                                            maxLength: 6,
-                                            autofocus: false,
-                                            controller: _passCodeController,
-                                            decoration: InputDecoration(
-                                              contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 24),
-                                              border: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(40),
-                                                borderSide: const BorderSide(
-                                                  width: 0,
-                                                  style: BorderStyle.none,
-                                                ),
+                                    Flexible(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), color: AppStyles.SECOND_COLOR.withOpacity(.3)),
+                                          height: 45,
+                                          child: Theme(
+                                            data: Theme.of(context).copyWith(
+                                              colorScheme: ThemeData().colorScheme.copyWith(
+                                                    primary: AppStyles.MAIN_COLOR,
+                                                  ),
+                                            ),
+                                            child: TextField(
+                                              cursorColor: AppStyles.MAIN_COLOR,
+                                              keyboardType: TextInputType.number,
+                                              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                                              maxLength: 6,
+                                              autofocus: false,
+                                              controller: _passCodeController,
+                                              decoration: InputDecoration(
+                                                contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 24),
+                                                border: OutlineInputBorder(
+                                                  borderRadius: BorderRadius.circular(40),
+                                                  borderSide: const BorderSide(
+                                                    width: 0,
+                                                    style: BorderStyle.none,
+                                                  ),
 
+                                                ),
+                                                // border: InputBorder.none,
+                                                hintText: "PassCode",
+                                                hintStyle: const TextStyle(color: Colors.brown, fontSize: 14),
+                                              counterText: ''
                                               ),
-                                              // border: InputBorder.none,
-                                              hintText: "PassCode",
-                                              hintStyle: const TextStyle(color: Colors.brown, fontSize: 14),
-                                            counterText: ''
                                             ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      )),
-                  SizedBox(height: 40),
-                  Padding(
+
+                            ],
+                          ),
+                        )),
+                  ),
+                  Positioned(
+                      bottom: 36,left: 0,right: 0,
+                      child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                     child: SizedBox(
                         height: 40.0,
@@ -564,9 +567,9 @@ class _SettingScreenState extends State<SettingScreen> {
                             ),
                           ),
                         )),
-                  )
+                  ))
                 ],
-              ),
+
             );
           },
         )
