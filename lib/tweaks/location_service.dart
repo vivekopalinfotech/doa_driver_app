@@ -13,11 +13,16 @@ class LocationService with ChangeNotifier {
   LocationData? get currentLocation => _currentLocation;
 
   Future<void> startLocationService(BuildContext context) async {
+
     await location.changeSettings(
       accuracy: LocationAccuracy.high,
-      interval: 60000,
-      distanceFilter: 500.00
+      interval: 15000,
+      //distanceFilter: 500.00
     );
+    final result = await location.isBackgroundModeEnabled();
+    if(!result){
+      location.enableBackgroundMode(enable: true);
+    }
 
     location.onLocationChanged.listen((LocationData locationData) {
       _currentLocation = locationData;
