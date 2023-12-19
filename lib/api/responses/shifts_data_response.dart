@@ -30,10 +30,10 @@ class ShiftsDataResponse {
 
 class ShiftsData{
   int? Total_Deliver_Order;
-  int? Total_Pending_Amount;
-  int? Total_Deliver_Amount;
-  int? Total_cash;
-  int? Total_cc;
+  double? Total_Pending_Amount;
+  double? Total_Deliver_Amount;
+  double? Total_cash;
+  double? Total_cc;
   int? Total_Pending_Order;
   String? Availability_status;
 
@@ -42,10 +42,10 @@ class ShiftsData{
 
   ShiftsData.fromJson(Map<String, dynamic> json) {
     Total_Deliver_Order = json['Total_Deliver_Order'];
-    Total_Pending_Amount = json['Total_Pending_Amount'];
-    Total_Deliver_Amount = json['Total_Deliver_Amount'];
-    Total_cash = json['Total_cash'];
-    Total_cc = json['Total_cc'];
+    Total_Pending_Amount = double.parse(json['Total_Pending_Amount'].toString());
+    Total_Deliver_Amount = double.parse(json['Total_Deliver_Amount'].toString());
+    Total_cash = double.parse(json['Total_cash'].toString());
+    Total_cc = double.parse(json['Total_cc'].toString());
     Total_Pending_Order = json['Total_Pending_Order'];
     Availability_status = json['Availability_status'];
   }
