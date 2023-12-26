@@ -181,14 +181,18 @@ class _OrderScreenState extends State<OrderScreen> {
                                                         ),
                                                         Row(
                                                           children: [
-                                                            const Icon(
-                                                              Icons.verified_outlined,
-                                                              color: Colors.deepOrange,
-                                                              size: 18,
+                                                             Icon(
+                                                               state.ordersData[index].delivery_status == 'Delivery Stop'?   Icons.not_interested_outlined:
+                                                               state.ordersData[index].delivery_status == 'Assigned'?Icons.verified_outlined:Icons.delivery_dining_outlined,
+                                                              color:  state.ordersData[index].delivery_status == 'Delivery Stop'?
+                                                              Colors.deepOrange:state.ordersData[index].delivery_status == 'Assigned'?Colors.blue:Colors.green,
+                                                              size: 16,
                                                             ),
                                                             Text(
-                                                              state.ordersData[index].delivery_status.toString(),
-                                                              style: const TextStyle(color: Colors.deepOrange, fontWeight: FontWeight.bold, fontSize: 14),
+                                                              ' ${state.ordersData[index].delivery_status}',
+                                                              style:  TextStyle(color:
+                                                              state.ordersData[index].delivery_status == 'Delivery Stop'?
+                                                              Colors.deepOrange:state.ordersData[index].delivery_status == 'Assigned'?Colors.blue:Colors.green, fontWeight: FontWeight.bold, fontSize: 14),
                                                             ),
                                                           ],
                                                         ),
