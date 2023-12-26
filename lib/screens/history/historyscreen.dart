@@ -66,7 +66,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
     super.didChangeDependencies();
     _callSplashScreen();
   }
-
+  var lat;
+  var lng;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,12 +94,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
                       shrinkWrap: true,
                       itemCount: state.ordersData.length,
                       itemBuilder: (context, index) {
-                        double distanceInMiles = AppUtils.calculateDistanceInMiles(
-                          latitude,
-                          longitude,
-                          state.ordersData[index].customerId!= null? double.parse(state.ordersData[index].customerId!.customer_address![index].lattitude.toString()):23.03085995,
-                          state.ordersData[index].customerId!= null?double.parse(state.ordersData[index].customerId!.customer_address![index].longitude.toString()):72.53501535,
-                        );
+                        lat = double.parse(state.ordersData[index].latlong.toString().split(',')[0]);
+                        lng = double.parse(state.ordersData[index].latlong.toString().split(',')[1]);
+                        double distanceInMiles = AppUtils.calculateDistanceInMiles(latitude, longitude, lat, lng);
+
                         return  InkWell(
                           splashColor: Colors.transparent,
                           highlightColor: Colors.transparent,

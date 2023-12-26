@@ -116,7 +116,7 @@ class OrdersData {
   OrdersData.fromJson(Map<String, dynamic> json) {
     orderId = json['order_id'];
     customerId =
-        json['data'] != null ? CustomerId.fromJson(json['customer_id']) : null;
+        json['customer_id'] != null ? CustomerId.fromJson(json['customer_id']) : null;
     warehouseId = json['warehouse_id'];
     warehouse = json['warehouse'] != null
         ? WareHouse.fromJson(json['warehouse'])
@@ -274,8 +274,8 @@ class CustomerId {
   String? customer_last_name;
   String? customer_email;
   String? customer_hash;
-  // String? customer_proof;
-  // String? customer_doctor;
+  String? customer_proof;
+  String? customer_doctor;
   String? is_seen;
   String? customer_status;
   List<CustomerAddress>? customer_address;
@@ -286,8 +286,8 @@ class CustomerId {
     this.customer_last_name,
     this.customer_email,
     this.customer_hash,
- //   this.customer_proof,
- //   this.customer_doctor,
+   this.customer_proof,
+   this.customer_doctor,
     this.is_seen,
     this.customer_status,
     this.customer_address,
@@ -299,8 +299,8 @@ class CustomerId {
     customer_last_name = json['customer_last_name'];
     customer_email = json['customer_email'];
     customer_hash = json['customer_hash'];
-  //  customer_proof = json['customer_proof'];
- //   customer_doctor = json['customer_doctor'];
+   customer_proof = json['customer_proof'];
+   customer_doctor = json['customer_doctor'];
     is_seen = json['is_seen'];
     customer_status = json['customer_status'];
     if (json['customer_address'] != null) {
@@ -318,8 +318,8 @@ class CustomerId {
     data['customer_last_name'] = customer_last_name;
     data['customer_email'] = customer_email;
     data['customer_hash'] = customer_hash;
- //   data['customer_proof'] = customer_proof;
- //   data['customer_doctor'] = customer_doctor;
+   data['customer_proof'] = customer_proof;
+   data['customer_doctor'] = customer_doctor;
     data['is_seen'] = is_seen;
     data['customer_status'] = customer_status;
     if (customer_address != null) {
@@ -342,10 +342,10 @@ class CustomerAddress {
   String? postcode;
   String? dob;
   String? city;
-  List<CountryId>? country_id;
-  List<StateId>? state_id;
-  double? lattitude;
-  double? longitude;
+  CountryId? country_id;
+  StateId? state_id;
+  String? lattitude;
+  String? longitude;
   String? latlong;
   String? default_address;
 
@@ -373,29 +373,31 @@ class CustomerAddress {
     id = json['id'];
     first_name = json['first_name'];
     last_name = json['last_name'];
-    gender = json['gender'];
+    gender = json['gender'].toString();
     company = json['company'];
     street_address = json['street_address'];
-    suburb = json['suburb'];
+    suburb = json['suburb'].toString();
     phone = json['phone'];
     postcode = json['postcode'];
-    dob = json['dob'];
+    dob = json['dob'].toString();
     city = json['city'];
-    if (json['country_id'] != null) {
-      country_id = <CountryId>[];
-      json['country_id'].forEach((v) {
-        country_id?.add(CountryId.fromJson(v));
-      });
-    }
-    if (json['state_id'] != null) {
-      state_id = <StateId>[];
-      json['state_id'].forEach((v) {
-        state_id?.add(StateId.fromJson(v));
-      });
-    }
+    country_id =   json['country_id'] != null ? CountryId.fromJson(json['country_id']) : null;
+    // if (json['country_id'] != null) {
+    //   country_id = <CountryId>[];
+    //   json['country_id'].forEach((v) {
+    //     country_id?.add(CountryId.fromJson(v));
+    //   });
+    // }
+    state_id =   json['state_id'] != null ? StateId.fromJson(json['state_id']) : null;
+    // if (json['state_id'] != null) {
+    //   state_id = <StateId>[];
+    //   json['state_id'].forEach((v) {
+    //     state_id?.add(StateId.fromJson(v));
+    //   });
+    // }
     lattitude = json['lattitude'];
     longitude = json['longitude'];
-    latlong = json['latlong'];
+    latlong = json['latlong'].toString();
     default_address = json['default_address'];
   }
 
@@ -412,11 +414,12 @@ class CustomerAddress {
     data['postcode'] = postcode;
     data['dob'] = dob;
     data['city'] = city;
+
     if (country_id != null) {
-      data['country_id'] = country_id?.map((v) => v.toJson()).toList();
+      data['country_id'] = country_id?.toJson();
     }
     if (state_id != null) {
-      data['state_id'] = state_id?.map((v) => v.toJson()).toList();
+      data['state_id'] = state_id?.toJson();
     }
     data['lattitude'] = lattitude;
     data['longitude'] = longitude;

@@ -651,6 +651,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                           onTap: () {
                                             BlocProvider.of<OrderStatusBloc>(context).add(CheckOrderStatus(widget.ordersData.orderId.toString(), 'Delivery Cancel',0,0));
                                             Navigator.of(context).pop(true);
+                                           BlocProvider.of<OrdersBloc>(context).add(GetOrders(AppData.user!.id));
                                             Navigator.of(context).pop();
                                           },
                                           child: Row(
@@ -674,7 +675,9 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                           onTap: () {
                                             BlocProvider.of<OrderStatusBloc>(context).add(CheckOrderStatus(widget.ordersData.orderId.toString(), 'Delivery Stop',0,0));
                                             Navigator.of(context).pop(true);
+                                         BlocProvider.of<OrdersBloc>(context).add(GetOrders(AppData.user!.id));
                                             Navigator.of(context).pop();
+
                                           },
                                           child: Row(
                                             mainAxisAlignment: MainAxisAlignment.start,
@@ -697,6 +700,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                           onTap: () {
                                             BlocProvider.of<OrderStatusBloc>(context).add(CheckOrderStatus(widget.ordersData.orderId.toString(), 'Not At Home',0,0));
                                             Navigator.of(context).pop(true);
+                                           BlocProvider.of<OrdersBloc>(context).add(GetOrders(AppData.user!.id));
                                             Navigator.of(context).pop();
                                             },
                                           child: Row(
