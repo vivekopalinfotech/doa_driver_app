@@ -15,6 +15,7 @@ class UpdateShiftBloc extends Bloc<UpdateShiftEvent, UpdateShiftState> {
   Stream<UpdateShiftState> mapEventToState(UpdateShiftEvent event) async* {
     if (event is CheckUpdateShift) {
       try {
+    //    emit(const UpdateShiftLoading());
         final updateShiftResponse = await updateShiftRepo.updateShift(event.id, event.status, event.fcm_token);
         print(updateShiftResponse.status);
         if (updateShiftResponse.status == AppConstants.STATUS_SUCCESS ) {

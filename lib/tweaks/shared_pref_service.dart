@@ -100,7 +100,6 @@ class SharedPreferencesService {
     _preferences?.remove(SharedPrefKeys.USER_VEHICLE_COLOR);
     _preferences?.remove(SharedPrefKeys.SET_LOGIN_CODE);
     _preferences?.remove(SharedPrefKeys.USER_TOKEN);
-
   }
 
   Future<void> clearLocation() async {

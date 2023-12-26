@@ -14,6 +14,7 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
   Stream<PaymentState> mapEventToState(PaymentEvent event) async* {
     if (event is CheckPayment) {
       try {
+        emit(PaymentLoading());
         final orderStatusResponse = await orderStatusRepo.checkOrderStatus(event.id,event.status,event.paid_cash,event.paid_cc_terminal);
         print(orderStatusResponse.status);
         if (orderStatusResponse.status == AppConstants.STATUS_SUCCESS ) {

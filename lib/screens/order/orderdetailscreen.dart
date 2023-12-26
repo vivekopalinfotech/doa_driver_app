@@ -6,14 +6,19 @@ import 'package:doa_driver_app/bloc/order/order_bloc.dart';
 import 'package:doa_driver_app/bloc/order_status/check_order_status_bloc.dart';
 import 'package:doa_driver_app/constants/app_data.dart';
 import 'package:doa_driver_app/constants/appstyles.dart';
+import 'package:doa_driver_app/constants/showsnackbar.dart';
 import 'package:doa_driver_app/models/order.dart';
 import 'package:doa_driver_app/screens/order/widgets/detailcard.dart';
 import 'package:doa_driver_app/screens/payment/payment_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart' as maps_marker;
 import 'package:url_launcher/url_launcher.dart';
+
+import '../../bloc/shifts_data/shifts_data_bloc.dart';
+import '../../bloc/shifts_data/shifts_data_event.dart';
 
 class OrderDetailScreen extends StatefulWidget {
   final Function(Widget widget) navigateToNext;
@@ -121,13 +126,38 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
         ),
         body: BlocListener<OrderStatusBloc, OrderStatusState>(
           listener: (context, state) async {
+            if (state is OrderStatusLoading) {
+              loader(context);
+            }
             if (state is OrderStatusSuccess) {
+              Loader.hide();
               BlocProvider.of<OrdersBloc>(context).add(GetOrders(AppData.user!.id));
               setState(() {
                 start = true;
               });
+            }else if (state is DeliveryCancelSuccess) {
+              Loader.hide();
+              Navigator.of(context).pop(true);
+              BlocProvider.of<OrdersBloc>(context).add(GetOrders(AppData.user!.id));
+              Navigator.of(context).pop();
+              BlocProvider.of<ShiftsDataBloc>(context).add(GetShiftsData(AppData.user!.id));
+            }else if (state is NotHomeSuccess) {
+              Loader.hide();
+              Navigator.of(context).pop(true);
+              BlocProvider.of<OrdersBloc>(context).add(GetOrders(AppData.user!.id));
+              Navigator.of(context).pop();
+              BlocProvider.of<ShiftsDataBloc>(context).add(GetShiftsData(AppData.user!.id));
+            }else if (state is DeliveryStopSuccess) {
+              Loader.hide();
+              Navigator.of(context).pop(true);
+              BlocProvider.of<OrdersBloc>(context).add(GetOrders(AppData.user!.id));
+              Navigator.of(context).pop();
+              BlocProvider.of<ShiftsDataBloc>(context).add(GetShiftsData(AppData.user!.id));
             }
+
+
             if (state is OrderStatusFailed) {
+              Loader.hide();
               showDialog(
                 context: context,
                 builder: (context) => const AlertDialog(
@@ -650,9 +680,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                           highlightColor: Colors.transparent,
                                           onTap: () {
                                             BlocProvider.of<OrderStatusBloc>(context).add(CheckOrderStatus(widget.ordersData.orderId.toString(), 'Delivery Cancel',0,0));
-                                            Navigator.of(context).pop(true);
-                                           BlocProvider.of<OrdersBloc>(context).add(GetOrders(AppData.user!.id));
-                                            Navigator.of(context).pop();
+
                                           },
                                           child: Row(
                                             mainAxisAlignment: MainAxisAlignment.start,
@@ -674,9 +702,6 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                           highlightColor: Colors.transparent,
                                           onTap: () {
                                             BlocProvider.of<OrderStatusBloc>(context).add(CheckOrderStatus(widget.ordersData.orderId.toString(), 'Delivery Stop',0,0));
-                                            Navigator.of(context).pop(true);
-                                         BlocProvider.of<OrdersBloc>(context).add(GetOrders(AppData.user!.id));
-                                            Navigator.of(context).pop();
 
                                           },
                                           child: Row(
@@ -699,9 +724,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                           highlightColor: Colors.transparent,
                                           onTap: () {
                                             BlocProvider.of<OrderStatusBloc>(context).add(CheckOrderStatus(widget.ordersData.orderId.toString(), 'Not At Home',0,0));
-                                            Navigator.of(context).pop(true);
-                                           BlocProvider.of<OrdersBloc>(context).add(GetOrders(AppData.user!.id));
-                                            Navigator.of(context).pop();
+
                                             },
                                           child: Row(
                                             mainAxisAlignment: MainAxisAlignment.start,

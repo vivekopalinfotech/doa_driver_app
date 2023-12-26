@@ -20,11 +20,12 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   Stream<ProfileState> mapEventToState(ProfileEvent event) async* {
     if (event is UpdateProfile) {
       try {
+        emit(ProfileLoading());
         final profileResponse = await profileRepo.updateProfile(event.id!,event.vehicleNo!,event.vehicleColor!,event.firstName!,event.lastName!,event.code!);
         if (profileResponse.status == AppConstants.STATUS_SUCCESS ) {
           yield ProfileLoaded(profileResponse.data);
         } else {
-          yield ProfileError('Error');
+          yield const ProfileError('Error');
         }
       } on Error {
         yield const ProfileError("Couldn't fetch weather. Is the device online?");

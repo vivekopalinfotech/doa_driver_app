@@ -7,6 +7,7 @@ import 'package:doa_driver_app/constants/showsnackbar.dart';
 import 'package:doa_driver_app/mainscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 
 class Payment extends StatefulWidget {
   final amount;
@@ -93,15 +94,17 @@ class _PaymentState extends State<Payment> {
         body: BlocListener<PaymentBloc, PaymentState>(
             listener: (BuildContext context, state) {
               if (state is PaymentSuccess) {
+                Loader.hide();
                 Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => MainScreen()), (route) => false);
                 BlocProvider.of<OrdersBloc>(context).add(GetOrders(AppData.user!.id));
               }
               if (state is PaymentFailed) {
+                Loader.hide();
                 showSnackBar(context, 'Error');
               }
 
               if (state is PaymentLoading) {
-                showSnackBar(context, 'Error');
+                loader(context);
               }
 
             },

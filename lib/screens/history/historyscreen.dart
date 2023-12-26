@@ -4,10 +4,12 @@ import 'package:doa_driver_app/bloc/history/history_bloc.dart';
 import 'package:doa_driver_app/constants/app_data.dart';
 import 'package:doa_driver_app/constants/app_utils.dart';
 import 'package:doa_driver_app/constants/appstyles.dart';
+import 'package:doa_driver_app/constants/showsnackbar.dart';
 import 'package:doa_driver_app/screens/order/orderdetailscreen.dart';
 import 'package:doa_driver_app/screens/order/widgets/customcards.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:geolocator/geolocator.dart';
 
 class HistoryScreen extends StatefulWidget {
@@ -74,8 +76,11 @@ class _HistoryScreenState extends State<HistoryScreen> {
       backgroundColor: Colors.white,
       body: BlocBuilder<HistoryBloc, HistoryState>(
         builder: (context, state) {
+          if(state is HistoryLoading){
+            loader(context);
+          }
           if (state is HistoryLoaded) {
-
+            Loader.hide();
             return RefreshIndicator(
               onRefresh: () async {
                 setState(() {

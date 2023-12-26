@@ -14,16 +14,27 @@ class OrderStatusBloc extends Bloc<OrderStatusEvent, OrderStatusState> {
   Stream<OrderStatusState> mapEventToState(OrderStatusEvent event) async* {
     if (event is CheckOrderStatus) {
       try {
-        final orderStatusResponse = await orderStatusRepo.checkOrderStatus(event.id,event.status,event.paid_cash,event.paid_cc_terminal);
+        emit(const OrderStatusLoading());
+        final orderStatusResponse = await orderStatusRepo.checkOrderStatus(event.id, event.status, event.paid_cash, event.paid_cc_terminal);
         print(orderStatusResponse.status);
-        if (orderStatusResponse.status == AppConstants.STATUS_SUCCESS ) {
-          yield OrderStatusSuccess(orderStatusResponse.message);
-          yield const OrderStatusInitial();
+        if (orderStatusResponse.status == AppConstants.STATUS_SUCCESS) {
+          if (event.status == 'Delivery Stop') {
+            yield DeliveryStopSuccess(orderStatusResponse.message);
+            yield const OrderStatusInitial();
+          } else if (event.status == 'Not At Home') {
+            yield NotHomeSuccess(orderStatusResponse.message);
+            yield const OrderStatusInitial();
+          } else if (event.status == 'Delivery Cancel') {
+            yield DeliveryCancelSuccess(orderStatusResponse.message);
+            yield const OrderStatusInitial();
+          } else {
+            yield OrderStatusSuccess(orderStatusResponse.message);
+            yield const OrderStatusInitial();
+          }
         } else {
           yield OrderStatusFailed(orderStatusResponse.message);
           yield const OrderStatusInitial();
         }
-
       } on Error {
         yield const OrderStatusFailed("Some Error");
         yield const OrderStatusInitial();

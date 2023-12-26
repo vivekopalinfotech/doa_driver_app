@@ -59,6 +59,7 @@ dependencies:
   provider: ^6.1.1
   firebase_analytics:
   upgrader:
+  flutter_overlay_loader: ^2.0.0
 
 
 

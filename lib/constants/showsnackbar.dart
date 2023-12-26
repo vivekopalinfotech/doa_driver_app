@@ -1,4 +1,6 @@
+import 'package:doa_driver_app/constants/appstyles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 
 showSnackBar(BuildContext context, String message) {
   ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -11,4 +13,18 @@ showSnackBar(BuildContext context, String message) {
                 textAlign: TextAlign.center,
                 style:  const TextStyle(
                     color: Colors.white),))));
+}
+
+loader(BuildContext context) {
+  Loader.show(context,
+      isSafeAreaOverlay: false,
+      isAppbarOverlay: true,
+      isBottomBarOverlay: true,
+      progressIndicator: const Center(
+        child: CircularProgressIndicator(
+          color: AppStyles.MAIN_COLOR,
+          strokeWidth: 4,
+        ),
+      ),
+      overlayColor: Colors.white);
 }

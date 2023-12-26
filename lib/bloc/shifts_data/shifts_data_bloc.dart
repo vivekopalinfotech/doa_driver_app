@@ -13,6 +13,7 @@ class ShiftsDataBloc extends Bloc<ShiftsDataEvent, ShiftsDataState> {
   Stream<ShiftsDataState> mapEventToState(ShiftsDataEvent event) async* {
     if (event is GetShiftsData) {
       try {
+        emit(ShiftsDataLoading());
         final shiftsDataResponse = await shiftsRepo.getShiftsData(event.id!);
         if (shiftsDataResponse.status == AppConstants.STATUS_SUCCESS &&
             shiftsDataResponse.data != null) {

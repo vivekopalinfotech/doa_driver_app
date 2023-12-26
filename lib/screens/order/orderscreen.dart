@@ -4,11 +4,13 @@ import 'package:doa_driver_app/bloc/order/order_bloc.dart';
 import 'package:doa_driver_app/constants/app_data.dart';
 import 'package:doa_driver_app/constants/app_utils.dart';
 import 'package:doa_driver_app/constants/appstyles.dart';
+import 'package:doa_driver_app/constants/showsnackbar.dart';
 import 'package:doa_driver_app/screens/order/orderdetailscreen.dart';
 import 'package:doa_driver_app/tweaks/location_service.dart';
 import 'package:doa_driver_app/utils/NotificationProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:geolocator/geolocator.dart';
 
 class OrderScreen extends StatefulWidget {
@@ -109,7 +111,11 @@ class _OrderScreenState extends State<OrderScreen> {
         //   child:
           BlocBuilder<OrdersBloc, OrdersState>(
             builder: (context, state) {
+              if(state is OrdersLoading){
+                loader(context);
+              }
               if (state is OrdersLoaded) {
+                Loader.hide();
                 return RefreshIndicator(
                   onRefresh: () async {
                     BlocProvider.of<OrdersBloc>(context).add(GetOrders(AppData.user!.id));

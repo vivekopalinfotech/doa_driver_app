@@ -18,6 +18,7 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
   Stream<HistoryState> mapEventToState(HistoryEvent event) async* {
     if (event is GetHistory) {
       try {
+        emit(HistoryLoading());
         final ordersResponse = await historyRepo.getHistory(event.id!);
         if (ordersResponse.status == AppConstants.STATUS_SUCCESS &&
             ordersResponse.data != null) {
