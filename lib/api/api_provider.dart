@@ -66,6 +66,7 @@ class ApiProvider {
     try {
       Response response = await _dio!.post("${_baseUrl}customer_logout");
       print(response);
+      log(jsonEncode(response.data));
       return LogoutResponse.fromJson(response.data);
     } catch (error) {
       return LogoutResponse.withError(_handleError(error as TypeError));

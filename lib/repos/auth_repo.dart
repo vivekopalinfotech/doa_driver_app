@@ -21,7 +21,7 @@ class RealAuthRepo implements AuthRepo {
 
   @override
   Future<LogoutResponse> logoutUser() {
-    return ApiProvider().doLogout();
+    return apiProvider.doLogout();
   }
 
 }

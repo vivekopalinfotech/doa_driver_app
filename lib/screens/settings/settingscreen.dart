@@ -591,11 +591,11 @@ class _SettingScreenState extends State<SettingScreen> {
     Widget continueButton = TextButton(
       child: const Text("Logout", style: TextStyle(color: AppStyles.MAIN_COLOR, fontWeight: FontWeight.bold)),
       onPressed: () async {
-        final sharedPrefService = await SharedPreferencesService.instance;
-        sharedPrefService.logoutUser();
+
+        BlocProvider.of<AuthBloc>(context).add(const PerformLogout());
         Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => const SignInScreen()),
-          (Route<dynamic> route) => false,
+              (Route<dynamic> route) => false,
         );
       },
     );

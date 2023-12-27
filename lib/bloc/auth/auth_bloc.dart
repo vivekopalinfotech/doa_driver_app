@@ -31,7 +31,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }  else if (event is PerformLogout) {
       try {
         final logoutResponse = await authRepo.logoutUser();
-        if (logoutResponse.status == AppConstants.STATUS_SUCCESS) {
+        if (logoutResponse.message == 'Unauthenticated.') {
           AppData.user = null;
           final sharedPrefService = await SharedPreferencesService.instance;
           sharedPrefService.logoutUser();

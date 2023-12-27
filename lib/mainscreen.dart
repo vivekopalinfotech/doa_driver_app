@@ -147,11 +147,12 @@ class _MainScreenState extends State<MainScreen> {
     Widget continueButton = TextButton(
       child: const Text("Logout", style: TextStyle(color: AppStyles.MAIN_COLOR, fontWeight: FontWeight.bold)),
       onPressed: () async {
+        BlocProvider.of<AuthBloc>(context).add(const PerformLogout());
         Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => const SignInScreen()),
           (Route<dynamic> route) => false,
         );
-        BlocProvider.of<AuthBloc>(context).add(const PerformLogout());
+
       },
     );
     AlertDialog alert = AlertDialog(
