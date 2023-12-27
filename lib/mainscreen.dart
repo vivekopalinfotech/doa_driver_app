@@ -231,7 +231,7 @@ class _MainScreenState extends State<MainScreen> {
     return {
       '/': (context) {
         return [
-          TabBarView(physics: NeverScrollableScrollPhysics(), children: [
+          TabBarView(physics: const NeverScrollableScrollPhysics(), children: [
             OrderScreen(_navigateToNext, _openHomeDrawer),
             HistoryScreen(_navigateToNext, _openHomeDrawer),
           ]),
