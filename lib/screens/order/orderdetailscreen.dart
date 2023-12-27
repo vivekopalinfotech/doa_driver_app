@@ -129,7 +129,98 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent,
                 onTap: () {
-                  _getDirection();
+                  Platform.isIOS?
+                  showModalBottomSheet(
+                      isDismissible: true,
+                      useSafeArea: false,
+                      isScrollControlled: true,
+                      shape: const OutlineInputBorder(
+                          borderRadius: BorderRadius.only(topLeft: Radius.circular(18),topRight: Radius.circular(18)),
+                          borderSide: BorderSide.none
+                      ),
+                      elevation: 10,
+                      enableDrag: true,
+                      backgroundColor: Colors.white,
+                      context: context,
+
+                      builder: (builder){
+                        return Container(
+                          decoration: BoxDecoration(
+                              borderRadius: const BorderRadius.only(topLeft: Radius.circular(18),topRight: Radius.circular(18)),
+                              color: Colors.white
+                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          height: 250,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+
+                              Container(
+                                height: 4.0,
+                                width: 32.0,
+                                margin: const EdgeInsets.symmetric(vertical: 4),
+                                decoration: BoxDecoration(
+                                  color: AppStyles.MAIN_COLOR,
+                                  borderRadius: BorderRadius.circular(28),
+                                ),
+                              ),
+                              Center(child: Text("Please select an option",
+                                textScaleFactor: 1,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,fontSize: 16,
+                                    color: AppStyles.MAIN_COLOR),),),
+                              const SizedBox(height: 15,) ,
+                              InkWell(
+                                splashColor: Colors.transparent,
+                                highlightColor: Colors.transparent,
+                                onTap:(){
+                                  _getDirection();
+                                },
+                                child: Container(
+                                  height: 50,
+                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),
+                                    color:  AppStyles.MAIN_COLOR,
+                                  ),
+                                  child:  Center(child: Text("Open in Apple Maps",
+                                    textScaleFactor: 1,
+                                    style: TextStyle(fontWeight: FontWeight.bold,color: Colors.white),),),
+                                ),
+                              ),
+                              InkWell(
+                                splashColor: Colors.transparent,
+                                highlightColor: Colors.transparent,
+                                onTap:(){
+                                  _googleMap();
+                                },
+                                child: Container(
+                                  height: 50,
+                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(28),
+                                    color: AppStyles.MAIN_COLOR,
+                                  ),
+                                  child:  Center(child: Text("Open in Google Maps",
+                                    textScaleFactor: 1,
+                                    style: TextStyle(fontWeight: FontWeight.bold,color: Colors.white,fontSize: 16),),),
+                                ),
+                              ),
+
+                              const SizedBox(height: 10,),
+                              InkWell(
+                                  splashColor: Colors.transparent,
+                                  highlightColor: Colors.transparent,
+                                  onTap: (){Navigator.pop(context);},
+                                  child:  Center(child: Text("Cancel",
+                                    textScaleFactor: 1,
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: Theme.of(context).brightness == Brightness.dark ?
+                                        Colors.white.withOpacity(.85): Colors.black54),),)),
+                            ],
+                          ),
+                        );
+                      }
+                  ): _getDirection();
                 },
                 child: const Icon(Icons.location_on_outlined),
               ),
@@ -221,6 +312,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                 splashColor: Colors.transparent,
                                 highlightColor: Colors.transparent,
                                 onTap: () {
+                                  Platform.isIOS?
                                   showModalBottomSheet(
                                       isDismissible: true,
                                       useSafeArea: false,
@@ -261,7 +353,8 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.bold,fontSize: 16,
                                                     color: AppStyles.MAIN_COLOR),),),
-                                              const SizedBox(height: 15,) ,  Platform.isIOS  ?InkWell(
+                                              const SizedBox(height: 15,) ,
+                                              InkWell(
                                                 splashColor: Colors.transparent,
                                                 highlightColor: Colors.transparent,
                                                 onTap:(){
@@ -276,25 +369,8 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                                     textScaleFactor: 1,
                                                     style: TextStyle(fontWeight: FontWeight.bold,color: Colors.white),),),
                                                 ),
-                                              ):InkWell(
-                                                splashColor: Colors.transparent,
-                                                highlightColor: Colors.transparent,
-                                                onTap:(){
-                                                  _getDirection();
-                                                },
-                                                child: Container(
-                                                  height: 50,
-                                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(28),
-                                                    color: AppStyles.MAIN_COLOR,
-                                                  ),
-                                                  child:  Center(child: Text("Open in Maps App",
-                                                    textScaleFactor: 1,
-                                                    style: TextStyle(
-                                                        fontWeight: FontWeight.bold,fontSize: 16,
-                                                        color: Colors.white),),),
-                                                ),
                                               ),
-                                              Platform.isIOS?InkWell(
+                                             InkWell(
                                                 splashColor: Colors.transparent,
                                                 highlightColor: Colors.transparent,
                                                 onTap:(){
@@ -309,7 +385,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                                     textScaleFactor: 1,
                                                     style: TextStyle(fontWeight: FontWeight.bold,color: Colors.white,fontSize: 16),),),
                                                 ),
-                                              ):const SizedBox(height: 0,),
+                                              ),
 
                                             const SizedBox(height: 10,),
                                               InkWell(
@@ -327,7 +403,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                           ),
                                         );
                                       }
-                                  );
+                                  ): _getDirection();
                                 },
                                 child: Container(
                                   height: 60,
