@@ -27,20 +27,14 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
 
-
   final List<GlobalKey<NavigatorState>> _navigatorKeys = [GlobalKey<NavigatorState>(), GlobalKey<NavigatorState>(), GlobalKey<NavigatorState>(), GlobalKey<NavigatorState>()];
 
   _MainScreenState();
 
-
-
   @override
   void initState() {
-
     super.initState();
   }
-
-
 
   final keyCounter = GlobalKey();
 
@@ -92,14 +86,15 @@ class _MainScreenState extends State<MainScreen> {
                           Center(
                               child: Padding(
                             padding: EdgeInsets.symmetric(vertical: 8, horizontal: 2),
-                            child: Text('Incomplete',textScaleFactor: 1,),
+                            child: Text(
+                              'Incomplete',
+                              textScaleFactor: 1,
+                            ),
                           )),
                           Center(
                               child: Padding(
                             padding: EdgeInsets.symmetric(vertical: 8, horizontal: 2),
-                            child: Text(
-                              'Completed',textScaleFactor: 1
-                            ),
+                            child: Text('Completed', textScaleFactor: 1),
                           )),
                         ],
                         unselectedLabelColor: AppStyles.MAIN_COLOR,
@@ -109,9 +104,7 @@ class _MainScreenState extends State<MainScreen> {
                         indicatorSize: TabBarIndicatorSize.tab,
                       ),
                     ),
-
               actions: [
-
                 Padding(
                   padding: const EdgeInsets.all(15),
                   child: GestureDetector(
@@ -238,16 +231,10 @@ class _MainScreenState extends State<MainScreen> {
     return {
       '/': (context) {
         return [
-          TabBarView(children: [
-            OrderScreen(_navigateToNext, _openHomeDrawer, ),
-            HistoryScreen(
-              _navigateToNext,
-              _openHomeDrawer,
-
-            ),
+          TabBarView(physics: NeverScrollableScrollPhysics(), children: [
+            OrderScreen(_navigateToNext, _openHomeDrawer),
+            HistoryScreen(_navigateToNext, _openHomeDrawer),
           ]),
-          //   OrderScreen(_navigateToNext, _openHomeDrawer,online,latitude,longitude),
-
           ShiftScreen(),
         ].elementAt(index);
       },

@@ -81,14 +81,15 @@ class _HistoryScreenState extends State<HistoryScreen> {
           }
           if (state is HistoryLoaded) {
             Loader.hide();
-            return RefreshIndicator(
-              onRefresh: () async {
-                setState(() {
+            return
+              // RefreshIndicator(
+              // onRefresh: () async {
+              //
+              //   BlocProvider.of<HistoryBloc>(context).add( GetHistory(AppData.user!.id));
+              //
+              // },child:
 
-                });
-                BlocProvider.of<HistoryBloc>(context).add( GetHistory(AppData.user!.id));
-
-              },child: state.ordersData.isNotEmpty
+            state.ordersData.isNotEmpty
                 ? SingleChildScrollView(
               child: Column(
                 children: [
@@ -233,8 +234,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
                   ),
                 ],
               ),
-            ),
             );
+       //     );
           }
           return const Center(
             child: CircularProgressIndicator(

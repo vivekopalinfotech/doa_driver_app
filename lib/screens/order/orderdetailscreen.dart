@@ -179,7 +179,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                 },
                                 child: Container(
                                   height: 50,
-                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),
+                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(28),
                                     color:  AppStyles.MAIN_COLOR,
                                   ),
                                   child:  Center(child: Text("Open in Apple Maps",
@@ -362,7 +362,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                                 },
                                                 child: Container(
                                                   height: 50,
-                                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),
+                                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(28),
                                                     color:  AppStyles.MAIN_COLOR,
                                                   ),
                                                   child:  Center(child: Text("Open in Apple Maps",

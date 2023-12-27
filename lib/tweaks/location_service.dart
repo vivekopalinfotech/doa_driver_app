@@ -1,4 +1,3 @@
-
 import 'package:doa_driver_app/bloc/lat_lng/latlng_bloc.dart';
 import 'package:doa_driver_app/constants/app_data.dart';
 import 'package:flutter/foundation.dart';
@@ -13,14 +12,13 @@ class LocationService with ChangeNotifier {
   LocationData? get currentLocation => _currentLocation;
 
   Future<void> startLocationService(BuildContext context) async {
-
     await location.changeSettings(
       accuracy: LocationAccuracy.high,
       interval: 150000,
       //distanceFilter: 500.00
     );
     final result = await location.isBackgroundModeEnabled();
-    if(!result){
+    if (!result) {
       location.enableBackgroundMode(enable: true);
     }
 
@@ -32,5 +30,4 @@ class LocationService with ChangeNotifier {
       ));
     });
   }
-
 }
