@@ -2,6 +2,7 @@
 
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:doa_driver_app/bloc/order/order_bloc.dart';
 import 'package:doa_driver_app/bloc/order_status/check_order_status_bloc.dart';
 import 'package:doa_driver_app/constants/app_data.dart';
@@ -16,7 +17,9 @@ import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart' as maps_marker;
 import 'package:url_launcher/url_launcher.dart';
+import 'package:zoom_widget/zoom_widget.dart';
 
+import '../../api/api_provider.dart';
 import '../../bloc/shifts_data/shifts_data_bloc.dart';
 import '../../bloc/shifts_data/shifts_data_event.dart';
 
@@ -41,7 +44,13 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
   double cartDiscount = 0;
   String deliveryCharges = '';
   bool start = false;
+  bool isZoom = false;
 
+  void receiveDataFromChild(bool data) {
+    setState(() {
+      isZoom = data;
+    });
+  }
   @override
   void initState() {
     print(widget.lat);
@@ -74,7 +83,10 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     });
     return SafeArea(
       bottom: true,top: false,
-      child: Scaffold(
+      child:
+      Stack(
+        children:[
+      Scaffold(
         appBar: AppBar(
           backgroundColor: AppStyles.MAIN_COLOR,
           elevation: 0,
@@ -209,7 +221,113 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                 splashColor: Colors.transparent,
                                 highlightColor: Colors.transparent,
                                 onTap: () {
-                                  _getDirection();
+                                  showModalBottomSheet(
+                                      isDismissible: true,
+                                      useSafeArea: false,
+                                      isScrollControlled: true,
+                                      shape: const OutlineInputBorder(
+                                          borderRadius: BorderRadius.only(topLeft: Radius.circular(18),topRight: Radius.circular(18)),
+                                          borderSide: BorderSide.none
+                                      ),
+                                      elevation: 10,
+                                      enableDrag: true,
+                                      backgroundColor: Colors.white,
+                                      context: context,
+
+                                      builder: (builder){
+                                        return Container(
+                                          decoration: BoxDecoration(
+                                              borderRadius: const BorderRadius.only(topLeft: Radius.circular(18),topRight: Radius.circular(18)),
+                                              color: Colors.white
+                                          ),
+                                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                                          height: 250,
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            children: [
+
+                                              Container(
+                                                height: 4.0,
+                                                width: 32.0,
+                                                margin: const EdgeInsets.symmetric(vertical: 4),
+                                                decoration: BoxDecoration(
+                                                  color: AppStyles.MAIN_COLOR,
+                                                  borderRadius: BorderRadius.circular(28),
+                                                ),
+                                              ),
+                                              Center(child: Text("Please select an option",
+                                                textScaleFactor: 1,
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,fontSize: 16,
+                                                    color: AppStyles.MAIN_COLOR),),),
+                                              const SizedBox(height: 15,) ,  Platform.isIOS  ?InkWell(
+                                                splashColor: Colors.transparent,
+                                                highlightColor: Colors.transparent,
+                                                onTap:(){
+                                                  _getDirection();
+                                                },
+                                                child: Container(
+                                                  height: 50,
+                                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),
+                                                    color:  AppStyles.MAIN_COLOR,
+                                                  ),
+                                                  child:  Center(child: Text("Open in Apple Maps",
+                                                    textScaleFactor: 1,
+                                                    style: TextStyle(fontWeight: FontWeight.bold,color: Colors.white),),),
+                                                ),
+                                              ):InkWell(
+                                                splashColor: Colors.transparent,
+                                                highlightColor: Colors.transparent,
+                                                onTap:(){
+                                                  _getDirection();
+                                                },
+                                                child: Container(
+                                                  height: 50,
+                                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(28),
+                                                    color: AppStyles.MAIN_COLOR,
+                                                  ),
+                                                  child:  Center(child: Text("Open in Maps App",
+                                                    textScaleFactor: 1,
+                                                    style: TextStyle(
+                                                        fontWeight: FontWeight.bold,fontSize: 16,
+                                                        color: Colors.white),),),
+                                                ),
+                                              ),
+                                              Platform.isIOS?InkWell(
+                                                splashColor: Colors.transparent,
+                                                highlightColor: Colors.transparent,
+                                                onTap:(){
+                                                  _googleMap();
+                                                },
+                                                child: Container(
+                                                  height: 50,
+                                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(28),
+                                                    color: AppStyles.MAIN_COLOR,
+                                                  ),
+                                                  child:  Center(child: Text("Open in Google Maps",
+                                                    textScaleFactor: 1,
+                                                    style: TextStyle(fontWeight: FontWeight.bold,color: Colors.white,fontSize: 16),),),
+                                                ),
+                                              ):const SizedBox(height: 0,),
+
+                                            const SizedBox(height: 10,),
+                                              InkWell(
+                                                  splashColor: Colors.transparent,
+                                                  highlightColor: Colors.transparent,
+                                                  onTap: (){Navigator.pop(context);},
+                                                  child:  Center(child: Text("Cancel",
+                                                    textScaleFactor: 1,
+                                                    style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight: FontWeight.bold,
+                                                        color: Theme.of(context).brightness == Brightness.dark ?
+                                                        Colors.white.withOpacity(.85): Colors.black54),),)),
+                                            ],
+                                          ),
+                                        );
+                                      }
+                                  );
                                 },
                                 child: Container(
                                   height: 60,
@@ -228,6 +346,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                         DetailCard(
                           ordersData: widget.ordersData,
                           miles: widget.miles,
+                            callback: receiveDataFromChild
                         ),
                         Column(
                           children: [
@@ -767,6 +886,65 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
           )
         ),
       ),
+          isZoom?
+          Scaffold(
+              body:
+              SizedBox(
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
+                  child: Stack(
+                      children:[
+
+                        Zoom(
+                            centerOnScale: true,
+                            maxZoomWidth: MediaQuery.of(context).size.width,
+                            maxZoomHeight: MediaQuery.of(context).size.height,
+                            maxScale: 3,
+                            backgroundColor: Colors.white,
+                            child:
+
+                            Container(
+                              width: double.maxFinite,
+                              height: double.maxFinite,
+                              // padding: EdgeInsets.symmetric(vertical: 8),
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.black12),
+                                  color: Colors.white),
+                              child: CachedNetworkImage(
+                                imageUrl: 'https://admin.dankofamerica.karnavati.in/proof/${widget.ordersData.customerId!.customer_proof ?? ''}',
+                                fit: BoxFit.contain,
+                                progressIndicatorBuilder:
+                                    (context, url, downloadProgress) => Center(
+                                    child: CircularProgressIndicator(
+                                        color: Colors.white,
+                                        backgroundColor: AppStyles.MAIN_COLOR,
+                                        value: downloadProgress.progress)),
+                                errorWidget: (context, url, error) =>
+                                const Icon(Icons.error),
+                              ),
+                            )),
+                        Align(
+                            alignment: Alignment.topLeft,
+                            child:
+                            Padding(
+                                padding: EdgeInsets.only(top: 50,left: 16),
+                                child:
+                                InkWell(
+                                    splashColor: Colors.transparent,
+                                    highlightColor: Colors.transparent,
+                                    onTap:(){
+                                      setState(() {
+                                        isZoom = false;
+                                      });
+                                    },child:
+                                const CircleAvatar(
+                                  backgroundColor: AppStyles.MAIN_COLOR,
+                                  radius: 12,
+                                  child: Icon(
+                                    Icons.close,color: Colors.white,size: 20,
+                                  ),
+                                ))))
+                      ]))):SizedBox()])
     );
   }
 
@@ -787,4 +965,13 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       }
     }
   }
-}
+
+  _googleMap() async {
+    var url = Uri.parse("https://www.google.com/maps/search/?api=1&query=${widget.lat},${widget.lng}");
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      throw 'Could not launch Maps';
+    }
+  }}
+

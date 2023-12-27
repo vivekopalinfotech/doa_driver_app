@@ -8,8 +8,9 @@ import 'package:url_launcher/url_launcher.dart';
 
 class DetailCard extends StatefulWidget {
   final OrdersData ordersData;
+  final Function(bool) callback;
   final miles;
-  const DetailCard({super.key, required this.ordersData, this.miles});
+  const DetailCard({super.key, required this.ordersData, this.miles, required this.callback});
 
   @override
   State<DetailCard> createState() => _DetailCardState();
@@ -25,7 +26,7 @@ class _DetailCardState extends State<DetailCard> {
     final Uri launchUri = Uri.parse('sms:$phone');
     await launchUrl(launchUri);
   }
-
+  bool isZoom = false;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -37,6 +38,14 @@ class _DetailCardState extends State<DetailCard> {
           child: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, crossAxisAlignment: CrossAxisAlignment.start, children: [
             Row(
               children: [
+                InkWell(
+          onTap: (){
+            setState(() {
+              isZoom = true;
+              widget.callback(isZoom);
+            });
+          },
+          child:
                 Container(
                     height: 50,
                     width: 50,
@@ -56,7 +65,7 @@ class _DetailCardState extends State<DetailCard> {
                           color: AppStyles.MAIN_COLOR,
                         ),
                       ),
-                    )),
+                    ))),
                 const SizedBox(
                   width: 10,
                 ),

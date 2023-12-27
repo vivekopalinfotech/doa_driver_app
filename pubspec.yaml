@@ -60,7 +60,7 @@ dependencies:
   firebase_analytics:
   upgrader:
   flutter_overlay_loader: ^2.0.0
-
+  zoom_widget: ^2.0.0
 
 
 
