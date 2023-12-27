@@ -118,7 +118,7 @@ class _OrderScreenState extends State<OrderScreen> {
                 Loader.hide();
                 return RefreshIndicator(
                   onRefresh: () async {
-                    BlocProvider.of<OrdersBloc>(context).add(GetOrders(AppData.user!.id));
+                   // BlocProvider.of<OrdersBloc>(context).add(GetOrders(AppData.user!.id));
                   },
                   child: state.ordersData.isNotEmpty
                       ? SingleChildScrollView(

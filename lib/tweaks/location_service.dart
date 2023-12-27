@@ -16,7 +16,7 @@ class LocationService with ChangeNotifier {
 
     await location.changeSettings(
       accuracy: LocationAccuracy.high,
-      interval: 15000,
+      interval: 150000,
       //distanceFilter: 500.00
     );
     final result = await location.isBackgroundModeEnabled();
