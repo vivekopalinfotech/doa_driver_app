@@ -80,9 +80,15 @@ class _OrderScreenState extends State<OrderScreen> {
   @override
   void didChangeDependencies() {
    context.read<NotificationProvider>().removeListener(_refreshPage);
-    _callSplashScreen();
+    //_callSplashScreen();
 
     super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    context.read<NotificationProvider>().removeListener(_refreshPage);
+    super.dispose();
   }
 
   var lat;
