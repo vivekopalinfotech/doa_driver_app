@@ -1,6 +1,5 @@
 import 'package:doa_driver_app/bloc/lat_lng/latlng_bloc.dart';
 import 'package:doa_driver_app/constants/app_data.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:location/location.dart';

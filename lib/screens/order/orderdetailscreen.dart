@@ -63,12 +63,14 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     double orderTotal = 0;
     double itemTotal = 0;
     double itemDiscount = 0;
+    double item = 0;
     String tax = '';
     deliveryCharges = widget.ordersData.shipping_cost.toString();
     tax = widget.ordersData.total_tax.toString();
     // orderTotal = widget.ordersData.order_price.toString();
     for (int i = 0; i < widget.orderDetail!.length; i++) {
-      itemDiscount += (double.parse(widget.orderDetail![i].productQty.toString())) * (double.parse(widget.orderDetail![i].productPrice) - double.parse(widget.orderDetail![i].productDiscount));
+      item = double.parse(widget.orderDetail![i].productDiscount) != 0.00?(double.parse(widget.orderDetail![i].productPrice) - double.parse(widget.orderDetail![i].productDiscount)):0;
+      itemDiscount += (double.parse(widget.orderDetail![i].productQty.toString())) * item;
       cartDiscount = double.parse(widget.orderDetail![i].productDiscount);
       itemTotal += double.parse(widget.orderDetail![i].productPrice) * double.parse(widget.orderDetail![i].productQty.toString());
     }
@@ -503,7 +505,12 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                                       SizedBox(child: Center(child: Text(widget.orderDetail![index].productQty))),
                                                       SizedBox(
                                                           child: Center(
-                                                              child: Column(
+                                                              child:
+                                                              widget.orderDetail![index].productDiscount == '0.00'?
+                                                              Text(
+                                                                '\$${widget.orderDetail![index].productPrice}',
+                                                              )  :
+                                                              Column(
                                                         children: [
                                                           Text(
                                                             '\$${widget.orderDetail![index].productPrice}',
@@ -558,7 +565,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                           SizedBox(
                                               child: Center(
                                                   child: Text(
-                                            '-\$${itemDiscount.toStringAsFixed(2)}',
+    itemDiscount.toStringAsFixed(2) == '0.00'? '\$${itemDiscount.toStringAsFixed(2)}':   '-\$${itemDiscount.toStringAsFixed(2)}',
                                             style: const TextStyle(fontWeight: FontWeight.bold),
                                           ))),
                                         ],
