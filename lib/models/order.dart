@@ -51,6 +51,7 @@ class OrdersData {
   String? order_date;
   String? order_time;
   String? latlong;
+  String? transaction_fee;
   List<OrderHistory>? order_history;
   List<OrderNotes>? order_notes;
   List<OrderComments>? order_comments;
@@ -107,6 +108,7 @@ class OrdersData {
     this.order_date,
     this.order_time,
     this.latlong,
+    this.transaction_fee,
     this.order_history,
     this.order_notes,
     this.order_comments,
@@ -168,6 +170,7 @@ class OrdersData {
     order_date = json['order_date'];
     order_time = json['order_time'];
     latlong = json['latlong'];
+    transaction_fee = json['transaction_fee'];
     if (json['order_history'] != null) {
       order_history = <OrderHistory>[];
       json['order_history'].forEach((v) {
@@ -251,6 +254,7 @@ class OrdersData {
     data['order_date'] = order_date;
     data['order_time'] = order_time;
     data['latlong'] = latlong;
+    data['transaction_fee'] = transaction_fee;
     if (order_history != null) {
       data['order_history'] = order_history?.map((v) => v.toJson()).toList();
     }

@@ -73,7 +73,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       itemTotal += double.parse(widget.orderDetail![i].productPrice) * double.parse(widget.orderDetail![i].productQty.toString());
     }
     subtotal = itemTotal - itemDiscount;
-    orderTotal = subtotal + num.parse(deliveryCharges) + num.parse(tax);
+    orderTotal = subtotal + num.parse(deliveryCharges) + num.parse(tax) + double.parse(widget.ordersData.transaction_fee.toString());
     Iterable markers = Iterable.generate(1, (index) {
       return maps_marker.Marker(
         icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueCyan),
@@ -626,6 +626,27 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                             '\$${widget.ordersData.shipping_cost}',
                                             style: const TextStyle(fontWeight: FontWeight.bold),
                                           ))),
+                                        ],
+                                      ),
+                                      const Divider(
+                                        color: Colors.transparent,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          const Flexible(
+                                            child: SizedBox(
+                                                child: Text(
+                                                  'Transaction Fee',
+                                                  textAlign: TextAlign.start,
+                                                )),
+                                          ),
+                                          SizedBox(
+                                              child: Center(
+                                                  child: Text(
+                                                    '\$${widget.ordersData.transaction_fee}',
+                                                    style: const TextStyle(fontWeight: FontWeight.bold),
+                                                  ))),
                                         ],
                                       ),
                                       const Divider(
