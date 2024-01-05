@@ -69,12 +69,13 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     tax = widget.ordersData.total_tax.toString();
     // orderTotal = widget.ordersData.order_price.toString();
     for (int i = 0; i < widget.orderDetail!.length; i++) {
-      item = double.parse(widget.orderDetail![i].productDiscount) != 0.00?(double.parse(widget.orderDetail![i].productPrice) - double.parse(widget.orderDetail![i].productDiscount)):0;
+      item = double.parse(widget.orderDetail![i].productDiscount) != 0.00 ? (double.parse(widget.orderDetail![i].productPrice) - double.parse(widget.orderDetail![i].productDiscount)) : 0;
       itemDiscount += (double.parse(widget.orderDetail![i].productQty.toString())) * item;
       cartDiscount = double.parse(widget.orderDetail![i].productDiscount);
       itemTotal += double.parse(widget.orderDetail![i].productPrice) * double.parse(widget.orderDetail![i].productQty.toString());
     }
     subtotal = itemTotal - itemDiscount;
+    subtotal = subtotal - double.parse(widget.ordersData.coupon_amount.toString());
     orderTotal = subtotal + num.parse(deliveryCharges) + num.parse(tax) + double.parse(widget.ordersData.transaction_fee.toString());
     Iterable markers = Iterable.generate(1, (index) {
       return maps_marker.Marker(
@@ -505,22 +506,21 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                                       SizedBox(child: Center(child: Text(widget.orderDetail![index].productQty))),
                                                       SizedBox(
                                                           child: Center(
-                                                              child:
-                                                              widget.orderDetail![index].productDiscount == '0.00'?
-                                                              Text(
-                                                                '\$${widget.orderDetail![index].productPrice}',
-                                                              )  :
-                                                              Column(
-                                                        children: [
-                                                          Text(
-                                                            '\$${widget.orderDetail![index].productPrice}',
-                                                            style: const TextStyle(decoration: TextDecoration.lineThrough),
-                                                          ),
-                                                          Text(
-                                                            '\$${widget.orderDetail![index].productDiscount}',
-                                                          ),
-                                                        ],
-                                                      )))
+                                                              child: widget.orderDetail![index].productDiscount == '0.00'
+                                                                  ? Text(
+                                                                      '\$${widget.orderDetail![index].productPrice}',
+                                                                    )
+                                                                  : Column(
+                                                                      children: [
+                                                                        Text(
+                                                                          '\$${widget.orderDetail![index].productPrice}',
+                                                                          style: const TextStyle(decoration: TextDecoration.lineThrough),
+                                                                        ),
+                                                                        Text(
+                                                                          '\$${widget.orderDetail![index].productDiscount}',
+                                                                        ),
+                                                                      ],
+                                                                    )))
                                                     ],
                                                   ),
                                                 ],
@@ -565,9 +565,30 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                           SizedBox(
                                               child: Center(
                                                   child: Text(
-    itemDiscount.toStringAsFixed(2) == '0.00'? '\$${itemDiscount.toStringAsFixed(2)}':   '-\$${itemDiscount.toStringAsFixed(2)}',
+                                            itemDiscount.toStringAsFixed(2) == '0.00' ? '\$${itemDiscount.toStringAsFixed(2)}' : '-\$${itemDiscount.toStringAsFixed(2)}',
                                             style: const TextStyle(fontWeight: FontWeight.bold),
                                           ))),
+                                        ],
+                                      ),
+                                      const Divider(
+                                        color: Colors.transparent,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          const Flexible(
+                                            child: SizedBox(
+                                                child: Text(
+                                                  'Coupon Discounts',
+                                                  textAlign: TextAlign.start,
+                                                )),
+                                          ),
+                                          SizedBox(
+                                              child: Center(
+                                                  child: Text(
+                                                    '-\$${widget.ordersData.coupon_amount}',
+                                                    style: const TextStyle(fontWeight: FontWeight.bold),
+                                                  ))),
                                         ],
                                       ),
                                       const Divider(
@@ -644,16 +665,16 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                           const Flexible(
                                             child: SizedBox(
                                                 child: Text(
-                                                  'Transaction Fee',
-                                                  textAlign: TextAlign.start,
-                                                )),
+                                              'Transaction Fee',
+                                              textAlign: TextAlign.start,
+                                            )),
                                           ),
                                           SizedBox(
                                               child: Center(
                                                   child: Text(
-                                                    '\$${widget.ordersData.transaction_fee}',
-                                                    style: const TextStyle(fontWeight: FontWeight.bold),
-                                                  ))),
+                                            '\$${widget.ordersData.transaction_fee}',
+                                            style: const TextStyle(fontWeight: FontWeight.bold),
+                                          ))),
                                         ],
                                       ),
                                       const Divider(
@@ -888,7 +909,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                                       showDialog(
                                                         context: context,
                                                         builder: (BuildContext context) {
-                                                          return  AlertDialog(
+                                                          return AlertDialog(
                                                             contentPadding: EdgeInsets.zero,
                                                             title: Row(
                                                               children: [
@@ -916,18 +937,17 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                                                   Navigator.of(context, rootNavigator: true).pop();
                                                                 },
                                                               ),
-                                                            TextButton(
-                                                              child: const Text("Start", style: TextStyle(color: AppStyles.MAIN_COLOR, fontWeight: FontWeight.bold)),
-                                                              onPressed: () async {
-                                                                Navigator.of(context, rootNavigator: true).pop();
-                                                                BlocProvider.of<OrderStatusBloc>(context).add(CheckOrderStatus(widget.ordersData.orderId.toString(), 'On Route', 0, 0));
-                                                              },
-                                                            ),
+                                                              TextButton(
+                                                                child: const Text("Start", style: TextStyle(color: AppStyles.MAIN_COLOR, fontWeight: FontWeight.bold)),
+                                                                onPressed: () async {
+                                                                  Navigator.of(context, rootNavigator: true).pop();
+                                                                  BlocProvider.of<OrderStatusBloc>(context).add(CheckOrderStatus(widget.ordersData.orderId.toString(), 'On Route', 0, 0));
+                                                                },
+                                                              ),
                                                             ],
                                                           );
                                                         },
                                                       );
-
                                                     },
                                                     child: Container(
                                                       height: 60,
@@ -966,7 +986,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                                               showDialog(
                                                                 context: context,
                                                                 builder: (BuildContext context) {
-                                                                  return  AlertDialog(
+                                                                  return AlertDialog(
                                                                     contentPadding: EdgeInsets.zero,
                                                                     title: Row(
                                                                       children: [
@@ -998,14 +1018,14 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                                                         child: const Text("Cancel", style: TextStyle(color: AppStyles.MAIN_COLOR, fontWeight: FontWeight.bold)),
                                                                         onPressed: () async {
                                                                           Navigator.of(context, rootNavigator: true).pop();
-                                                                          BlocProvider.of<OrderStatusBloc>(context).add(CheckOrderStatus(widget.ordersData.orderId.toString(), 'Delivery Cancel', 0, 0));
+                                                                          BlocProvider.of<OrderStatusBloc>(context)
+                                                                              .add(CheckOrderStatus(widget.ordersData.orderId.toString(), 'Delivery Cancel', 0, 0));
                                                                         },
                                                                       ),
                                                                     ],
                                                                   );
                                                                 },
                                                               );
-
                                                             },
                                                             child: Row(
                                                               mainAxisAlignment: MainAxisAlignment.start,
@@ -1029,7 +1049,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                                               showDialog(
                                                                 context: context,
                                                                 builder: (BuildContext context) {
-                                                                  return  AlertDialog(
+                                                                  return AlertDialog(
                                                                     contentPadding: EdgeInsets.zero,
                                                                     title: Row(
                                                                       children: [
@@ -1068,7 +1088,6 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                                                   );
                                                                 },
                                                               );
-
                                                             },
                                                             child: Row(
                                                               mainAxisAlignment: MainAxisAlignment.start,
@@ -1092,7 +1111,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                                               showDialog(
                                                                 context: context,
                                                                 builder: (BuildContext context) {
-                                                                  return  AlertDialog(
+                                                                  return AlertDialog(
                                                                     contentPadding: EdgeInsets.zero,
                                                                     title: Row(
                                                                       children: [
