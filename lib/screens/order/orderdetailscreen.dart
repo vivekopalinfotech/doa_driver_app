@@ -64,6 +64,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     double itemTotal = 0;
     double itemDiscount = 0;
     double item = 0;
+    double amount = 0;
     String tax = '';
     deliveryCharges = widget.ordersData.shipping_cost.toString();
     tax = widget.ordersData.total_tax.toString();
@@ -75,7 +76,8 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       itemTotal += double.parse(widget.orderDetail![i].productPrice) * double.parse(widget.orderDetail![i].productQty.toString());
     }
     subtotal = itemTotal - itemDiscount;
-    subtotal = subtotal - double.parse(widget.ordersData.coupon_amount.toString());
+    amount = widget.ordersData.coupon_amount!= null?double.parse(widget.ordersData.coupon_amount.toString()):0;
+    subtotal = subtotal - amount;
     orderTotal = subtotal + num.parse(deliveryCharges) + num.parse(tax) + double.parse(widget.ordersData.transaction_fee.toString());
     Iterable markers = Iterable.generate(1, (index) {
       return maps_marker.Marker(
@@ -586,7 +588,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                           SizedBox(
                                               child: Center(
                                                   child: Text(
-                                                    '-\$${widget.ordersData.coupon_amount}',
+                                                    widget.ordersData.coupon_amount!= null? '-\$${widget.ordersData.coupon_amount}':'\$0.0',
                                                     style: const TextStyle(fontWeight: FontWeight.bold),
                                                   ))),
                                         ],
