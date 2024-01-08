@@ -588,7 +588,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                           SizedBox(
                                               child: Center(
                                                   child: Text(
-                                                    widget.ordersData.coupon_amount!= null? '-\$${widget.ordersData.coupon_amount}':'\$0.0',
+                                                    widget.ordersData.coupon_amount!= null? '-\$${widget.ordersData.coupon_amount}':'\$0.00',
                                                     style: const TextStyle(fontWeight: FontWeight.bold),
                                                   ))),
                                         ],
