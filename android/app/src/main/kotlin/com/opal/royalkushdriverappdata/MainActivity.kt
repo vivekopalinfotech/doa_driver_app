@@ -1,4 +1,4 @@
-package com.opal.royalkushdriver
+package com.opal.royalkushdriverappdata
 
 import io.flutter.embedding.android.FlutterActivity
 
