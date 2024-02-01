@@ -142,7 +142,7 @@ class _OrderScreenState extends State<OrderScreen> {
                                 lat = double.parse(state.ordersData[index].latlong.toString().split(',')[0]);
                                 lng = double.parse(state.ordersData[index].latlong.toString().split(',')[1]);
                                 double distanceInMiles = AppUtils.calculateDistanceInMiles(latitude, longitude, lat, lng);
-
+                                print(state.ordersData[index].latlong.toString());
                                 return InkWell(
                                   splashColor: Colors.transparent,
                                   highlightColor: Colors.transparent,

@@ -8,5 +8,4 @@ class AppStyles {
   static const Color COLOR_LITE_GREY_LIGHT = Color(0x11555555);
   static const Color MAIN_COLOR = Colors.black;
   static const Color SECOND_COLOR = Colors.grey;
-
 }
