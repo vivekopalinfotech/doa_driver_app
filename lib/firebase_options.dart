@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -49,9 +46,19 @@ class DefaultFirebaseOptions {
     }
   }
 
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyADJ9lKpuv4fVvrqOGxGjGeDcDGxkhk9cI',
+    appId: '1:203281484288:web:9026614a0a1d02797826e5',
+    messagingSenderId: '203281484288',
+    projectId: 'royal-kush---doa',
+    authDomain: 'royal-kush---doa.firebaseapp.com',
+    storageBucket: 'royal-kush---doa.appspot.com',
+    measurementId: 'G-NBS5XBGMXJ',
+  );
+
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDREuv26IohD_qvBPRi6N44KagKdRgSrjE',
-    appId: '1:203281484288:android:49e2d79907bc06067826e5',
+    appId: '1:203281484288:android:da563f3aff2be9067826e5',
     messagingSenderId: '203281484288',
     projectId: 'royal-kush---doa',
     storageBucket: 'royal-kush---doa.appspot.com',
@@ -59,10 +66,10 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyC_KABzMJwe4EO3KUlx5xtKsDi13PVlKgE',
-    appId: '1:203281484288:ios:4c0781e2a4e017e97826e5',
+    appId: '1:203281484288:ios:c6a6302dba6505677826e5',
     messagingSenderId: '203281484288',
     projectId: 'royal-kush---doa',
     storageBucket: 'royal-kush---doa.appspot.com',
-    iosBundleId: 'com.opal.royalkushdriverapp',
+    iosBundleId: 'com.opal.royalkushdriverappdata',
   );
 }
