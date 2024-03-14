@@ -65,6 +65,8 @@ class _ShiftScreenState extends State<ShiftScreen> {
                 }
                 if (state is ShiftsDataLoaded) {
                   Loader.hide();
+                  String expectedCash =
+                      (double.parse(state.shiftsDataResponse.data!.Total_cash.toString()) - double.parse(state.shiftsDataResponse.data!.Total_Shipping_cost.toString())).toStringAsFixed(2);
                   return SingleChildScrollView(
                     child: Column(
                       children: [
@@ -118,11 +120,11 @@ class _ShiftScreenState extends State<ShiftScreen> {
                                     children: [
                                       const Flexible(
                                           child: Text(
-                                        'Opening Amount',
+                                        'Cc Total Amount',
                                         style: TextStyle(color: Colors.black38, fontWeight: FontWeight.w500),
                                       )),
                                       Text(
-                                        '\$${0.00.toStringAsFixed(2)}',
+                                        '${state.shiftsDataResponse.data!.Total_cc_order}/\$${state.shiftsDataResponse.data!.Total_cc!.toStringAsFixed(2)}',
                                         style: const TextStyle(fontSize: 18),
                                       )
                                     ],
@@ -136,11 +138,11 @@ class _ShiftScreenState extends State<ShiftScreen> {
                                     children: [
                                       const Flexible(
                                           child: Text(
-                                        'Cash Traders',
+                                        'Cash Amount',
                                         style: TextStyle(color: Colors.black38, fontWeight: FontWeight.w500),
                                       )),
                                       Text(
-                                        '\$${state.shiftsDataResponse.data!.Total_cash!.toStringAsFixed(2)}',
+                                        '${state.shiftsDataResponse.data!.Total_cash_order}/\$${state.shiftsDataResponse.data!.Total_cash!.toStringAsFixed(2)}',
                                         style: const TextStyle(fontSize: 18),
                                       )
                                     ],
@@ -154,11 +156,29 @@ class _ShiftScreenState extends State<ShiftScreen> {
                                     children: [
                                       const Flexible(
                                           child: Text(
-                                        'Expected Drawer',
+                                        'Delivery Fee',
                                         style: TextStyle(color: Colors.black38, fontWeight: FontWeight.w500),
                                       )),
                                       Text(
-                                        '\$${state.shiftsDataResponse.data!.Total_cc!.toStringAsFixed(2)}',
+                                        '\$${state.shiftsDataResponse.data!.Total_Shipping_cost!.toStringAsFixed(2)}',
+                                        style: const TextStyle(fontSize: 18),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                const Divider(),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const Flexible(
+                                          child: Text(
+                                        'Expected Cash',
+                                        style: TextStyle(color: Colors.black38, fontWeight: FontWeight.w500),
+                                      )),
+                                      Text(
+                                        '\$$expectedCash',
                                         style: const TextStyle(fontSize: 18),
                                       )
                                     ],
