@@ -154,7 +154,7 @@ class ApiProvider {
             "paid_cash": paid_cash,
             "paid_cc_terminal": paid_cc_terminal,
           }));
-
+      log(jsonEncode(response.data));
       return DeliveryStatusResponse.fromJson(response.data);
     } catch (error) {
       return DeliveryStatusResponse.withError(_handleError(error as TypeError));

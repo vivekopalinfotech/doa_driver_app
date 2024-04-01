@@ -54,6 +54,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
   void initState() {
     print(widget.lat);
     print(widget.lng);
+    print(widget.ordersData.coupon_amount);
     super.initState();
   }
 
@@ -76,7 +77,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       itemTotal += double.parse(widget.orderDetail![i].productPrice) * double.parse(widget.orderDetail![i].productQty.toString());
     }
     subtotal = itemTotal - itemDiscount;
-    amount = widget.ordersData.coupon_amount!= null?double.parse(widget.ordersData.coupon_amount.toString()):0;
+    amount = widget.ordersData.coupon_amount != null ? double.parse(widget.ordersData.coupon_amount.toString()) : 0;
     subtotal = subtotal - amount;
     orderTotal = subtotal + num.parse(deliveryCharges) + num.parse(tax) + double.parse(widget.ordersData.transaction_fee.toString());
     Iterable markers = Iterable.generate(1, (index) {
@@ -581,16 +582,16 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                           const Flexible(
                                             child: SizedBox(
                                                 child: Text(
-                                                  'Coupon Discounts',
-                                                  textAlign: TextAlign.start,
-                                                )),
+                                              'Coupon Discounts',
+                                              textAlign: TextAlign.start,
+                                            )),
                                           ),
                                           SizedBox(
                                               child: Center(
                                                   child: Text(
-                                                    widget.ordersData.coupon_amount!= null? '-\$${widget.ordersData.coupon_amount}':'\$0.00',
-                                                    style: const TextStyle(fontWeight: FontWeight.bold),
-                                                  ))),
+                                            widget.ordersData.coupon_amount != null && widget.ordersData.coupon_amount != '0.00'?'-\$${widget.ordersData.coupon_amount}' : '\$0.00',
+                                            style: const TextStyle(fontWeight: FontWeight.bold),
+                                          ))),
                                         ],
                                       ),
                                       const Divider(

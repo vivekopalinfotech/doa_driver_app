@@ -1,7 +1,6 @@
 // ignore_for_file: no_logic_in_create_state, prefer_typing_uninitialized_variables, must_be_immutable
 
 import 'dart:io';
-
 import 'package:doa_driver_app/bloc/shift/shift_bloc.dart';
 import 'package:doa_driver_app/bloc/shifts_data/shifts_data_bloc.dart';
 import 'package:doa_driver_app/bloc/shifts_data/shifts_data_event.dart';
