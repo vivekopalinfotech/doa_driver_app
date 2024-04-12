@@ -72,7 +72,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
       ),
       body: ScrollConfiguration(
-      behavior: const ScrollBehavior().copyWith(overscroll: false),
+      behavior:  ScrollBehavior(androidOverscrollIndicator: AndroidOverscrollIndicator.stretch),
     child: SingleChildScrollView(
         child: Column(
           children: [

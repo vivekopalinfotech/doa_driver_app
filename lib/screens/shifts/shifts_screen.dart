@@ -67,7 +67,7 @@ class _ShiftScreenState extends State<ShiftScreen> {
                   String expectedCash =
                       (double.parse(state.shiftsDataResponse.data!.Total_cash.toString()) - double.parse(state.shiftsDataResponse.data!.Total_Shipping_cost.toString())).toStringAsFixed(2);
                   return ScrollConfiguration(
-                    behavior: const ScrollBehavior().copyWith(overscroll: false),
+                    behavior:  ScrollBehavior(androidOverscrollIndicator: AndroidOverscrollIndicator.stretch),
                     child: SingleChildScrollView(
                     child: Column(
                       children: [

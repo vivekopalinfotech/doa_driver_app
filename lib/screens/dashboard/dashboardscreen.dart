@@ -227,7 +227,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
         Expanded(
             child: ScrollConfiguration(
-    behavior: const ScrollBehavior().copyWith(overscroll: false),
+    behavior:  ScrollBehavior(androidOverscrollIndicator: AndroidOverscrollIndicator.stretch),
     child: SingleChildScrollView(
                 controller: _controller,
                 child: widget.online == false

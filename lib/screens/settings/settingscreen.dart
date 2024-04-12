@@ -136,7 +136,7 @@ class _SettingScreenState extends State<SettingScreen> {
             return Stack(
               children: [
                 ScrollConfiguration(
-                behavior: const ScrollBehavior().copyWith(overscroll: false),
+                behavior:  ScrollBehavior(androidOverscrollIndicator: AndroidOverscrollIndicator.stretch),
             child:    SingleChildScrollView(
                   child: SizedBox(
                       width: double.maxFinite,

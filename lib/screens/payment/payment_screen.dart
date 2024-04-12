@@ -54,7 +54,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
           SizedBox(
             height: MediaQuery.of(context).size.height,
             child: ScrollConfiguration(
-              behavior: const ScrollBehavior().copyWith(overscroll: false),
+              behavior:  ScrollBehavior(androidOverscrollIndicator: AndroidOverscrollIndicator.stretch),
               child: SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),

@@ -118,7 +118,7 @@ class _SignInScreenState extends State<SignInScreen> {
         },
         builder: (context, state) {
       return ScrollConfiguration(
-          behavior: const ScrollBehavior().copyWith(overscroll: false),
+          behavior:  ScrollBehavior(androidOverscrollIndicator: AndroidOverscrollIndicator.stretch),
           child: SingleChildScrollView(
               child: Column(
                 children: [

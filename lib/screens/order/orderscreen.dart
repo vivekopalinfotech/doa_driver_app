@@ -129,7 +129,7 @@ class _OrderScreenState extends State<OrderScreen> {
 
                 state.ordersData.isNotEmpty
                     ? ScrollConfiguration(
-                  behavior: const ScrollBehavior().copyWith(overscroll: false),
+                  behavior:  const ScrollBehavior(androidOverscrollIndicator: AndroidOverscrollIndicator.stretch),
                   child: SingleChildScrollView(
                         child: Column(
                           children: [

@@ -48,7 +48,7 @@ class _OtpScreenState extends State<OtpScreen> {
       body: BlocConsumer<OtpBloc, OtpState>(
         builder: (context, state) {
           return ScrollConfiguration(
-              behavior: const ScrollBehavior().copyWith(overscroll: false),
+              behavior:  ScrollBehavior(androidOverscrollIndicator: AndroidOverscrollIndicator.stretch),
               child: SingleChildScrollView(
                 child: Form(
                   key: _formKey,
