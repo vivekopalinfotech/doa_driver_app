@@ -53,7 +53,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
         children: [
           SizedBox(
             height: MediaQuery.of(context).size.height,
-            child: SingleChildScrollView(
+            child: ScrollConfiguration(
+              behavior: const ScrollBehavior().copyWith(overscroll: false),
+              child: SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                 child: Column(
@@ -160,7 +162,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 ),
               ),
             ),
-          ),
+            )),
           Positioned(
             left: 0,
             right: 0,

@@ -71,7 +71,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         title: const Text('Edit Profile',style: TextStyle(color: Colors.white),),
 
       ),
-      body: SingleChildScrollView(
+      body: ScrollConfiguration(
+      behavior: const ScrollBehavior().copyWith(overscroll: false),
+    child: SingleChildScrollView(
         child: Column(
           children: [
             Padding(
@@ -338,7 +340,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
           ],
         ),
-      ),
+      )),
     );
   }
 

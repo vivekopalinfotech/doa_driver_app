@@ -292,7 +292,9 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                   children: [
                     SizedBox(
                       height: MediaQuery.of(context).size.height,
-                      child: SingleChildScrollView(
+                      child: ScrollConfiguration(
+                        behavior: const ScrollBehavior().copyWith(overscroll: false),
+                        child: SingleChildScrollView(
                         child: Column(
                           children: [
                             Stack(
@@ -709,7 +711,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                             ),
                           ],
                         ),
-                      ),
+                      )),
                     ),
                     Positioned(
                         bottom: 0,

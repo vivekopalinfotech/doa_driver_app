@@ -90,7 +90,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
               // },child:
 
             state.ordersData.isNotEmpty
-                ? SingleChildScrollView(
+                ? ScrollConfiguration(
+              behavior: const ScrollBehavior().copyWith(overscroll: false),
+              child: SingleChildScrollView(
               child: Column(
                 children: [
                   Padding(
@@ -204,7 +206,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                   ),
                 ],
               ),
-            )
+            ))
                 : Center(
               child: Row(
                 mainAxisSize: MainAxisSize.max,

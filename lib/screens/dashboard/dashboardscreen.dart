@@ -226,7 +226,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ),
         Expanded(
-            child: SingleChildScrollView(
+            child: ScrollConfiguration(
+    behavior: const ScrollBehavior().copyWith(overscroll: false),
+    child: SingleChildScrollView(
                 controller: _controller,
                 child: widget.online == false
                     ? Column(
@@ -785,7 +787,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 );
                 },
                 ),
-    )),
+    ))),
       ],
     );
   }

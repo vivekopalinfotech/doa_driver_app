@@ -117,7 +117,9 @@ class _SignInScreenState extends State<SignInScreen> {
           }
         },
         builder: (context, state) {
-      return SingleChildScrollView(
+      return ScrollConfiguration(
+          behavior: const ScrollBehavior().copyWith(overscroll: false),
+          child: SingleChildScrollView(
               child: Column(
                 children: [
                   Padding(
@@ -237,7 +239,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
                 ],
               ),
-            );
+          ));
         },
 
       ));

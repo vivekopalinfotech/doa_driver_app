@@ -111,7 +111,9 @@ class _PaymentState extends State<Payment> {
             child: Stack(children: [
               SizedBox(
                 height: MediaQuery.of(context).size.height,
-                child: SingleChildScrollView(
+                child:ScrollConfiguration(
+                  behavior: const ScrollBehavior().copyWith(overscroll: false),
+                  child:  SingleChildScrollView(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                     child: Column(
@@ -232,7 +234,7 @@ class _PaymentState extends State<Payment> {
                       ],
                     ),
                   ),
-                ),
+                )),
               ),
               widget.type == 'split' && isSumEqualToTotalValue()
                   ? Positioned(

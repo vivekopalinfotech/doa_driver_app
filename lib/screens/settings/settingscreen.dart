@@ -135,7 +135,9 @@ class _SettingScreenState extends State<SettingScreen> {
           builder: (context, state) {
             return Stack(
               children: [
-                SingleChildScrollView(
+                ScrollConfiguration(
+                behavior: const ScrollBehavior().copyWith(overscroll: false),
+            child:    SingleChildScrollView(
                   child: SizedBox(
                       width: double.maxFinite,
                       height: MediaQuery.of(context).size.height,
@@ -542,7 +544,7 @@ class _SettingScreenState extends State<SettingScreen> {
                           ],
                         ),
                       )),
-                ),
+            ) ),
                 Positioned(
                     bottom: 36,
                     left: 0,

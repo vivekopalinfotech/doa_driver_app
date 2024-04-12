@@ -128,7 +128,9 @@ class _OrderScreenState extends State<OrderScreen> {
                 //  child:
 
                 state.ordersData.isNotEmpty
-                    ? SingleChildScrollView(
+                    ? ScrollConfiguration(
+                  behavior: const ScrollBehavior().copyWith(overscroll: false),
+                  child: SingleChildScrollView(
                         child: Column(
                           children: [
                             Padding(
@@ -291,7 +293,7 @@ class _OrderScreenState extends State<OrderScreen> {
                             ),
                           ],
                         ),
-                      )
+                      ))
                     : Center(
                         child: Row(
                           mainAxisSize: MainAxisSize.max,
