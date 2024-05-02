@@ -71,13 +71,13 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     tax = widget.ordersData.total_tax.toString();
     // orderTotal = widget.ordersData.order_price.toString();
     for (int i = 0; i < widget.orderDetail!.length; i++) {
-      item = double.parse(widget.orderDetail![i].productDiscount) != 0.00 ? (double.parse(widget.orderDetail![i].productPrice) - double.parse(widget.orderDetail![i].productDiscount)) : 0;
+      item = double.parse(widget.orderDetail![i].productDiscount.toString()) != 0.00 ? (double.parse(widget.orderDetail![i].productPrice) - double.parse(widget.orderDetail![i].productDiscount.toString())) : 0;
       itemDiscount += (double.parse(widget.orderDetail![i].productQty.toString())) * item;
-      cartDiscount = double.parse(widget.orderDetail![i].productDiscount);
+      cartDiscount = double.parse(widget.orderDetail![i].productDiscount.toString());
       itemTotal += double.parse(widget.orderDetail![i].productPrice) * double.parse(widget.orderDetail![i].productQty.toString());
     }
     subtotal = itemTotal - itemDiscount;
-    amount = widget.ordersData.coupon_amount != null ? double.parse(widget.ordersData.coupon_amount.toString()) : 0;
+    amount = widget.ordersData.coupon_amount != 'null' ? double.parse(widget.ordersData.coupon_amount.toString()) : 0;
     subtotal = subtotal - amount;
     orderTotal = subtotal + num.parse(deliveryCharges) + num.parse(tax) + double.parse(widget.ordersData.transaction_fee.toString());
     Iterable markers = Iterable.generate(1, (index) {
@@ -591,7 +591,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                           SizedBox(
                                               child: Center(
                                                   child: Text(
-                                            widget.ordersData.coupon_amount != null && widget.ordersData.coupon_amount != '0.00'?'-\$${widget.ordersData.coupon_amount}' : '\$0.00',
+                                            widget.ordersData.coupon_amount != 'null' && widget.ordersData.coupon_amount != '0.00'?'-\$${widget.ordersData.coupon_amount}' : '\$0.00',
                                             style: const TextStyle(fontWeight: FontWeight.bold),
                                           ))),
                                         ],
@@ -1214,7 +1214,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                               // padding: EdgeInsets.symmetric(vertical: 8),
                               decoration: BoxDecoration(border: Border.all(color: Colors.black12), color: Colors.white),
                               child: CachedNetworkImage(
-                                imageUrl: 'https://admin.dankofamerica.karnavati.in/proof/${widget.ordersData.customerId!.customer_proof ?? ''}',
+                                imageUrl: 'https://admin.rkdeliveries.com/proof/${widget.ordersData.customerId!.customer_proof ?? ''}',
                                 fit: BoxFit.contain,
                                 progressIndicatorBuilder: (context, url, downloadProgress) =>
                                     Center(child: CircularProgressIndicator(color: Colors.white, backgroundColor: AppStyles.MAIN_COLOR, value: downloadProgress.progress)),

@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:203281484288:android:525222167edd498c7826e5",
         "android_client_info": {
-          "package_name": "com.opal.doa"
+          "package_name": "com.opal.rkdeliverydriver"
         }
       },
       "oauth_client": [
@@ -38,7 +38,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:203281484288:android:49e2d79907bc06067826e5",
         "android_client_info": {
-          "package_name": "com.opal.royalkushdriverapp"
+          "package_name": "com.opal.rkdeliverydriver"
         }
       },
       "oauth_client": [
@@ -67,7 +67,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:203281484288:android:da563f3aff2be9067826e5",
         "android_client_info": {
-          "package_name": "com.opal.royalkushdriverappdata"
+          "package_name": "com.opal.rkdeliverydriver"
         }
       },
       "oauth_client": [

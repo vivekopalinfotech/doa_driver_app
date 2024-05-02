@@ -215,6 +215,9 @@ class _ShiftScreenState extends State<ShiftScreen> {
                                                       child: const Text("Yes"),
                                                       onPressed: () {
                                                         FirebaseMessaging.instance.getToken().then((value) {
+                                                         setState(() {
+                                                           print('value --> $value');
+                                                         });
                                                           BlocProvider.of<UpdateShiftBloc>(context).add(CheckUpdateShift(int.parse(AppData.user!.id.toString()), 0, value ?? ''));
                                                         });
                                                         Navigator.of(context).pop();

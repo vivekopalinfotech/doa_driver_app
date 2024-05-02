@@ -56,7 +56,7 @@ class _DetailCardState extends State<DetailCard> {
                       clipBehavior: Clip.antiAlias,
                       borderRadius: BorderRadius.circular(100),
                       child: CachedNetworkImage(
-                        imageUrl: 'https://admin.dankofamerica.karnavati.in/proof/${widget.ordersData.customerId!.customer_proof ?? ''}',
+                        imageUrl: 'https://admin.rkdeliveries.com/proof/${widget.ordersData.customerId!.customer_proof ?? ''}',
                         fit: BoxFit.cover,
                         progressIndicatorBuilder: (context, url, downloadProgress) =>
                             Center(child: CircularProgressIndicator(color: Colors.white, backgroundColor: AppStyles.MAIN_COLOR, value: downloadProgress.progress)),
@@ -108,7 +108,7 @@ class _DetailCardState extends State<DetailCard> {
                           ),
                           Flexible(
                             child: Text(
-                              widget.ordersData.customer_order_notes ?? '',
+                              widget.ordersData.customer_order_notes!= 'null' ? widget.ordersData.customer_order_notes.toString(): '',
                               style: const TextStyle(
                                 fontSize: 14,
                                 decorationStyle: TextDecorationStyle.solid,

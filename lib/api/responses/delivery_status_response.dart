@@ -43,7 +43,7 @@ class Data {
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    customer_id = json['customer_id'];
+    customer_id = json['customer_id'].toString();
      }
 
   Map<String, dynamic> toJson() {

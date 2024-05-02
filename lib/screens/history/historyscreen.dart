@@ -91,7 +91,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
             state.ordersData.isNotEmpty
                 ? ScrollConfiguration(
-              behavior:  ScrollBehavior(androidOverscrollIndicator: AndroidOverscrollIndicator.stretch),
+              behavior:  const ScrollBehavior(androidOverscrollIndicator: AndroidOverscrollIndicator.stretch),
               child: SingleChildScrollView(
               child: Column(
                 children: [

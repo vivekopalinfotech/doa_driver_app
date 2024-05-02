@@ -1,4 +1,4 @@
-package com.opal.royalkushdriverappdata
+package com.opal.rkdeliverydriver
 
 import io.flutter.embedding.android.FlutterActivity
 

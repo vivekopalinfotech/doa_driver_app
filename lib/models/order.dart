@@ -119,58 +119,58 @@ class OrdersData {
     orderId = json['order_id'];
     customerId =
         json['customer_id'] != null ? CustomerId.fromJson(json['customer_id']) : null;
-    warehouseId = json['warehouse_id'];
+    warehouseId = json['warehouse_id'].toString();
     warehouse = json['warehouse'] != null
         ? WareHouse.fromJson(json['warehouse'])
         : null;
     deliveryboy = json['deliveryboy'] != null
         ? DeliveryBoy.fromJson(json['deliveryboy'])
         : null;
-    order_from = json['order_from'];
-    billing_first_name = json['billing_first_name'];
-    billing_last_name = json['billing_last_name'];
-    billing_company = json['billing_company'];
-    billing_street_aadress = json['billing_street_aadress'];
-    billing_suburb = json['billing_suburb'];
-    billing_city = json['billing_city'];
-    billing_postcode = json['billing_postcode'];
-    billing_country = json['billing_country'];
-    billing_state = json['billing_state'];
-    billing_phone = json['billing_phone'];
-    delivery_first_name = json['delivery_first_name'];
-    delivery_last_name = json['delivery_last_name'];
-    delivery_dt = json['delivery_dt'];
-    delivery_time = json['delivery_time'];
-    delivery_company = json['delivery_company'];
-    delivery_suburb = json['delivery_suburb'];
-    billing_city = json['delivery_city'];
-    billing_postcode = json['delivery_postcode'];
-    billing_country = json['delivery_country'];
-    billing_state = json['delivery_state'];
-    billing_phone = json['delivery_phone'];
-    cc_type = json['cc_type'];
-    cc_owner = json['cc_owner'];
-    cc_number = json['cc_number'];
-    cc_expiry = json['cc_expiry'];
-    currency_value = json['currency_value'];
-    order_price = json['order_price'];
-    shipping_cost = json['shipping_cost'];
-    shipping_method = json['shipping_method'];
-    shipping_duration = json['shipping_duration'];
-    customer_order_notes = json['customer_order_notes'];
-    is_seen = json['is_seen'];
-    coupon_code = json['coupon_code'];
-    coupon_amount = json['coupon_amount'];
-    payment_method = json['payment_method'];
-    transaction_id = json['transaction_id'];
-    order_status = json['order_status'];
-    delivery_status = json['delivery_status'];
-    delivery_boy_id = json['delivery_boy_id'];
-    total_tax = json['total_tax'];
-    order_date = json['order_date'];
-    order_time = json['order_time'];
-    latlong = json['latlong'];
-    transaction_fee = json['transaction_fee'];
+    order_from = json['order_from'].toString();
+    billing_first_name = json['billing_first_name'].toString();
+    billing_last_name = json['billing_last_name'].toString();
+    billing_company = json['billing_company'].toString();
+    billing_street_aadress = json['billing_street_aadress'].toString();
+    billing_suburb = json['billing_suburb'].toString();
+    billing_city = json['billing_city'].toString();
+    billing_postcode = json['billing_postcode'].toString();
+    billing_country = json['billing_country'].toString();
+    billing_state = json['billing_state'].toString();
+    billing_phone = json['billing_phone'].toString();
+    delivery_first_name = json['delivery_first_name'].toString();
+    delivery_last_name = json['delivery_last_name'].toString();
+    delivery_dt = json['delivery_dt'].toString();
+    delivery_time = json['delivery_time'].toString();
+    delivery_company = json['delivery_company'].toString();
+    delivery_suburb = json['delivery_suburb'].toString();
+    billing_city = json['delivery_city'].toString();
+    billing_postcode = json['delivery_postcode'].toString();
+    billing_country = json['delivery_country'].toString();
+    billing_state = json['delivery_state'].toString();
+    billing_phone = json['delivery_phone'].toString();
+    cc_type = json['cc_type'].toString();
+    cc_owner = json['cc_owner'].toString();
+    cc_number = json['cc_number'].toString();
+    cc_expiry = json['cc_expiry'].toString();
+    currency_value = json['currency_value'].toString();
+    order_price = json['order_price'].toString();
+    shipping_cost = json['shipping_cost'].toString();
+    shipping_method = json['shipping_method'].toString();
+    shipping_duration = json['shipping_duration'].toString();
+    customer_order_notes = json['customer_order_notes'].toString();
+    is_seen = json['is_seen'].toString();
+    coupon_code = json['coupon_code'].toString();
+    coupon_amount = json['coupon_amount'].toString();
+    payment_method = json['payment_method'].toString();
+    transaction_id = json['transaction_id'].toString();
+    order_status = json['order_status'].toString();
+    delivery_status = json['delivery_status'].toString();
+    delivery_boy_id = json['delivery_boy_id'].toString();
+    total_tax = json['total_tax'].toString();
+    order_date = json['order_date'].toString();
+    order_time = json['order_time'].toString();
+    latlong = json['latlong'].toString();
+    transaction_fee = json['transaction_fee'].toString();
     if (json['order_history'] != null) {
       order_history = <OrderHistory>[];
       json['order_history'].forEach((v) {
@@ -532,14 +532,14 @@ class WareHouse {
 
   WareHouse.fromJson(Map<String, dynamic> json) {
     warehouse_id = json['warehouse_id'];
-    warehouse_code = json['warehouse_code'];
-    warehouse_name = json['warehouse_name'];
-    warehouse_address = json['warehouse_address'];
-    warehouse_phone = json['warehouse_phone'];
-    warehouse_email = json['warehouse_email'];
-    warehouse_status = json['warehouse_status'];
-    warehouse_state_id = json['warehouse_state_id'];
-    warehouse_country_id = json['warehouse_country_id'];
+    warehouse_code = json['warehouse_code'].toString();
+    warehouse_name = json['warehouse_name'].toString();
+    warehouse_address = json['warehouse_address'].toString();
+    warehouse_phone = json['warehouse_phone'].toString();
+    warehouse_email = json['warehouse_email'].toString();
+    warehouse_status = json['warehouse_status'].toString();
+    warehouse_state_id = json['warehouse_state_id'].toString();
+    warehouse_country_id = json['warehouse_country_id'].toString();
   }
 
   Map<String, dynamic> toJson() {
@@ -628,37 +628,37 @@ class DeliveryBoy {
 
   DeliveryBoy.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    first_name = json['first_name'];
-    last_name = json['last_name'];
-    email = json['email'];
-    phone_number = json['phone_number'];
-    avatar = json['avatar'];
-    dob = json['dob'];
-    blood_group = json['blood_group'];
-    warehouse = json['warehouse'];
-    commission = json['commission'];
-    pin_code = json['pin_code'];
-    status = json['status'];
-    availability_status = json['availability_status'];
-    address = json['address'];
-    city = json['city'];
-    country = json['country'];
-    in_active = json['in_active'];
-    zip_code = json['zip_code'];
-    state = json['state'];
-    vehicle_name = json['vehicle_name'];
-    owner_name = json['owner_name'];
-    vehicle_color = json['vehicle_color'];
-    vehicle_registration_no = json['vehicle_registration_no'];
-    vehicle_details = json['vehicle_details'];
-    driving_license_no = json['driving_license_no'];
-    vehicle_rc_book_no = json['vehicle_rc_book_no'];
-    account_name = json['account_name'];
-    account_number = json['account_number'];
-    gpay_number = json['gpay_number'];
-    bank_address = json['bank_address'];
-    ifsc_code = json['ifsc_code'];
-    branch_name = json['branch_name'];
+    first_name = json['first_name'].toString();
+    last_name = json['last_name'].toString();
+    email = json['email'].toString();
+    phone_number = json['phone_number'].toString();
+    avatar = json['avatar'].toString();
+    dob = json['dob'].toString();
+    blood_group = json['blood_group'].toString();
+    warehouse = json['warehouse'].toString();
+    commission = json['commission'].toString();
+    pin_code = json['pin_code'].toString();
+    status = json['status'].toString();
+    availability_status = json['availability_status'].toString();
+    address = json['address'].toString();
+    city = json['city'].toString();
+    country = json['country'].toString();
+    in_active = json['in_active'].toString();
+    zip_code = json['zip_code'].toString();
+    state = json['state'].toString();
+    vehicle_name = json['vehicle_name'].toString();
+    owner_name = json['owner_name'].toString();
+    vehicle_color = json['vehicle_color'].toString();
+    vehicle_registration_no = json['vehicle_registration_no'].toString();
+    vehicle_details = json['vehicle_details'].toString();
+    driving_license_no = json['driving_license_no'].toString();
+    vehicle_rc_book_no = json['vehicle_rc_book_no'].toString();
+    account_name = json['account_name'].toString();
+    account_number = json['account_number'].toString();
+    gpay_number = json['gpay_number'].toString();
+    bank_address = json['bank_address'].toString();
+    ifsc_code = json['ifsc_code'].toString();
+    branch_name = json['branch_name'].toString();
   }
 
   Map<String, dynamic> toJson() {
@@ -717,10 +717,10 @@ class OrderHistory {
 
   OrderHistory.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    order_id = json['order_id'];
-    order_status = json['order_status'];
-    created_at = json['created_at'];
-    updated_at = json['updated_at'];
+    order_id = json['order_id'].toString();
+    order_status = json['order_status'].toString();
+    created_at = json['created_at'].toString();
+    updated_at = json['updated_at'].toString();
   }
 
   Map<String, dynamic> toJson() {
@@ -870,7 +870,7 @@ class Role {
 class OrderDetail {
   Product? product;
   var productPrice;
-  var productDiscount;
+  String? productDiscount;
   var productTax;
   var productQty;
   var productTotal;
@@ -886,11 +886,11 @@ class OrderDetail {
   OrderDetail.fromJson(Map<String, dynamic> json) {
     product =
     json['product'] != null ? Product.fromJson(json['product']) : null;
-    productPrice = json['product_price'];
-    productDiscount = json['product_discount'];
-    productTax = json['product_tax'];
-    productQty = json['product_qty'];
-    productTotal = json['product_total'];
+    productPrice = json['product_price'].toString();
+    productDiscount = json['product_discount'].toString();
+    productTax = json['product_tax'].toString();
+    productQty = json['product_qty'].toString();
+    productTotal = json['product_total'].toString();
   }
 
   Map<String, dynamic> toJson() {
@@ -941,8 +941,8 @@ class Product {
 
   Product.fromJson(Map<String, dynamic> json) {
     productId = json['product_id'];
-    productType = json['product_type'];
-    productSlug = json['product_slug'];
+    productType = json['product_type'].toString();
+    productSlug = json['product_slug'].toString();
     productGallary = json['product_gallary'] != null
         ? ProductGallary.fromJson(json['product_gallary'])
         : null;
@@ -952,14 +952,14 @@ class Product {
         productGallaryDetail?.add(ProductGallaryDetail.fromJson(v));
       });
     }
-    productPrice = json['product_price'];
-    productDiscountPrice = json['product_discount_price'];
-    productStatus = json['product_status'];
+    productPrice = json['product_price'].toString();
+    productDiscountPrice = json['product_discount_price'].toString();
+    productStatus = json['product_status'].toString();
     productBrand = json['product_brand'] != null
         ? ProductBrand.fromJson(json['product_brand'])
         : null;
-    isFeatured = json['is_featured'];
-    isPoints = json['is_points'];
+    isFeatured = json['is_featured'].toString();
+    isPoints = json['is_points'].toString();
     if (json['detail'] != null) {
       detail = <Detail>[];
       json['detail'].forEach((v) {
@@ -1024,9 +1024,9 @@ class ProductGallary {
 
   ProductGallary.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    gallaryName = json['gallary_name'];
-    gallaryExtension = json['gallary_extension'];
-    userId = json['user_id'];
+    gallaryName = json['gallary_name'].toString();
+    gallaryExtension = json['gallary_extension'].toString();
+    userId = json['user_id'].toString();
     if (json['detail'] != null) {
       detail = <Detail>[];
       json['detail'].forEach((v) {
@@ -1063,9 +1063,9 @@ class Detail {
         this.language});
 
   Detail.fromJson(Map<String, dynamic> json) {
-    id = json['product_id'];
-    title = json['title'];
-    desc = json['desc'];
+    id = json['product_id'].toString();
+    title = json['title'].toString();
+    desc = json['desc'].toString();
     language =  json['language'] != null ? Language.fromJson(json['language']) : null;
   }
 
@@ -1092,8 +1092,8 @@ class ProductGallaryDetail {
 
   ProductGallaryDetail.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    gallaryName = json['gallary_name'];
-    gallaryExtension = json['gallary_extension'];
+    gallaryName = json['gallary_name'].toString();
+    gallaryExtension = json['gallary_extension'].toString();
     userId = json['user_id'];
   }
 
@@ -1214,12 +1214,12 @@ class Language {
 
   Language.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    languageName = json['language_name'];
-    code = json['code'];
-    isDefault = json['is_default'];
-    direction = json['direction'];
-    directory = json['directory'];
-    status = json['status'];
+    languageName = json['language_name'].toString();
+    code = json['code'].toString();
+    isDefault = json['is_default'].toString();
+    direction = json['direction'].toString();
+    directory = json['directory'].toString();
+    status = json['status'].toString();
   }
 
   Map<String, dynamic> toJson() {
@@ -1245,9 +1245,9 @@ class Reviews {
 
   Reviews.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    comment = json['comment'];
-    rating = json['rating'];
-    status = json['status'];
+    comment = json['comment'].toString();
+    rating = json['rating'].toString();
+    status = json['status'].toString();
   }
 
   Map<String, dynamic> toJson() {
@@ -1284,14 +1284,14 @@ class Stock {
 
   Stock.fromJson(Map<String, dynamic> json) {
     productId = json['product_id'].toString();
-    productCombinationId = json['product_combination_id'];
-    productType = json['product_type'];
+    productCombinationId = json['product_combination_id'].toString();
+    productType = json['product_type'].toString();
     warehouseId = json['warehouse_id'].toString();
-    stockIn = json['stock_in'];
-    stockOut = json['stock_out'];
-    remainingStock = json['remaining_stock'];
-    price = json['price'];
-    discountPrice = json['discount_price'];
+    stockIn = json['stock_in'].toString();
+    stockOut = json['stock_out'].toString();
+    remainingStock = json['remaining_stock'].toString();
+    price = json['price'].toString();
+    discountPrice = json['discount_price'].toString();
   }
 
   Map<String, dynamic> toJson() {
