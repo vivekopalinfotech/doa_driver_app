@@ -25,10 +25,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -58,7 +55,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDREuv26IohD_qvBPRi6N44KagKdRgSrjE',
-    appId: '1:203281484288:android:da563f3aff2be9067826e5',
+    appId: '1:203281484288:android:120727e454f819f87826e5',
     messagingSenderId: '203281484288',
     projectId: 'royal-kush---doa',
     storageBucket: 'royal-kush---doa.appspot.com',
@@ -71,5 +68,14 @@ class DefaultFirebaseOptions {
     projectId: 'royal-kush---doa',
     storageBucket: 'royal-kush---doa.appspot.com',
     iosBundleId: 'com.opal.royalkushdriverappdata',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyC_KABzMJwe4EO3KUlx5xtKsDi13PVlKgE',
+    appId: '1:203281484288:ios:4c0781e2a4e017e97826e5',
+    messagingSenderId: '203281484288',
+    projectId: 'royal-kush---doa',
+    storageBucket: 'royal-kush---doa.appspot.com',
+    iosBundleId: 'com.opal.royalkushdriverapp',
   );
 }
