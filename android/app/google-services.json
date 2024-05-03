@@ -9,6 +9,35 @@
       "client_info": {
         "mobilesdk_app_id": "1:203281484288:android:525222167edd498c7826e5",
         "android_client_info": {
+          "package_name": "com.opal.doa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "203281484288-uv4jd0qlu8s9mli5kui38raj35svr1u9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDREuv26IohD_qvBPRi6N44KagKdRgSrjE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "203281484288-uv4jd0qlu8s9mli5kui38raj35svr1u9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:203281484288:android:120727e454f819f87826e5",
+        "android_client_info": {
           "package_name": "com.opal.rkdeliverydriver"
         }
       },
@@ -38,7 +67,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:203281484288:android:49e2d79907bc06067826e5",
         "android_client_info": {
-          "package_name": "com.opal.rkdeliverydriver"
+          "package_name": "com.opal.royalkushdriverapp"
         }
       },
       "oauth_client": [
@@ -67,7 +96,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:203281484288:android:da563f3aff2be9067826e5",
         "android_client_info": {
-          "package_name": "com.opal.rkdeliverydriver"
+          "package_name": "com.opal.royalkushdriverappdata"
         }
       },
       "oauth_client": [
