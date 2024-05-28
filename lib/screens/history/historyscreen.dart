@@ -82,7 +82,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
       body: BlocBuilder<HistoryBloc, HistoryState>(
         builder: (context, state) {
           if (state is HistoryLoading) {
-            loader(context);
+         //   loader(context);
           }
           if (state is HistoryLoaded) {
             Loader.hide();

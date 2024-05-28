@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:doa_driver_app/bloc/order/order_bloc.dart';
 import 'package:doa_driver_app/bloc/order_status/check_order_status_bloc.dart';
+import 'package:doa_driver_app/constants/app_constants.dart';
 import 'package:doa_driver_app/constants/app_data.dart';
 import 'package:doa_driver_app/constants/appstyles.dart';
 import 'package:doa_driver_app/constants/showsnackbar.dart';
@@ -16,7 +17,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart' as maps_marker;
-import 'package:url_launcher/url_launcher.dart';
 import 'package:zoom_widget/zoom_widget.dart';
 import '../../bloc/shifts_data/shifts_data_bloc.dart';
 import '../../bloc/shifts_data/shifts_data_event.dart';
@@ -71,7 +71,9 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     tax = widget.ordersData.total_tax.toString();
     // orderTotal = widget.ordersData.order_price.toString();
     for (int i = 0; i < widget.orderDetail!.length; i++) {
-      item = double.parse(widget.orderDetail![i].productDiscount.toString()) != 0.00 ? (double.parse(widget.orderDetail![i].productPrice) - double.parse(widget.orderDetail![i].productDiscount.toString())) : 0;
+      item = double.parse(widget.orderDetail![i].productDiscount.toString()) != 0.00
+          ? (double.parse(widget.orderDetail![i].productPrice) - double.parse(widget.orderDetail![i].productDiscount.toString()))
+          : 0;
       itemDiscount += (double.parse(widget.orderDetail![i].productQty.toString())) * item;
       cartDiscount = double.parse(widget.orderDetail![i].productDiscount.toString());
       itemTotal += double.parse(widget.orderDetail![i].productPrice) * double.parse(widget.orderDetail![i].productQty.toString());
@@ -176,7 +178,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                         splashColor: Colors.transparent,
                                         highlightColor: Colors.transparent,
                                         onTap: () {
-                                          _getDirection();
+                                          AppConstants.getDirection(widget.lat, widget.lng);
                                         },
                                         child: Container(
                                           height: 50,
@@ -197,7 +199,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                         splashColor: Colors.transparent,
                                         highlightColor: Colors.transparent,
                                         onTap: () {
-                                          _googleMap();
+                                          AppConstants.googleMap(widget.lat, widget.lng);
                                         },
                                         child: Container(
                                           height: 50,
@@ -235,7 +237,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                   ),
                                 );
                               })
-                          : _getDirection();
+                          : AppConstants.getDirection(widget.lat, widget.lng);
                     },
                     child: const Icon(Icons.location_on_outlined),
                   ),
@@ -293,425 +295,426 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                     SizedBox(
                       height: MediaQuery.of(context).size.height,
                       child: ScrollConfiguration(
-                        behavior:  const ScrollBehavior(androidOverscrollIndicator: AndroidOverscrollIndicator.stretch),
-                        child: SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            Stack(
+                          behavior: const ScrollBehavior(androidOverscrollIndicator: AndroidOverscrollIndicator.stretch),
+                          child: SingleChildScrollView(
+                            child: Column(
                               children: [
-                                SizedBox(
-                                  height: 180,
-                                  child: GoogleMap(
-                                    initialCameraPosition: CameraPosition(target: LatLng(widget.lat, widget.lng), zoom: 15),
-                                    mapType: MapType.normal,
-                                    myLocationEnabled: false,
-                                    scrollGesturesEnabled: true,
-                                    zoomGesturesEnabled: true,
-                                    zoomControlsEnabled: false,
-                                    minMaxZoomPreference: const MinMaxZoomPreference(0, 20),
-                                    markers: Set.from(markers),
-                                    tiltGesturesEnabled: true,
-                                    mapToolbarEnabled: false,
-                                    onCameraMove: (position) {
-                                      //_customInfoWindowController.onCameraMove!();
-                                    },
-                                    onMapCreated: (GoogleMapController controller) {
-                                      controller = controller;
-                                    },
-                                  ),
+                                Stack(
+                                  children: [
+                                    SizedBox(
+                                      height: 180,
+                                      child: GoogleMap(
+                                        initialCameraPosition: CameraPosition(target: LatLng(widget.lat, widget.lng), zoom: 15),
+                                        mapType: MapType.normal,
+                                        myLocationEnabled: false,
+                                        scrollGesturesEnabled: true,
+                                        zoomGesturesEnabled: true,
+                                        zoomControlsEnabled: false,
+                                        minMaxZoomPreference: const MinMaxZoomPreference(0, 20),
+                                        markers: Set.from(markers),
+                                        tiltGesturesEnabled: true,
+                                        mapToolbarEnabled: false,
+                                        onCameraMove: (position) {
+                                          //_customInfoWindowController.onCameraMove!();
+                                        },
+                                        onMapCreated: (GoogleMapController controller) {
+                                          controller = controller;
+                                        },
+                                      ),
+                                    ),
+                                    Positioned(
+                                      left: 0,
+                                      right: 0,
+                                      bottom: 0,
+                                      child: InkWell(
+                                        splashColor: Colors.transparent,
+                                        highlightColor: Colors.transparent,
+                                        onTap: () {
+                                          Platform.isIOS
+                                              ? showModalBottomSheet(
+                                                  isDismissible: true,
+                                                  useSafeArea: false,
+                                                  isScrollControlled: true,
+                                                  shape: const OutlineInputBorder(
+                                                      borderRadius: BorderRadius.only(topLeft: Radius.circular(18), topRight: Radius.circular(18)), borderSide: BorderSide.none),
+                                                  elevation: 10,
+                                                  enableDrag: true,
+                                                  backgroundColor: Colors.white,
+                                                  context: context,
+                                                  builder: (builder) {
+                                                    return Container(
+                                                      decoration:
+                                                          const BoxDecoration(borderRadius: BorderRadius.only(topLeft: Radius.circular(18), topRight: Radius.circular(18)), color: Colors.white),
+                                                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                                                      height: 250,
+                                                      child: Column(
+                                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                                        children: [
+                                                          Container(
+                                                            height: 4.0,
+                                                            width: 32.0,
+                                                            margin: const EdgeInsets.symmetric(vertical: 4),
+                                                            decoration: BoxDecoration(
+                                                              color: AppStyles.MAIN_COLOR,
+                                                              borderRadius: BorderRadius.circular(28),
+                                                            ),
+                                                          ),
+                                                          const Center(
+                                                            child: Text(
+                                                              "Please select an option",
+                                                              textScaleFactor: 1,
+                                                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: AppStyles.MAIN_COLOR),
+                                                            ),
+                                                          ),
+                                                          const SizedBox(
+                                                            height: 15,
+                                                          ),
+                                                          InkWell(
+                                                            splashColor: Colors.transparent,
+                                                            highlightColor: Colors.transparent,
+                                                            onTap: () {
+                                                              AppConstants.getDirection(widget.lat, widget.lng);
+                                                            },
+                                                            child: Container(
+                                                              height: 50,
+                                                              decoration: BoxDecoration(
+                                                                borderRadius: BorderRadius.circular(28),
+                                                                color: AppStyles.MAIN_COLOR,
+                                                              ),
+                                                              child: const Center(
+                                                                child: Text(
+                                                                  "Open in Apple Maps",
+                                                                  textScaleFactor: 1,
+                                                                  style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          InkWell(
+                                                            splashColor: Colors.transparent,
+                                                            highlightColor: Colors.transparent,
+                                                            onTap: () {
+                                                              AppConstants.googleMap(widget.lat, widget.lng);
+                                                            },
+                                                            child: Container(
+                                                              height: 50,
+                                                              decoration: BoxDecoration(
+                                                                borderRadius: BorderRadius.circular(28),
+                                                                color: AppStyles.MAIN_COLOR,
+                                                              ),
+                                                              child: const Center(
+                                                                child: Text(
+                                                                  "Open in Google Maps",
+                                                                  textScaleFactor: 1,
+                                                                  style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 16),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          const SizedBox(
+                                                            height: 10,
+                                                          ),
+                                                          InkWell(
+                                                              splashColor: Colors.transparent,
+                                                              highlightColor: Colors.transparent,
+                                                              onTap: () {
+                                                                Navigator.pop(context);
+                                                              },
+                                                              child: Center(
+                                                                child: Text(
+                                                                  "Cancel",
+                                                                  textScaleFactor: 1,
+                                                                  style: TextStyle(
+                                                                      fontSize: 16,
+                                                                      fontWeight: FontWeight.bold,
+                                                                      color: Theme.of(context).brightness == Brightness.dark ? Colors.white.withOpacity(.85) : Colors.black54),
+                                                                ),
+                                                              )),
+                                                        ],
+                                                      ),
+                                                    );
+                                                  })
+                                              : AppConstants.getDirection(widget.lat, widget.lng);
+                                        },
+                                        child: Container(
+                                          height: 60,
+                                          color: AppStyles.SECOND_COLOR.withOpacity(.7),
+                                          padding: const EdgeInsets.all(8),
+                                          child: Center(
+                                              child: Text(
+                                            widget.location,
+                                            maxLines: 2,
+                                          )),
+                                        ),
+                                      ),
+                                    )
+                                  ],
                                 ),
-                                Positioned(
-                                  left: 0,
-                                  right: 0,
-                                  bottom: 0,
-                                  child: InkWell(
-                                    splashColor: Colors.transparent,
-                                    highlightColor: Colors.transparent,
-                                    onTap: () {
-                                      Platform.isIOS
-                                          ? showModalBottomSheet(
-                                              isDismissible: true,
-                                              useSafeArea: false,
-                                              isScrollControlled: true,
-                                              shape:
-                                                  const OutlineInputBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(18), topRight: Radius.circular(18)), borderSide: BorderSide.none),
-                                              elevation: 10,
-                                              enableDrag: true,
-                                              backgroundColor: Colors.white,
-                                              context: context,
-                                              builder: (builder) {
+                                DetailCard(ordersData: widget.ordersData, miles: widget.miles, callback: receiveDataFromChild),
+                                Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 15.0, top: 10, right: 15),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: const [
+                                          Flexible(
+                                            child: SizedBox(
+                                                width: 160,
+                                                child: Text(
+                                                  'Items',
+                                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                                )),
+                                          ),
+                                          SizedBox(
+                                              child: Center(
+                                                  child: Text(
+                                            'Qty',
+                                            style: TextStyle(fontWeight: FontWeight.bold),
+                                          ))),
+                                          SizedBox(
+                                              child: Center(
+                                                  child: Text(
+                                            'Price',
+                                            style: TextStyle(fontWeight: FontWeight.bold),
+                                          )))
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 16,
+                                    ),
+                                    Container(
+                                      margin: const EdgeInsets.only(bottom: 100),
+                                      padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
+                                      color: Colors.white,
+                                      child: Column(
+                                        children: [
+                                          ListView.builder(
+                                              physics: const NeverScrollableScrollPhysics(),
+                                              primary: false,
+                                              padding: EdgeInsets.zero,
+                                              shrinkWrap: true,
+                                              itemCount: widget.ordersData.orderDetail!.length,
+                                              itemBuilder: (context, index) {
                                                 return Container(
-                                                  decoration: const BoxDecoration(borderRadius: BorderRadius.only(topLeft: Radius.circular(18), topRight: Radius.circular(18)), color: Colors.white),
-                                                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                                                  height: 250,
+                                                  padding: const EdgeInsets.symmetric(vertical: 8),
                                                   child: Column(
-                                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                    crossAxisAlignment: CrossAxisAlignment.center,
                                                     children: [
-                                                      Container(
-                                                        height: 4.0,
-                                                        width: 32.0,
-                                                        margin: const EdgeInsets.symmetric(vertical: 4),
-                                                        decoration: BoxDecoration(
-                                                          color: AppStyles.MAIN_COLOR,
-                                                          borderRadius: BorderRadius.circular(28),
-                                                        ),
+                                                      Row(
+                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                        children: [
+                                                          SizedBox(
+                                                              width: 180,
+                                                              child: Text(
+                                                                widget.orderDetail![index].product?.detail![0].title ?? 'Not Available',
+                                                                textAlign: TextAlign.start,
+                                                              )),
+                                                          SizedBox(child: Center(child: Text(widget.orderDetail![index].productQty))),
+                                                          SizedBox(
+                                                              child: Center(
+                                                                  child: widget.orderDetail![index].productDiscount == '0.00'
+                                                                      ? Text(
+                                                                          '\$${widget.orderDetail![index].productPrice}',
+                                                                        )
+                                                                      : Column(
+                                                                          children: [
+                                                                            Text(
+                                                                              '\$${widget.orderDetail![index].productPrice}',
+                                                                              style: const TextStyle(decoration: TextDecoration.lineThrough),
+                                                                            ),
+                                                                            Text(
+                                                                              '\$${widget.orderDetail![index].productDiscount}',
+                                                                            ),
+                                                                          ],
+                                                                        )))
+                                                        ],
                                                       ),
-                                                      const Center(
-                                                        child: Text(
-                                                          "Please select an option",
-                                                          textScaleFactor: 1,
-                                                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: AppStyles.MAIN_COLOR),
-                                                        ),
-                                                      ),
-                                                      const SizedBox(
-                                                        height: 15,
-                                                      ),
-                                                      InkWell(
-                                                        splashColor: Colors.transparent,
-                                                        highlightColor: Colors.transparent,
-                                                        onTap: () {
-                                                          _getDirection();
-                                                        },
-                                                        child: Container(
-                                                          height: 50,
-                                                          decoration: BoxDecoration(
-                                                            borderRadius: BorderRadius.circular(28),
-                                                            color: AppStyles.MAIN_COLOR,
-                                                          ),
-                                                          child: const Center(
-                                                            child: Text(
-                                                              "Open in Apple Maps",
-                                                              textScaleFactor: 1,
-                                                              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      InkWell(
-                                                        splashColor: Colors.transparent,
-                                                        highlightColor: Colors.transparent,
-                                                        onTap: () {
-                                                          _googleMap();
-                                                        },
-                                                        child: Container(
-                                                          height: 50,
-                                                          decoration: BoxDecoration(
-                                                            borderRadius: BorderRadius.circular(28),
-                                                            color: AppStyles.MAIN_COLOR,
-                                                          ),
-                                                          child: const Center(
-                                                            child: Text(
-                                                              "Open in Google Maps",
-                                                              textScaleFactor: 1,
-                                                              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 16),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      const SizedBox(
-                                                        height: 10,
-                                                      ),
-                                                      InkWell(
-                                                          splashColor: Colors.transparent,
-                                                          highlightColor: Colors.transparent,
-                                                          onTap: () {
-                                                            Navigator.pop(context);
-                                                          },
-                                                          child: Center(
-                                                            child: Text(
-                                                              "Cancel",
-                                                              textScaleFactor: 1,
-                                                              style: TextStyle(
-                                                                  fontSize: 16,
-                                                                  fontWeight: FontWeight.bold,
-                                                                  color: Theme.of(context).brightness == Brightness.dark ? Colors.white.withOpacity(.85) : Colors.black54),
-                                                            ),
-                                                          )),
                                                     ],
                                                   ),
                                                 );
-                                              })
-                                          : _getDirection();
-                                    },
-                                    child: Container(
-                                      height: 60,
-                                      color: AppStyles.SECOND_COLOR.withOpacity(.7),
-                                      padding: const EdgeInsets.all(8),
-                                      child: Center(
-                                          child: Text(
-                                        widget.location,
-                                        maxLines: 2,
-                                      )),
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                            DetailCard(ordersData: widget.ordersData, miles: widget.miles, callback: receiveDataFromChild),
-                            Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 15.0, top: 10, right: 15),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: const [
-                                      Flexible(
-                                        child: SizedBox(
-                                            width: 160,
-                                            child: Text(
-                                              'Items',
-                                              style: TextStyle(fontWeight: FontWeight.bold),
-                                            )),
-                                      ),
-                                      SizedBox(
-                                          child: Center(
-                                              child: Text(
-                                        'Qty',
-                                        style: TextStyle(fontWeight: FontWeight.bold),
-                                      ))),
-                                      SizedBox(
-                                          child: Center(
-                                              child: Text(
-                                        'Price',
-                                        style: TextStyle(fontWeight: FontWeight.bold),
-                                      )))
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 16,
-                                ),
-                                Container(
-                                  margin: const EdgeInsets.only(bottom: 100),
-                                  padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
-                                  color: Colors.white,
-                                  child: Column(
-                                    children: [
-                                      ListView.builder(
-                                          physics: const NeverScrollableScrollPhysics(),
-                                          primary: false,
-                                          padding: EdgeInsets.zero,
-                                          shrinkWrap: true,
-                                          itemCount: widget.ordersData.orderDetail!.length,
-                                          itemBuilder: (context, index) {
-                                            return Container(
-                                              padding: const EdgeInsets.symmetric(vertical: 8),
-                                              child: Column(
-                                                children: [
-                                                  Row(
-                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                    children: [
-                                                      SizedBox(
-                                                          width: 180,
-                                                          child: Text(
-                                                            widget.orderDetail![index].product?.detail![0].title ?? 'Not Available',
-                                                            textAlign: TextAlign.start,
-                                                          )),
-                                                      SizedBox(child: Center(child: Text(widget.orderDetail![index].productQty))),
-                                                      SizedBox(
-                                                          child: Center(
-                                                              child: widget.orderDetail![index].productDiscount == '0.00'
-                                                                  ? Text(
-                                                                      '\$${widget.orderDetail![index].productPrice}',
-                                                                    )
-                                                                  : Column(
-                                                                      children: [
-                                                                        Text(
-                                                                          '\$${widget.orderDetail![index].productPrice}',
-                                                                          style: const TextStyle(decoration: TextDecoration.lineThrough),
-                                                                        ),
-                                                                        Text(
-                                                                          '\$${widget.orderDetail![index].productDiscount}',
-                                                                        ),
-                                                                      ],
-                                                                    )))
-                                                    ],
-                                                  ),
-                                                ],
+                                              }),
+                                          const Divider(
+                                            color: Colors.black38,
+                                            thickness: 1,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              const Flexible(
+                                                child: SizedBox(
+                                                    child: Text(
+                                                  'Item total',
+                                                  textAlign: TextAlign.start,
+                                                )),
                                               ),
-                                            );
-                                          }),
-                                      const Divider(
-                                        color: Colors.black38,
-                                        thickness: 1,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          const Flexible(
-                                            child: SizedBox(
-                                                child: Text(
-                                              'Item total',
-                                              textAlign: TextAlign.start,
-                                            )),
+                                              SizedBox(
+                                                  child: Center(
+                                                      child: Text(
+                                                '\$${itemTotal.toStringAsFixed(2)}',
+                                                style: const TextStyle(fontWeight: FontWeight.bold),
+                                              ))),
+                                            ],
                                           ),
-                                          SizedBox(
-                                              child: Center(
-                                                  child: Text(
-                                            '\$${itemTotal.toStringAsFixed(2)}',
-                                            style: const TextStyle(fontWeight: FontWeight.bold),
-                                          ))),
+                                          const Divider(
+                                            color: Colors.transparent,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              const Flexible(
+                                                child: SizedBox(
+                                                    child: Text(
+                                                  'Item Discounts',
+                                                  textAlign: TextAlign.start,
+                                                )),
+                                              ),
+                                              SizedBox(
+                                                  child: Center(
+                                                      child: Text(
+                                                itemDiscount.toStringAsFixed(2) == '0.00' ? '\$${itemDiscount.toStringAsFixed(2)}' : '-\$${itemDiscount.toStringAsFixed(2)}',
+                                                style: const TextStyle(fontWeight: FontWeight.bold),
+                                              ))),
+                                            ],
+                                          ),
+                                          const Divider(
+                                            color: Colors.transparent,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              const Flexible(
+                                                child: SizedBox(
+                                                    child: Text(
+                                                  'Coupon Discounts',
+                                                  textAlign: TextAlign.start,
+                                                )),
+                                              ),
+                                              SizedBox(
+                                                  child: Center(
+                                                      child: Text(
+                                                widget.ordersData.coupon_amount != 'null' && widget.ordersData.coupon_amount != '0.00' ? '-\$${widget.ordersData.coupon_amount}' : '\$0.00',
+                                                style: const TextStyle(fontWeight: FontWeight.bold),
+                                              ))),
+                                            ],
+                                          ),
+                                          const Divider(
+                                            color: Colors.black38,
+                                            thickness: 1,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              const Flexible(
+                                                child: SizedBox(
+                                                    child: Text(
+                                                  'Sub Total',
+                                                  textAlign: TextAlign.start,
+                                                )),
+                                              ),
+                                              SizedBox(
+                                                  child: Align(
+                                                      alignment: Alignment.center,
+                                                      child: Text(
+                                                        '\$${subtotal.toStringAsFixed(2)}',
+                                                        style: const TextStyle(fontWeight: FontWeight.bold),
+                                                      ))),
+                                            ],
+                                          ),
+                                          const Divider(
+                                            color: Colors.transparent,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              const Flexible(
+                                                child: SizedBox(
+                                                    child: Text(
+                                                  'Tax',
+                                                  textAlign: TextAlign.start,
+                                                )),
+                                              ),
+                                              SizedBox(
+                                                  child: Center(
+                                                      child: Text(
+                                                '\$$tax',
+                                                style: const TextStyle(fontWeight: FontWeight.bold),
+                                              ))),
+                                            ],
+                                          ),
+                                          const Divider(
+                                            color: Colors.transparent,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              const Flexible(
+                                                child: SizedBox(
+                                                    child: Text(
+                                                  'Delivery Charges',
+                                                  textAlign: TextAlign.start,
+                                                )),
+                                              ),
+                                              SizedBox(
+                                                  child: Center(
+                                                      child: Text(
+                                                '\$${widget.ordersData.shipping_cost}',
+                                                style: const TextStyle(fontWeight: FontWeight.bold),
+                                              ))),
+                                            ],
+                                          ),
+                                          const Divider(
+                                            color: Colors.transparent,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              const Flexible(
+                                                child: SizedBox(
+                                                    child: Text(
+                                                  'Transaction Fee',
+                                                  textAlign: TextAlign.start,
+                                                )),
+                                              ),
+                                              SizedBox(
+                                                  child: Center(
+                                                      child: Text(
+                                                '\$${widget.ordersData.transaction_fee}',
+                                                style: const TextStyle(fontWeight: FontWeight.bold),
+                                              ))),
+                                            ],
+                                          ),
+                                          const Divider(
+                                            color: Colors.transparent,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              const Flexible(
+                                                child: SizedBox(
+                                                    child: Text(
+                                                  'Total',
+                                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+                                                  textAlign: TextAlign.start,
+                                                )),
+                                              ),
+                                              SizedBox(
+                                                  child: Center(
+                                                      child: Text(
+                                                '\$${orderTotal.toStringAsFixed(2)}',
+                                                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                              ))),
+                                            ],
+                                          ),
                                         ],
                                       ),
-                                      const Divider(
-                                        color: Colors.transparent,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          const Flexible(
-                                            child: SizedBox(
-                                                child: Text(
-                                              'Item Discounts',
-                                              textAlign: TextAlign.start,
-                                            )),
-                                          ),
-                                          SizedBox(
-                                              child: Center(
-                                                  child: Text(
-                                            itemDiscount.toStringAsFixed(2) == '0.00' ? '\$${itemDiscount.toStringAsFixed(2)}' : '-\$${itemDiscount.toStringAsFixed(2)}',
-                                            style: const TextStyle(fontWeight: FontWeight.bold),
-                                          ))),
-                                        ],
-                                      ),
-                                      const Divider(
-                                        color: Colors.transparent,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          const Flexible(
-                                            child: SizedBox(
-                                                child: Text(
-                                              'Coupon Discounts',
-                                              textAlign: TextAlign.start,
-                                            )),
-                                          ),
-                                          SizedBox(
-                                              child: Center(
-                                                  child: Text(
-                                            widget.ordersData.coupon_amount != 'null' && widget.ordersData.coupon_amount != '0.00'?'-\$${widget.ordersData.coupon_amount}' : '\$0.00',
-                                            style: const TextStyle(fontWeight: FontWeight.bold),
-                                          ))),
-                                        ],
-                                      ),
-                                      const Divider(
-                                        color: Colors.black38,
-                                        thickness: 1,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          const Flexible(
-                                            child: SizedBox(
-                                                child: Text(
-                                              'Sub Total',
-                                              textAlign: TextAlign.start,
-                                            )),
-                                          ),
-                                          SizedBox(
-                                              child: Align(
-                                                  alignment: Alignment.center,
-                                                  child: Text(
-                                                    '\$${subtotal.toStringAsFixed(2)}',
-                                                    style: const TextStyle(fontWeight: FontWeight.bold),
-                                                  ))),
-                                        ],
-                                      ),
-                                      const Divider(
-                                        color: Colors.transparent,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          const Flexible(
-                                            child: SizedBox(
-                                                child: Text(
-                                              'Tax',
-                                              textAlign: TextAlign.start,
-                                            )),
-                                          ),
-                                          SizedBox(
-                                              child: Center(
-                                                  child: Text(
-                                            '\$$tax',
-                                            style: const TextStyle(fontWeight: FontWeight.bold),
-                                          ))),
-                                        ],
-                                      ),
-                                      const Divider(
-                                        color: Colors.transparent,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          const Flexible(
-                                            child: SizedBox(
-                                                child: Text(
-                                              'Delivery Charges',
-                                              textAlign: TextAlign.start,
-                                            )),
-                                          ),
-                                          SizedBox(
-                                              child: Center(
-                                                  child: Text(
-                                            '\$${widget.ordersData.shipping_cost}',
-                                            style: const TextStyle(fontWeight: FontWeight.bold),
-                                          ))),
-                                        ],
-                                      ),
-                                      const Divider(
-                                        color: Colors.transparent,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          const Flexible(
-                                            child: SizedBox(
-                                                child: Text(
-                                              'Transaction Fee',
-                                              textAlign: TextAlign.start,
-                                            )),
-                                          ),
-                                          SizedBox(
-                                              child: Center(
-                                                  child: Text(
-                                            '\$${widget.ordersData.transaction_fee}',
-                                            style: const TextStyle(fontWeight: FontWeight.bold),
-                                          ))),
-                                        ],
-                                      ),
-                                      const Divider(
-                                        color: Colors.transparent,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          const Flexible(
-                                            child: SizedBox(
-                                                child: Text(
-                                              'Total',
-                                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
-                                              textAlign: TextAlign.start,
-                                            )),
-                                          ),
-                                          SizedBox(
-                                              child: Center(
-                                                  child: Text(
-                                            '\$${orderTotal.toStringAsFixed(2)}',
-                                            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                                          ))),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                )
+                                    )
+                                  ],
+                                ),
                               ],
                             ),
-                          ],
-                        ),
-                      )),
+                          )),
                     ),
                     Positioned(
                         bottom: 0,
@@ -922,13 +925,15 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                                                   'assets/images/logo.png',
                                                                   height: 50,
                                                                 ),
-                                                              Flexible(child:   Container(
-                                                                padding: const EdgeInsets.only(left: 10),
-                                                                child: const Text(
-                                                                  "Are You Sure You Want to Start Delivery?",
-                                                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppStyles.MAIN_COLOR),
-                                                                ),
-                                                              ),)
+                                                                Flexible(
+                                                                  child: Container(
+                                                                    padding: const EdgeInsets.only(left: 10),
+                                                                    child: const Text(
+                                                                      "Are You Sure You Want to Start Delivery?",
+                                                                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppStyles.MAIN_COLOR),
+                                                                    ),
+                                                                  ),
+                                                                )
                                                               ],
                                                             ),
                                                             actions: [
@@ -1244,32 +1249,5 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                       ])))
               : const SizedBox()
         ]));
-  }
-
-  _getDirection() async {
-    if (Platform.isAndroid) {
-      var uri = Uri.parse("google.navigation:q=${widget.lat},${widget.lng}&mode=d");
-      if (await canLaunchUrl(uri)) {
-        await launch(uri.toString());
-      } else {
-        throw 'Could not launch Maps';
-      }
-    } else if (Platform.isIOS) {
-      var url = Uri.parse('https://maps.apple.com/?q=${widget.lat},${widget.lng}');
-      if (await canLaunchUrl(url)) {
-        await launchUrl(url);
-      } else {
-        throw 'Could not launch Maps';
-      }
-    }
-  }
-
-  _googleMap() async {
-    var url = Uri.parse("https://www.google.com/maps/search/?api=1&query=${widget.lat},${widget.lng}");
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url);
-    } else {
-      throw 'Could not launch Maps';
-    }
   }
 }
