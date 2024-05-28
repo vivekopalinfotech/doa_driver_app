@@ -120,180 +120,181 @@ class _OrderScreenState extends State<OrderScreen> {
           }
           if (state is OrdersLoaded) {
             Loader.hide();
-            return
-                //  RefreshIndicator(
-                //  onRefresh: () async {
-                // //   BlocProvider.of<OrdersBloc>(context).add(GetOrders(AppData.user!.id));
-                //  },
-                //  child:
-
-                state.ordersData.isNotEmpty
+            return RefreshIndicator(
+                notificationPredicate: (notification) {
+                  (notification.metrics.pixels < 0 && notification.metrics.maxScrollExtent > 20);
+                  return true;
+                },
+                onRefresh: () async {
+                  BlocProvider.of<OrdersBloc>(context).add(GetOrders(AppData.user!.id));
+                },
+                child: state.ordersData.isNotEmpty
                     ? ScrollConfiguration(
-                  behavior:  const ScrollBehavior(androidOverscrollIndicator: AndroidOverscrollIndicator.stretch),
-                  child: SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 6.0),
-                              child: ListView.separated(
-                                physics: const NeverScrollableScrollPhysics(),
-                                shrinkWrap: true,
-                                itemCount: state.ordersData.length,
-                                itemBuilder: (context, index) {
-                                  lat = double.parse(state.ordersData[index].latlong.toString().split(',')[0]);
-                                  lng = double.parse(state.ordersData[index].latlong.toString().split(',')[1]);
-                                  double distanceInMiles = AppUtils.calculateDistanceInMiles(latitude, longitude, lat, lng);
-                                  print(state.ordersData[index].latlong.toString());
-                                  return InkWell(
-                                    splashColor: Colors.transparent,
-                                    highlightColor: Colors.transparent,
-                                    onTap: () {
-                                      var lat = '0.0';
-                                      var lng = '0.0';
-                                      if (state.ordersData[index].latlong.toString().contains(',')) {
-                                        lat = state.ordersData[index].latlong.toString().split(',')[0] == '' ? '0.00' : state.ordersData[index].latlong.toString().split(',')[0];
-                                        lng = state.ordersData[index].latlong.toString().split(',')[1] == '' ? '0.00' : state.ordersData[index].latlong.toString().split(',')[1];
-                                      }
-                                      widget.navigateToNext(OrderDetailScreen(
-                                        type: widget.type,
-                                        navigateToNext: widget.navigateToNext,
-                                        ordersData: state.ordersData[index],
-                                        orderDetail: state.ordersData[index].orderDetail,
-                                        miles: distanceInMiles.toStringAsFixed(2),
-                                        lat: double.parse(lat),
-                                        lng: double.parse(lng),
-                                        location:
-                                            '${state.ordersData[index].billing_street_aadress.toString().toUpperCase()}, ${state.ordersData[index].billing_city.toString().toUpperCase()}, ${state.ordersData[index].billing_postcode}',
-                                      ));
-                                    },
-                                    child: Container(
-                                      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Colors.white),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15),
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                          children: [
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Flexible(
-                                                  child: Row(
+                        behavior: const ScrollBehavior(androidOverscrollIndicator: AndroidOverscrollIndicator.stretch),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 6.0),
+                                child: ListView.separated(
+                                  physics: const AlwaysScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemCount: state.ordersData.length,
+                                  itemBuilder: (context, index) {
+                                    lat = double.parse(state.ordersData[index].latlong.toString().split(',')[0]);
+                                    lng = double.parse(state.ordersData[index].latlong.toString().split(',')[1]);
+                                    double distanceInMiles = AppUtils.calculateDistanceInMiles(latitude, longitude, lat, lng);
+                                    print(state.ordersData[index].latlong.toString());
+                                    return InkWell(
+                                      splashColor: Colors.transparent,
+                                      highlightColor: Colors.transparent,
+                                      onTap: () {
+                                        var lat = '0.0';
+                                        var lng = '0.0';
+                                        if (state.ordersData[index].latlong.toString().contains(',')) {
+                                          lat = state.ordersData[index].latlong.toString().split(',')[0] == '' ? '0.00' : state.ordersData[index].latlong.toString().split(',')[0];
+                                          lng = state.ordersData[index].latlong.toString().split(',')[1] == '' ? '0.00' : state.ordersData[index].latlong.toString().split(',')[1];
+                                        }
+                                        widget.navigateToNext(OrderDetailScreen(
+                                          type: widget.type,
+                                          navigateToNext: widget.navigateToNext,
+                                          ordersData: state.ordersData[index],
+                                          orderDetail: state.ordersData[index].orderDetail,
+                                          miles: distanceInMiles.toStringAsFixed(2),
+                                          lat: double.parse(lat),
+                                          lng: double.parse(lng),
+                                          location:
+                                              '${state.ordersData[index].billing_street_aadress.toString().toUpperCase()}, ${state.ordersData[index].billing_city.toString().toUpperCase()}, ${state.ordersData[index].billing_postcode}',
+                                        ));
+                                      },
+                                      child: Container(
+                                        margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Colors.white),
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                            children: [
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Flexible(
+                                                    child: Row(
+                                                      children: [
+                                                        Text(
+                                                          'Order #${state.ordersData[index].orderId}',
+                                                          style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 8,
+                                                        ),
+                                                        Row(
+                                                          children: [
+                                                            Icon(
+                                                              state.ordersData[index].delivery_status == 'Delivery Stop'
+                                                                  ? Icons.not_interested_outlined
+                                                                  : state.ordersData[index].delivery_status == 'Assigned'
+                                                                      ? Icons.verified_outlined
+                                                                      : Icons.delivery_dining_outlined,
+                                                              color: state.ordersData[index].delivery_status == 'Delivery Stop'
+                                                                  ? Colors.deepOrange
+                                                                  : state.ordersData[index].delivery_status == 'Assigned'
+                                                                      ? Colors.blue
+                                                                      : Colors.green,
+                                                              size: 16,
+                                                            ),
+                                                            Text(
+                                                              ' ${state.ordersData[index].delivery_status}',
+                                                              style: TextStyle(
+                                                                  color: state.ordersData[index].delivery_status == 'Delivery Stop'
+                                                                      ? Colors.deepOrange
+                                                                      : state.ordersData[index].delivery_status == 'Assigned'
+                                                                          ? Colors.blue
+                                                                          : Colors.green,
+                                                                  fontWeight: FontWeight.bold,
+                                                                  fontSize: 14),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  const Icon(Icons.remove_red_eye_outlined),
+                                                ],
+                                              ),
+                                              const SizedBox(
+                                                height: 8,
+                                              ),
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Flexible(
+                                                    child: Text(
+                                                      AppUtils.capitalizeFirstLetter('${state.ordersData[index].billing_first_name ?? ''} ${state.ordersData[index].billing_last_name ?? ''}'),
+                                                      style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
+                                                    ),
+                                                  ),
+                                                  Text('${distanceInMiles.toStringAsFixed(2)} mi')
+                                                ],
+                                              ),
+                                              const SizedBox(
+                                                height: 8,
+                                              ),
+                                              Text(
+                                                '${state.ordersData[index].billing_street_aadress.toString().toUpperCase()}, ${state.ordersData[index].billing_city.toString().toUpperCase()}, ${state.ordersData[index].billing_postcode}',
+                                                maxLines: 2,
+                                                style: const TextStyle(color: Colors.black, fontSize: 14),
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                              const SizedBox(
+                                                height: 8,
+                                              ),
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Row(
                                                     children: [
                                                       Text(
-                                                        'Order #${state.ordersData[index].orderId}',
-                                                        style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
+                                                        state.ordersData[index].delivery_dt != null ? AppUtils.formattedDate(state.ordersData[index].delivery_dt.toString()) : 'N/A',
+                                                        style: const TextStyle(color: Colors.black54, fontSize: 16),
                                                       ),
                                                       const SizedBox(
-                                                        width: 8,
+                                                        width: 5,
                                                       ),
-                                                      Row(
-                                                        children: [
-                                                          Icon(
-                                                            state.ordersData[index].delivery_status == 'Delivery Stop'
-                                                                ? Icons.not_interested_outlined
-                                                                : state.ordersData[index].delivery_status == 'Assigned'
-                                                                    ? Icons.verified_outlined
-                                                                    : Icons.delivery_dining_outlined,
-                                                            color: state.ordersData[index].delivery_status == 'Delivery Stop'
-                                                                ? Colors.deepOrange
-                                                                : state.ordersData[index].delivery_status == 'Assigned'
-                                                                    ? Colors.blue
-                                                                    : Colors.green,
-                                                            size: 16,
-                                                          ),
-                                                          Text(
-                                                            ' ${state.ordersData[index].delivery_status}',
-                                                            style: TextStyle(
-                                                                color: state.ordersData[index].delivery_status == 'Delivery Stop'
-                                                                    ? Colors.deepOrange
-                                                                    : state.ordersData[index].delivery_status == 'Assigned'
-                                                                        ? Colors.blue
-                                                                        : Colors.green,
-                                                                fontWeight: FontWeight.bold,
-                                                                fontSize: 14),
-                                                          ),
-                                                        ],
+                                                      Text(
+                                                        state.ordersData[index].delivery_time.toString() != 'null' ? state.ordersData[index].delivery_time.toString() : '',
+                                                        style: const TextStyle(color: Colors.black54, fontSize: 16),
                                                       ),
                                                     ],
                                                   ),
-                                                ),
-                                                const Icon(Icons.remove_red_eye_outlined),
-                                              ],
-                                            ),
-                                            const SizedBox(
-                                              height: 8,
-                                            ),
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Flexible(
-                                                  child: Text(
-                                                    AppUtils.capitalizeFirstLetter('${state.ordersData[index].billing_first_name??''} ${state.ordersData[index].billing_last_name??''}'),
-                                                    style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
-                                                  ),
-                                                ),
-                                                Text('${distanceInMiles.toStringAsFixed(2)} mi')
-                                              ],
-                                            ),
-                                            const SizedBox(
-                                              height: 8,
-                                            ),
-                                            Text(
-                                              '${state.ordersData[index].billing_street_aadress.toString().toUpperCase()}, ${state.ordersData[index].billing_city.toString().toUpperCase()}, ${state.ordersData[index].billing_postcode}',
-                                              maxLines: 2,
-                                              style: const TextStyle(color: Colors.black, fontSize: 14),
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                            const SizedBox(
-                                              height: 8,
-                                            ),
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Row(
-                                                  children: [
-                                                    Text(
-                                                      state.ordersData[index].delivery_dt != null ? AppUtils.formattedDate(state.ordersData[index].delivery_dt.toString()) : 'N/A',
-                                                      style: const TextStyle(color: Colors.black54, fontSize: 16),
-                                                    ),
-                                                    const SizedBox(
-                                                      width: 5,
-                                                    ),
-                                                    Text(
-                                                      state.ordersData[index].delivery_time ?? '',
-                                                      style: const TextStyle(color: Colors.black54, fontSize: 16),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          ],
+                                                ],
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  );
-                                  //   CustomCard(
-                                  //   navigateToNext: widget.navigateToNext,
-                                  //   type: 'order',
-                                  //   online: widget.online,
-                                  //   ordersData: state.ordersData[index],
-                                  //   lat: widget.lat,
-                                  //   lng: widget.lng,
-                                  //   customerAddress: state.ordersData[index].customerId != null ? state.ordersData[index].customerId!.customer_address![index] : '',
-                                  // );
-                                },
-                                separatorBuilder: (BuildContext context, int index) {
-                                  return const Divider(
-                                    color: Colors.black12,
-                                  );
-                                },
+                                    );
+                                    //   CustomCard(
+                                    //   navigateToNext: widget.navigateToNext,
+                                    //   type: 'order',
+                                    //   online: widget.online,
+                                    //   ordersData: state.ordersData[index],
+                                    //   lat: widget.lat,
+                                    //   lng: widget.lng,
+                                    //   customerAddress: state.ordersData[index].customerId != null ? state.ordersData[index].customerId!.customer_address![index] : '',
+                                    // );
+                                  },
+                                  separatorBuilder: (BuildContext context, int index) {
+                                    return const Divider(
+                                      color: Colors.black12,
+                                    );
+                                  },
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ))
+                            ],
+                          ),
+                        ))
                     : Center(
                         child: Row(
                           mainAxisSize: MainAxisSize.max,
@@ -323,7 +324,7 @@ class _OrderScreenState extends State<OrderScreen> {
                             ),
                           ],
                         ),
-                      );
+                      ));
             // );
           }
 

@@ -205,7 +205,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                             borderRadius: BorderRadius.circular(28),
                                             color: AppStyles.MAIN_COLOR,
                                           ),
-                                          child: Center(
+                                          child: const Center(
                                             child: Text(
                                               "Open in Google Maps",
                                               textScaleFactor: 1,
@@ -293,7 +293,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                     SizedBox(
                       height: MediaQuery.of(context).size.height,
                       child: ScrollConfiguration(
-                        behavior:  ScrollBehavior(androidOverscrollIndicator: AndroidOverscrollIndicator.stretch),
+                        behavior:  const ScrollBehavior(androidOverscrollIndicator: AndroidOverscrollIndicator.stretch),
                         child: SingleChildScrollView(
                         child: Column(
                           children: [
@@ -341,7 +341,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                               context: context,
                                               builder: (builder) {
                                                 return Container(
-                                                  decoration: BoxDecoration(borderRadius: const BorderRadius.only(topLeft: Radius.circular(18), topRight: Radius.circular(18)), color: Colors.white),
+                                                  decoration: const BoxDecoration(borderRadius: BorderRadius.only(topLeft: Radius.circular(18), topRight: Radius.circular(18)), color: Colors.white),
                                                   padding: const EdgeInsets.symmetric(horizontal: 16),
                                                   height: 250,
                                                   child: Column(
@@ -357,7 +357,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                                           borderRadius: BorderRadius.circular(28),
                                                         ),
                                                       ),
-                                                      Center(
+                                                      const Center(
                                                         child: Text(
                                                           "Please select an option",
                                                           textScaleFactor: 1,
@@ -379,7 +379,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                                             borderRadius: BorderRadius.circular(28),
                                                             color: AppStyles.MAIN_COLOR,
                                                           ),
-                                                          child: Center(
+                                                          child: const Center(
                                                             child: Text(
                                                               "Open in Apple Maps",
                                                               textScaleFactor: 1,
@@ -400,7 +400,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                                             borderRadius: BorderRadius.circular(28),
                                                             color: AppStyles.MAIN_COLOR,
                                                           ),
-                                                          child: Center(
+                                                          child: const Center(
                                                             child: Text(
                                                               "Open in Google Maps",
                                                               textScaleFactor: 1,
@@ -922,14 +922,13 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                                                   'assets/images/logo.png',
                                                                   height: 50,
                                                                 ),
-                                                                Container(
-                                                                  padding: const EdgeInsets.only(left: 10),
-                                                                  width: 200,
-                                                                  child: const Text(
-                                                                    "Are You Sure You Want to Start Delivery?",
-                                                                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppStyles.MAIN_COLOR),
-                                                                  ),
+                                                              Flexible(child:   Container(
+                                                                padding: const EdgeInsets.only(left: 10),
+                                                                child: const Text(
+                                                                  "Are You Sure You Want to Start Delivery?",
+                                                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppStyles.MAIN_COLOR),
                                                                 ),
+                                                              ),)
                                                               ],
                                                             ),
                                                             actions: [
@@ -1224,7 +1223,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                         Align(
                             alignment: Alignment.topLeft,
                             child: Padding(
-                                padding: EdgeInsets.only(top: 50, left: 16),
+                                padding: const EdgeInsets.only(top: 50, left: 16),
                                 child: InkWell(
                                     splashColor: Colors.transparent,
                                     highlightColor: Colors.transparent,
@@ -1243,7 +1242,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                       ),
                                     ))))
                       ])))
-              : SizedBox()
+              : const SizedBox()
         ]));
   }
 

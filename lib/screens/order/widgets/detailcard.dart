@@ -26,6 +26,7 @@ class _DetailCardState extends State<DetailCard> {
     final Uri launchUri = Uri.parse('sms:$phone');
     await launchUrl(launchUri);
   }
+
   bool isZoom = false;
   @override
   Widget build(BuildContext context) {
@@ -39,33 +40,32 @@ class _DetailCardState extends State<DetailCard> {
             Row(
               children: [
                 InkWell(
-          onTap: (){
-            setState(() {
-              isZoom = true;
-              widget.callback(isZoom);
-            });
-          },
-          child:
-                Container(
-                    height: 50,
-                    width: 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100),
-                    ),
-                    child: ClipRRect(
-                      clipBehavior: Clip.antiAlias,
-                      borderRadius: BorderRadius.circular(100),
-                      child: CachedNetworkImage(
-                        imageUrl: 'https://admin.rkdeliveries.com/proof/${widget.ordersData.customerId!.customer_proof ?? ''}',
-                        fit: BoxFit.cover,
-                        progressIndicatorBuilder: (context, url, downloadProgress) =>
-                            Center(child: CircularProgressIndicator(color: Colors.white, backgroundColor: AppStyles.MAIN_COLOR, value: downloadProgress.progress)),
-                        errorWidget: (context, url, error) => const Icon(
-                          Icons.error,
-                          color: AppStyles.MAIN_COLOR,
+                    onTap: () {
+                      setState(() {
+                        isZoom = true;
+                        widget.callback(isZoom);
+                      });
+                    },
+                    child: Container(
+                        height: 50,
+                        width: 50,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
                         ),
-                      ),
-                    ))),
+                        child: ClipRRect(
+                          clipBehavior: Clip.antiAlias,
+                          borderRadius: BorderRadius.circular(100),
+                          child: CachedNetworkImage(
+                            imageUrl: 'https://admin.rkdeliveries.com/proof/${widget.ordersData.customerId!.customer_proof ?? ''}',
+                            fit: BoxFit.cover,
+                            progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                Center(child: CircularProgressIndicator(color: Colors.white, backgroundColor: AppStyles.MAIN_COLOR, value: downloadProgress.progress)),
+                            errorWidget: (context, url, error) => const Icon(
+                              Icons.error,
+                              color: AppStyles.MAIN_COLOR,
+                            ),
+                          ),
+                        ))),
                 const SizedBox(
                   width: 10,
                 ),
@@ -74,7 +74,7 @@ class _DetailCardState extends State<DetailCard> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        AppUtils.capitalizeFirstLetter('${widget.ordersData.billing_first_name??''} ${widget.ordersData.billing_last_name??''}'),
+                        AppUtils.capitalizeFirstLetter('${widget.ordersData.billing_first_name ?? ''} ${widget.ordersData.billing_last_name ?? ''}'),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                         style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 24),
@@ -108,10 +108,11 @@ class _DetailCardState extends State<DetailCard> {
                           ),
                           Flexible(
                             child: Text(
-                              widget.ordersData.customer_order_notes!= 'null' ? widget.ordersData.customer_order_notes.toString(): '',
+                              widget.ordersData.customer_order_notes != 'null' ? widget.ordersData.customer_order_notes.toString() : '',
                               style: const TextStyle(
                                 fontSize: 14,
                                 decorationStyle: TextDecorationStyle.solid,
+                                color: Colors.red
                               ),
                             ),
                           ),
@@ -157,7 +158,7 @@ class _DetailCardState extends State<DetailCard> {
                           ),
                           Flexible(
                             child: Text(
-                              widget.ordersData.delivery_time ?? "N/A",
+                              widget.ordersData.delivery_time.toString() != 'null'? widget.ordersData.delivery_time.toString(): "N/A",
                               style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 14,
