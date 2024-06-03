@@ -112,7 +112,7 @@ class _DetailCardState extends State<DetailCard> {
                               style: const TextStyle(
                                 fontSize: 14,
                                 decorationStyle: TextDecorationStyle.solid,
-                                color: Colors.red
+                                color: Colors.red,fontWeight: FontWeight.bold
                               ),
                             ),
                           ),

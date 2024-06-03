@@ -1,6 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api, prefer_typing_uninitialized_variables, must_be_immutable
 import 'dart:async';
 import 'package:doa_driver_app/bloc/order/order_bloc.dart';
+import 'package:doa_driver_app/constants/app_constants.dart';
 import 'package:doa_driver_app/constants/app_data.dart';
 import 'package:doa_driver_app/constants/app_utils.dart';
 import 'package:doa_driver_app/constants/appstyles.dart';
@@ -132,12 +133,13 @@ class _OrderScreenState extends State<OrderScreen> {
                     ? ScrollConfiguration(
                         behavior: const ScrollBehavior(androidOverscrollIndicator: AndroidOverscrollIndicator.stretch),
                         child: SingleChildScrollView(
+                          physics: const AlwaysScrollableScrollPhysics(),
                           child: Column(
                             children: [
                               Padding(
                                 padding: const EdgeInsets.symmetric(vertical: 6.0),
                                 child: ListView.separated(
-                                  physics: const AlwaysScrollableScrollPhysics(),
+                                  physics: const NeverScrollableScrollPhysics(),
                                   shrinkWrap: true,
                                   itemCount: state.ordersData.length,
                                   itemBuilder: (context, index) {
@@ -250,26 +252,13 @@ class _OrderScreenState extends State<OrderScreen> {
                                               const SizedBox(
                                                 height: 8,
                                               ),
-                                              Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                children: [
-                                                  Row(
-                                                    children: [
+
                                                       Text(
-                                                        state.ordersData[index].delivery_dt != null ? AppUtils.formattedDate(state.ordersData[index].delivery_dt.toString()) : 'N/A',
+                                                        state.ordersData[index].order_date != null ? AppConstants.convertTime(state.ordersData[index].order_date.toString()) : 'N/A',
                                                         style: const TextStyle(color: Colors.black54, fontSize: 16),
                                                       ),
-                                                      const SizedBox(
-                                                        width: 5,
-                                                      ),
-                                                      Text(
-                                                        state.ordersData[index].delivery_time.toString() != 'null' ? state.ordersData[index].delivery_time.toString() : '',
-                                                        style: const TextStyle(color: Colors.black54, fontSize: 16),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
+
+
                                             ],
                                           ),
                                         ),

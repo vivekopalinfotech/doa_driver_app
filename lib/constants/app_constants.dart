@@ -9,6 +9,13 @@ class AppConstants {
   static const STATUS_ERROR = "Error";
   static const kGoogleApiKey = "AIzaSyCNaxwGDO4Wg6GFWKpp0Z8Dagiwx0QnafA";
 
+  static String convertTime(String time) {
+    List<String> parts = time.split(':');
+    List<String> timeParts = parts[2].split(' ');
+
+    return '${parts[0]}:${parts[1]} ${timeParts[1]}';
+  }
+
   static getDirection(lat,lng) async {
     if (Platform.isAndroid) {
       var uri = Uri.parse("google.navigation:q=$lat,$lng&mode=d");
