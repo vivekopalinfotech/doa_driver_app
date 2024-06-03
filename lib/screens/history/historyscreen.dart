@@ -170,7 +170,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                                 height: 8,
                                               ),
                                               Text(
-                                                AppUtils.capitalizeFirstLetter('${state.ordersData[index].billing_first_name ?? ''} ${state.ordersData[index].billing_last_name ?? ''}'),
+                                                AppUtils.capitalizeFirstLetter('${state.ordersData[index].customerId!.customer_first_name ?? ''} ${state.ordersData[index].customerId!.customer_last_name ?? ''}'),
                                                 style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
                                               ),
                                               const SizedBox(
