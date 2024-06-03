@@ -74,7 +74,7 @@ class _DetailCardState extends State<DetailCard> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        AppUtils.capitalizeFirstLetter('${widget.ordersData.billing_first_name ?? ''} ${widget.ordersData.billing_last_name ?? ''}'),
+                        AppUtils.capitalizeFirstLetter('${widget.ordersData.customerId!.customer_first_name ?? ''} ${widget.ordersData.customerId!.customer_last_name ?? ''}'),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                         style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 24),

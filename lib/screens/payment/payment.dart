@@ -163,7 +163,7 @@ class _PaymentState extends State<Payment> {
                                               onChanged: (value) {
                                                 updateTextFieldValues(value, 1);
                                               },
-                                              keyboardType: TextInputType.number,
+                                              keyboardType: const TextInputType.numberWithOptions(decimal: true),
                                               controller: controller,
                                               decoration: const InputDecoration(
                                                   prefix: Text(
