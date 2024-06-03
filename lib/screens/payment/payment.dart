@@ -36,9 +36,9 @@ class _PaymentState extends State<Payment> {
         }
       }else{
         if (textFieldNumber == 1) {
-          ccController.text = remainingValue.toString();
+          ccController.text = remainingValue.toStringAsFixed(2);
         } else {
-          controller.text = remainingValue.toString();
+          controller.text = remainingValue.toStringAsFixed(2);
         }
       }
 
@@ -158,7 +158,7 @@ class _PaymentState extends State<Payment> {
                                     ),
                                     widget.type == 'split'
                                         ? SizedBox(
-                                            width: 60,
+                                            width: 70,
                                             child: TextField(
                                               onChanged: (value) {
                                                 updateTextFieldValues(value, 1);
@@ -209,12 +209,12 @@ class _PaymentState extends State<Payment> {
                                     ),
                                     widget.type == 'split'
                                         ? SizedBox(
-                                            width: 60,
+                                            width: 70,
                                             child: TextField(
                                               onChanged: (value) {
                                                 updateTextFieldValues(value, 2);
                                               },
-                                              keyboardType: TextInputType.number,
+                                              keyboardType: const TextInputType.numberWithOptions(decimal: true),
                                               controller: ccController,
                                               decoration: const InputDecoration(
                                                   prefix: Text(
