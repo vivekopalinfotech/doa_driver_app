@@ -42,8 +42,12 @@ class _DetailCardState extends State<DetailCard> {
                 InkWell(
                     onTap: () {
                       setState(() {
-                        isZoom = true;
-                        widget.callback(isZoom);
+                        if(widget.ordersData.customerId!.customer_proof!=null){
+                          isZoom = true;
+                          widget.callback(isZoom);
+                        }
+
+
                       });
                     },
                     child: Container(
