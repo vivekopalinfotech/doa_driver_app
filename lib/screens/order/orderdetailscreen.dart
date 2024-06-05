@@ -736,6 +736,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                       Image.asset(
                                         'assets/images/success.gif',
                                         height: 30,
+                                        cacheWidth: 79,cacheHeight: 60,
                                       )
                                     ],
                                   ))

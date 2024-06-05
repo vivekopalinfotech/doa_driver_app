@@ -64,9 +64,8 @@ class _DetailCardState extends State<DetailCard> {
                             fit: BoxFit.cover,
                             progressIndicatorBuilder: (context, url, downloadProgress) =>
                                 Center(child: CircularProgressIndicator(color: Colors.white, backgroundColor: AppStyles.MAIN_COLOR, value: downloadProgress.progress)),
-                            errorWidget: (context, url, error) => const Icon(
-                              Icons.error,
-                              color: AppStyles.MAIN_COLOR,
+                            errorWidget: (context, url, error) => Image.asset('assets/images/customer_logo.png',
+                              height: 40
                             ),
                           ),
                         ))),
