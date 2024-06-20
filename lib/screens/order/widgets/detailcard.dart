@@ -128,7 +128,29 @@ class _DetailCardState extends State<DetailCard> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text(
-                            'Created At: ',
+                            'Gate No: ',
+                            style: TextStyle(color: Colors.black26, fontSize: 14),
+                          ),
+                          Flexible(
+                            child: Text(
+                              widget.ordersData.gate_no != 'null' ? widget.ordersData.gate_no.toString() : '',
+                              style: const TextStyle(
+                                fontSize: 14,
+                                decorationStyle: TextDecorationStyle.solid,
+                                color: Colors.red,fontWeight: FontWeight.bold
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Created: ',
                             style: TextStyle(color: Colors.black26, fontSize: 14),
                           ),
                           const SizedBox(
@@ -146,31 +168,7 @@ class _DetailCardState extends State<DetailCard> {
                           ),
                         ],
                       ),
-                      const SizedBox(
-                        height: 8,
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Delivery Time: ',
-                            style: TextStyle(color: Colors.black26, fontSize: 14),
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Flexible(
-                            child: Text(
-                              widget.ordersData.delivery_time.toString() != 'null'? widget.ordersData.delivery_time.toString(): "N/A",
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 14,
-                                decorationStyle: TextDecorationStyle.solid,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+
                     ],
                   ),
                 ),
@@ -214,7 +212,32 @@ class _DetailCardState extends State<DetailCard> {
                   ],
                 )
               ],
-            )
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Delivery Time: ',
+                  style: TextStyle(color: Colors.black26, fontSize: 14),
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Flexible(
+                  child: Text(
+                    widget.ordersData.delivery_time.toString() != 'null'? widget.ordersData.delivery_time.toString(): "N/A",
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 14,
+                      decorationStyle: TextDecorationStyle.solid,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ]),
         ),
       ),

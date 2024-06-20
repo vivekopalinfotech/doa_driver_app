@@ -6,6 +6,7 @@ class OrdersData {
   String? warehouseId;
   WareHouse? warehouse;
   DeliveryBoy? deliveryboy;
+  String? gate_no;
   String? order_from;
   String? billing_first_name;
   String? billing_last_name;
@@ -63,6 +64,7 @@ class OrdersData {
     this.warehouseId,
     this.warehouse,
     this.deliveryboy,
+    this.gate_no,
     this.order_from,
     this.billing_first_name,
     this.billing_last_name,
@@ -126,6 +128,7 @@ class OrdersData {
     deliveryboy = json['deliveryboy'] != null
         ? DeliveryBoy.fromJson(json['deliveryboy'])
         : null;
+    gate_no = json['gate_no'].toString();
     order_from = json['order_from'].toString();
     billing_first_name = json['billing_first_name'].toString();
     billing_last_name = json['billing_last_name'].toString();
@@ -210,6 +213,7 @@ class OrdersData {
     if (deliveryboy != null) {
       data['deliveryboy'] = deliveryboy?.toJson();
     }
+    data['gate_no'] = gate_no;
     data['order_from'] = order_from;
     data['billing_first_name'] = billing_first_name;
     data['billing_last_name'] = billing_last_name;

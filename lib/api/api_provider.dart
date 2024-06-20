@@ -18,12 +18,9 @@ import 'package:doa_driver_app/constants/app_data.dart';
 class ApiProvider {
   final String _baseUrl = "${AppConfig.ECOMMERCE_URL}/api/client/";
 
-  static String imgThumbnailUrlString =
-      "${AppConfig.ECOMMERCE_URL}/gallary/thumbnail";
-  static String imgMediumUrlString =
-      "${AppConfig.ECOMMERCE_URL}/gallary/medium";
-  static String imgLargeUrlString =
-      "${AppConfig.ECOMMERCE_URL}/gallary/large";
+  static String imgThumbnailUrlString = "${AppConfig.ECOMMERCE_URL}/gallary/thumbnail";
+  static String imgMediumUrlString = "${AppConfig.ECOMMERCE_URL}/gallary/medium";
+  static String imgLargeUrlString = "${AppConfig.ECOMMERCE_URL}/gallary/large";
 
   Dio? _dio;
 
