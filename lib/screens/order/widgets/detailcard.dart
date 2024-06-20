@@ -128,7 +128,7 @@ class _DetailCardState extends State<DetailCard> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text(
-                            'Gate No: ',
+                            'Gate Code: ',
                             style: TextStyle(color: Colors.black26, fontSize: 14),
                           ),
                           Flexible(
