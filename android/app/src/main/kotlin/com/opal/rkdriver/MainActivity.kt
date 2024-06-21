@@ -1,4 +1,4 @@
-package com.opal.rkdeliverydriver
+package com.opal.rkdriver
 
 import io.flutter.embedding.android.FlutterActivity
 
