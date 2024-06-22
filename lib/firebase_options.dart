@@ -63,11 +63,11 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyC_KABzMJwe4EO3KUlx5xtKsDi13PVlKgE',
-    appId: '1:203281484288:ios:c6a6302dba6505677826e5',
+    appId: '1:203281484288:ios:244c24ffed47ab937826e5',
     messagingSenderId: '203281484288',
     projectId: 'royal-kush---doa',
     storageBucket: 'royal-kush---doa.appspot.com',
-    iosBundleId: 'com.opal.royalkushdriverappdata',
+    iosBundleId: 'com.opal.rkdriver',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
