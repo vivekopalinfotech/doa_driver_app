@@ -109,8 +109,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                   shrinkWrap: true,
                                   itemCount: state.ordersData.length,
                                   itemBuilder: (context, index) {
-                                    lat = double.parse(state.ordersData[index].latlong.toString().split(',')[0]);
-                                    lng = double.parse(state.ordersData[index].latlong.toString().split(',')[1]);
+                                    var reversedIndex = state.ordersData.length - 1 - index;
+                                    lat = double.parse(state.ordersData[reversedIndex].latlong.toString().split(',')[0]);
+                                    lng = double.parse(state.ordersData[reversedIndex].latlong.toString().split(',')[1]);
                                     double distanceInMiles = AppUtils.calculateDistanceInMiles(latitude, longitude, lat, lng);
 
                                     return InkWell(
@@ -120,13 +121,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                         widget.navigateToNext(OrderDetailScreen(
                                           type: 'history',
                                           navigateToNext: widget.navigateToNext,
-                                          ordersData: state.ordersData[index],
-                                          orderDetail: state.ordersData[index].orderDetail,
+                                          ordersData: state.ordersData[reversedIndex],
+                                          orderDetail: state.ordersData[reversedIndex].orderDetail,
                                           miles: distanceInMiles.toStringAsFixed(2),
-                                          lat: double.parse(state.ordersData[index].latlong.toString().split(',')[0]),
-                                          lng: double.parse(state.ordersData[index].latlong.toString().split(',')[1]),
+                                          lat: double.parse(state.ordersData[reversedIndex].latlong.toString().split(',')[0]),
+                                          lng: double.parse(state.ordersData[reversedIndex].latlong.toString().split(',')[1]),
                                           location:
-                                              '${state.ordersData[index].billing_street_aadress.toString().toUpperCase()}, ${state.ordersData[index].billing_city.toString().toUpperCase()}, ${state.ordersData[index].billing_postcode}',
+                                              '${state.ordersData[reversedIndex].billing_street_aadress.toString().toUpperCase()}, ${state.ordersData[reversedIndex].billing_city.toString().toUpperCase()}, ${state.ordersData[reversedIndex].billing_postcode}',
                                         ));
                                       },
                                       child: Container(
@@ -143,7 +144,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                                 children: [
                                                   Flexible(
                                                     child: Text(
-                                                      'Order #${state.ordersData[index].orderId}',
+                                                      'Order #${state.ordersData[reversedIndex].orderId}',
                                                       style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
                                                     ),
                                                   ),
@@ -161,7 +162,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                                     size: 18,
                                                   ),
                                                   Text(
-                                                    state.ordersData[index].delivery_status.toString(),
+                                                    state.ordersData[reversedIndex].delivery_status.toString(),
                                                     style: const TextStyle(color: Colors.black26, fontWeight: FontWeight.bold, fontSize: 14),
                                                   ),
                                                 ],
@@ -170,7 +171,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                                 height: 8,
                                               ),
                                               Text(
-                                                AppUtils.capitalizeFirstLetter('${state.ordersData[index].customerId!.customer_first_name ?? ''} ${state.ordersData[index].customerId!.customer_last_name ?? ''}'),
+                                                AppUtils.capitalizeFirstLetter('${state.ordersData[reversedIndex].customerId!.customer_first_name ?? ''} ${state.ordersData[reversedIndex].customerId!.customer_last_name ?? ''}'),
                                                 style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
                                               ),
                                               const SizedBox(
@@ -179,7 +180,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                               SizedBox(
                                                 width: 250,
                                                 child: Text(
-                                                  '${state.ordersData[index].billing_street_aadress.toString().toUpperCase()}\n${state.ordersData[index].billing_city.toString().toUpperCase()}, ${state.ordersData[index].billing_postcode}',
+                                                  '${state.ordersData[reversedIndex].billing_street_aadress.toString().toUpperCase()}\n${state.ordersData[reversedIndex].billing_city.toString().toUpperCase()}, ${state.ordersData[reversedIndex].billing_postcode}',
                                                   maxLines: 2,
                                                   style: const TextStyle(color: Colors.black, fontSize: 14),
                                                   overflow: TextOverflow.ellipsis,
@@ -189,7 +190,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                                 height: 8,
                                               ),
                                               Text(
-                                                state.ordersData[index].order_date != null ? AppConstants.convertTime(state.ordersData[index].order_date.toString()) : 'N/A',
+                                                state.ordersData[reversedIndex].order_date != null ? AppConstants.convertTime(state.ordersData[reversedIndex].order_date.toString()) : 'N/A',
                                                 style: const TextStyle(color: Colors.black54, fontSize: 16),
                                               ),
                                             ],

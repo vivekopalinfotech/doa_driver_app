@@ -42,12 +42,10 @@ class _DetailCardState extends State<DetailCard> {
                 InkWell(
                     onTap: () {
                       setState(() {
-                        if(widget.ordersData.customerId!.customer_proof!=null){
+                        if (widget.ordersData.customerId!.customer_proof != null) {
                           isZoom = true;
                           widget.callback(isZoom);
                         }
-
-
                       });
                     },
                     child: Container(
@@ -64,9 +62,7 @@ class _DetailCardState extends State<DetailCard> {
                             fit: BoxFit.cover,
                             progressIndicatorBuilder: (context, url, downloadProgress) =>
                                 Center(child: CircularProgressIndicator(color: Colors.white, backgroundColor: AppStyles.MAIN_COLOR, value: downloadProgress.progress)),
-                            errorWidget: (context, url, error) => Image.asset('assets/images/customer_logo.png',
-                              height: 40
-                            ),
+                            errorWidget: (context, url, error) => Image.asset('assets/images/customer_logo.png', height: 40),
                           ),
                         ))),
                 const SizedBox(
@@ -112,11 +108,7 @@ class _DetailCardState extends State<DetailCard> {
                           Flexible(
                             child: Text(
                               widget.ordersData.customer_order_notes != 'null' ? widget.ordersData.customer_order_notes.toString() : '',
-                              style: const TextStyle(
-                                fontSize: 14,
-                                decorationStyle: TextDecorationStyle.solid,
-                                color: Colors.red,fontWeight: FontWeight.bold
-                              ),
+                              style: const TextStyle(fontSize: 14, decorationStyle: TextDecorationStyle.solid, color: Colors.red, fontWeight: FontWeight.bold),
                             ),
                           ),
                         ],
@@ -134,11 +126,7 @@ class _DetailCardState extends State<DetailCard> {
                           Flexible(
                             child: Text(
                               widget.ordersData.gate_no != 'null' ? widget.ordersData.gate_no.toString() : '',
-                              style: const TextStyle(
-                                fontSize: 14,
-                                decorationStyle: TextDecorationStyle.solid,
-                                color: Colors.red,fontWeight: FontWeight.bold
-                              ),
+                              style: const TextStyle(fontSize: 14, decorationStyle: TextDecorationStyle.solid, color: Colors.red, fontWeight: FontWeight.bold),
                             ),
                           ),
                         ],
@@ -168,7 +156,6 @@ class _DetailCardState extends State<DetailCard> {
                           ),
                         ],
                       ),
-
                     ],
                   ),
                 ),
@@ -228,7 +215,7 @@ class _DetailCardState extends State<DetailCard> {
                 ),
                 Flexible(
                   child: Text(
-                    widget.ordersData.delivery_time.toString() != 'null'? widget.ordersData.delivery_time.toString(): "N/A",
+                    widget.ordersData.delivery_time.toString() != 'null' ? widget.ordersData.delivery_time.toString() : "N/A",
                     style: const TextStyle(
                       color: Colors.black,
                       fontSize: 14,

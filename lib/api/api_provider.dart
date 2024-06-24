@@ -2,7 +2,6 @@
 
 import 'dart:convert';
 import 'dart:developer';
-
 import 'package:dio/dio.dart';
 import 'package:doa_driver_app/api/login_interceptors.dart';
 import 'package:doa_driver_app/api/responses/delivery_status_response.dart';
@@ -14,6 +13,7 @@ import 'package:doa_driver_app/api/responses/order_response.dart';
 import 'package:doa_driver_app/api/responses/shifts_data_response.dart';
 import 'package:doa_driver_app/constants/app_config.dart';
 import 'package:doa_driver_app/constants/app_data.dart';
+import 'package:intl/intl.dart';
 
 class ApiProvider {
   final String _baseUrl = "${AppConfig.ECOMMERCE_URL}/api/client/";
@@ -25,20 +25,14 @@ class ApiProvider {
   Dio? _dio;
 
   ApiProvider() {
-    BaseOptions options = BaseOptions(
-        receiveTimeout: 30000,
-        connectTimeout: 30000,
-        validateStatus: (status) => true,
-        followRedirects: false);
+    BaseOptions options = BaseOptions(receiveTimeout: 30000, connectTimeout: 30000, validateStatus: (status) => true, followRedirects: false);
     _dio = Dio(options);
     _dio?.options.headers.addAll({
       'clientid': AppConfig.CONSUMER_KEY,
       'clientsecret': AppConfig.CONSUMER_SECRET,
       'content-type': 'application/json',
       'X-Requested-With': 'XMLHttpRequest',
-      'authorization': AppData.accessToken == null
-          ? ""
-          : 'Bearer ${AppData.accessToken}',
+      'authorization': AppData.accessToken == null ? "" : 'Bearer ${AppData.accessToken}',
     });
     print(_dio?.options.headers);
     print(AppData.accessToken);
@@ -47,12 +41,7 @@ class ApiProvider {
 
   Future<LoginResponse> loginUser(String email, String password) async {
     try {
-      Response response = await _dio!.post("${_baseUrl}customer_login",
-          data: jsonEncode({
-            "email": email,
-            "password": password,
-            "session_id": AppData.sessionId
-          }));
+      Response response = await _dio!.post("${_baseUrl}customer_login", data: jsonEncode({"email": email, "password": password, "session_id": AppData.sessionId}));
       return LoginResponse.fromJson(response.data);
     } catch (error) {
       return LoginResponse.withError(_handleError(error as TypeError));
@@ -70,16 +59,16 @@ class ApiProvider {
     }
   }
 
-  Future<LoginResponse> updateProfile(String id,String vehicleNo, String vehicleColor, String firstName, String lastName, String code) async {
+  Future<LoginResponse> updateProfile(String id, String vehicleNo, String vehicleColor, String firstName, String lastName, String code) async {
     try {
       Response response = await _dio!.post("${_baseUrl}deliveryboy_update/$id",
           data: jsonEncode({
-        "vehicle_registration_no": vehicleNo,
-        "vehicle_color": vehicleColor,
-        "first_name": firstName,
-        "last_name": lastName,
-        "mobile_del_code": code,
-      }));
+            "vehicle_registration_no": vehicleNo,
+            "vehicle_color": vehicleColor,
+            "first_name": firstName,
+            "last_name": lastName,
+            "mobile_del_code": code,
+          }));
       log(jsonEncode(response.data));
       print(response);
       return LoginResponse.fromJson(response.data);
@@ -88,7 +77,10 @@ class ApiProvider {
     }
   }
 
-  Future<String> updateLatLong(String id,String latLng, ) async {
+  Future<String> updateLatLong(
+    String id,
+    String latLng,
+  ) async {
     try {
       Response response = await _dio!.post("${_baseUrl}deliveryboy_latlong/$id",
           data: jsonEncode({
@@ -115,7 +107,7 @@ class ApiProvider {
     }
   }
 
-  Future<LoginResponse> otp(String phoneNumber,String otp) async {
+  Future<LoginResponse> otp(String phoneNumber, String otp) async {
     try {
       Response response = await _dio!.post("${_baseUrl}deliverylogin",
           data: jsonEncode({
@@ -129,8 +121,7 @@ class ApiProvider {
     }
   }
 
-
-   online(String id,String availabilityStatus) async {
+  online(String id, String availabilityStatus) async {
     try {
       Response response = await _dio!.put("${_baseUrl}update_delivery_boy_status",
           data: jsonEncode({
@@ -143,7 +134,7 @@ class ApiProvider {
     }
   }
 
-  Future<DeliveryStatusResponse> checkOrderStatus(String id,String orderStatus, double paid_cash,double paid_cc_terminal) async {
+  Future<DeliveryStatusResponse> checkOrderStatus(String id, String orderStatus, double paid_cash, double paid_cc_terminal) async {
     try {
       Response response = await _dio!.put("${_baseUrl}delivery_status_by_delivery_boy/$id",
           data: jsonEncode({
@@ -158,10 +149,9 @@ class ApiProvider {
     }
   }
 
-
   Future<OrderResponse> getOrder(int id) async {
     try {
-      Response response = await _dio!.get("${_baseUrl}order?delivery_boy_id=$id&productDetail=1&delivery_status=0");
+      Response response = await _dio!.get("${_baseUrl}order?delivery_boy_id=$id&productDetail=1&delivery_status=0&date_from=2024-06-22&date_to=2024-06-24");
       log(jsonEncode(response.data));
       return OrderResponse.fromJson(response.data);
     } catch (error) {
@@ -179,7 +169,7 @@ class ApiProvider {
     }
   }
 
-  Future<ShiftsDataResponse>getShiftsData(int id) async {
+  Future<ShiftsDataResponse> getShiftsData(int id) async {
     try {
       Response response = await _dio!.post("${_baseUrl}driver_stats/$id");
       log(jsonEncode(response.data));
@@ -198,21 +188,16 @@ class ApiProvider {
       return DeliveryUpdateResponse.withError(_handleError(error as TypeError));
     }
   }
+
   Future<LoginResponse> updateShift(int id, status, token) async {
     try {
-      Response response = await _dio!.put("${_baseUrl}update_availability/$id",
-          data: jsonEncode({
-            "fcm_token" : token,
-            "shift_status" : '$status',
-            "availability_status" : '$status'
-          }));
+      Response response = await _dio!.put("${_baseUrl}update_availability/$id", data: jsonEncode({"fcm_token": token, "shift_status": '$status', "availability_status": '$status'}));
       log(jsonEncode(response.data));
-     return LoginResponse.fromJson(response.data);
+      return LoginResponse.fromJson(response.data);
     } catch (error) {
-     return LoginResponse.withError(_handleError(error as TypeError));
+      return LoginResponse.withError(_handleError(error as TypeError));
     }
   }
-
 
   String _handleError(Error error) {
     String errorDescription = "";
@@ -229,15 +214,13 @@ class ApiProvider {
           errorDescription = "Receive timeout in connection with API server";
           break;
         case DioErrorType.response:
-          errorDescription =
-          "Received invalid status code: ${dioError.response?.statusCode}";
+          errorDescription = "Received invalid status code: ${dioError.response?.statusCode}";
           break;
         case DioErrorType.cancel:
           errorDescription = "Request to API server was cancelled";
           break;
         case DioErrorType.other:
-          errorDescription =
-          "Connection to API server failed due to internet connection";
+          errorDescription = "Connection to API server failed due to internet connection";
           break;
       }
     } else {

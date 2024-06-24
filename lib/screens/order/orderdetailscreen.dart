@@ -439,7 +439,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                         },
                                         child: Container(
                                           height: 60,
-                                          color: AppStyles.SECOND_COLOR.withOpacity(.7),
+                                          color: Colors.white,
                                           padding: const EdgeInsets.all(8),
                                           child: Center(
                                               child: Text(
@@ -736,7 +736,8 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                       Image.asset(
                                         'assets/images/success.gif',
                                         height: 30,
-                                        cacheWidth: 79,cacheHeight: 60,
+                                        cacheWidth: 79,
+                                        cacheHeight: 60,
                                       )
                                     ],
                                   ))

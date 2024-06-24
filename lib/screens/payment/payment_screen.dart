@@ -62,7 +62,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   children: [
                     const Center(
                       child: Text(
-                        'How would you like to play?',
+                        'How would you like to pay?',
                         style: TextStyle(color: Colors.black38, fontSize: 18),
                       ),
                     ),

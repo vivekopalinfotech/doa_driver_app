@@ -609,14 +609,14 @@ class _SettingScreenState extends State<SettingScreen> {
             'assets/images/logo.png',
             height: 50,
           ),
-          Container(
+          Flexible(child: Container(
             padding: const EdgeInsets.only(left: 10),
-            width: 200,
+
             child: const Text(
               "Are You Sure You Want to Logout?",
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppStyles.MAIN_COLOR),
             ),
-          ),
+          ),)
         ],
       ),
       actions: [
