@@ -151,7 +151,7 @@ class ApiProvider {
 
   Future<OrderResponse> getOrder(int id) async {
     try {
-      Response response = await _dio!.get("${_baseUrl}order?delivery_boy_id=$id&productDetail=1&delivery_status=0&date_from=2024-06-22&date_to=2024-06-24");
+      Response response = await _dio!.get("${_baseUrl}order?delivery_boy_id=$id&productDetail=1&delivery_status=0");
       log(jsonEncode(response.data));
       return OrderResponse.fromJson(response.data);
     } catch (error) {

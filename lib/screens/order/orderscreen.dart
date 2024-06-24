@@ -253,10 +253,19 @@ class _OrderScreenState extends State<OrderScreen> {
                                                 height: 8,
                                               ),
 
-                                                      Text(
-                                                        state.ordersData[index].order_date != null ? AppConstants.convertTime(state.ordersData[index].order_date.toString()) : 'N/A',
-                                                        style: const TextStyle(color: Colors.black54, fontSize: 16),
-                                                      ),
+                                                   Row(
+                                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                     children: [
+                                                       Flexible(child:    Text(
+                                                         state.ordersData[index].order_date != null ? AppConstants.convertTime(state.ordersData[index].order_date.toString()) : 'N/A',
+                                                         style: const TextStyle(color: Colors.black54, fontSize: 16),
+                                                       ),),
+                                                       Text(
+                                                         state.ordersData[index].delivery_type == 'Scheduled' ? state.ordersData[index].delivery_type.toString() : 'N/A',
+                                                         style: const TextStyle(color: Colors.redAccent, fontSize: 16,fontWeight: FontWeight.bold),
+                                                       ),
+                                                     ],
+                                                   )
 
 
                                             ],

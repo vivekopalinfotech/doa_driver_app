@@ -22,6 +22,7 @@ class OrdersData {
   String? delivery_last_name;
   String? delivery_dt;
   String? delivery_time;
+  String? delivery_type;
   String? delivery_company;
   String? delivery_street_aadress;
   String? delivery_suburb;
@@ -80,6 +81,7 @@ class OrdersData {
     this.delivery_last_name,
     this.delivery_dt,
     this.delivery_time,
+    this.delivery_type,
     this.delivery_company,
     this.delivery_street_aadress,
     this.delivery_suburb,
@@ -144,6 +146,7 @@ class OrdersData {
     delivery_last_name = json['delivery_last_name'].toString();
     delivery_dt = json['delivery_dt'].toString();
     delivery_time = json['delivery_time'].toString();
+    delivery_type = json['delivery_type'].toString();
     delivery_company = json['delivery_company'].toString();
     delivery_suburb = json['delivery_suburb'].toString();
     billing_city = json['delivery_city'].toString();
@@ -229,6 +232,7 @@ class OrdersData {
     data['delivery_last_name'] = delivery_last_name;
     data['delivery_dt'] = delivery_dt;
     data['delivery_time'] = delivery_time;
+    data['delivery_type'] = delivery_type;
     data['delivery_company'] = delivery_company;
     data['delivery_suburb'] = delivery_suburb;
     data['delivery_city'] = delivery_city;

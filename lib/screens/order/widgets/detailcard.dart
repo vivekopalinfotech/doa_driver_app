@@ -225,6 +225,32 @@ class _DetailCardState extends State<DetailCard> {
                 ),
               ],
             ),
+            const SizedBox(
+              height: 8,
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Delivery Type: ',
+                  style: TextStyle(color: Colors.black26, fontSize: 14),
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Flexible(
+                  child: Text(
+                    widget.ordersData.delivery_type.toString() != 'null' ? widget.ordersData.delivery_type.toString() : "N/A",
+                    style: const TextStyle(
+                      color: Colors.redAccent,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      decorationStyle: TextDecorationStyle.solid,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ]),
         ),
       ),
