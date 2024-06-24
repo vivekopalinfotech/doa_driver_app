@@ -240,7 +240,7 @@ class _DetailCardState extends State<DetailCard> {
                 ),
                 Flexible(
                   child: Text(
-                    widget.ordersData.delivery_type.toString() != 'null' ? widget.ordersData.delivery_type.toString() : "N/A",
+                    widget.ordersData.delivery_type.toString() == 'Scheduled' ? widget.ordersData.delivery_type.toString() : "N/A",
                     style: const TextStyle(
                       color: Colors.redAccent,
                       fontSize: 14,
